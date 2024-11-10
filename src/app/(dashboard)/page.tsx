@@ -14,6 +14,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import BlurFade from "@/components/ui/blur-fade";
+import Link from "next/link";
 
 
 export interface Album {
@@ -91,7 +92,7 @@ export default async function DashboardPage() {
             <div className="flex w-max space-x-4 p-4 pb-5">
               {listenNowAlbums.map((album, index) =>
                 <BlurFade key={`trend-${album.name}-${index}`} delay={0.25 + (index % 4) * 0.1} inView>
-                  <div className="space-y-3 cursor-pointer transition-all hover:scale-105">
+                  <Link href="/mysteries/1" className="block space-y-3 cursor-pointer transition-all hover:scale-105">
                     <div className="overflow-hidden rounded-md">
                       <Image
                         src={album.cover}
@@ -108,7 +109,7 @@ export default async function DashboardPage() {
                       <h3 className="font-medium leading-none">{album.name}</h3>
                       <p className="text-xs text-muted-foreground">{album.artist}</p>
                     </div>
-                  </div>
+                  </Link>
                 </BlurFade>
               )}
             </div>
