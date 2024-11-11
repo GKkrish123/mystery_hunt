@@ -10,6 +10,7 @@ interface ShineBorderProps {
   duration?: number;
   color?: TColorProp;
   className?: string;
+  borderClassName?: string;
   children: React.ReactNode;
 }
 
@@ -29,6 +30,7 @@ export default function ShineBorder({
   duration = 14,
   color = "#000000",
   className,
+  borderClassName,
   children,
 }: ShineBorderProps) {
   return (
@@ -53,7 +55,7 @@ export default function ShineBorder({
             "--background-radial-gradient": `radial-gradient(transparent,transparent, ${color instanceof Array ? color.join(",") : color},transparent,transparent)`,
           } as React.CSSProperties
         }
-        className={`pointer-events-none before:bg-shine-size before:absolute before:inset-0 before:aspect-square before:size-full before:rounded-[--border-radius] before:p-[--border-width] before:will-change-[background-position] before:content-[""] before:![-webkit-mask-composite:xor] before:![mask-composite:exclude] before:[background-image:--background-radial-gradient] before:[background-size:300%_300%] before:[mask:--mask-linear-gradient] motion-safe:before:animate-shine`}
+        className={cn(`pointer-events-none before:bg-shine-size before:absolute before:inset-0 before:aspect-square before:size-full before:rounded-[--border-radius] before:p-[--border-width] before:will-change-[background-position] before:content-[""] before:![-webkit-mask-composite:xor] before:![mask-composite:exclude] before:[background-image:--background-radial-gradient] before:[background-size:300%_300%] before:[mask:--mask-linear-gradient] motion-safe:before:animate-shine`, borderClassName)}
       ></div>
       {children}
     </div>

@@ -15,7 +15,7 @@ const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 // const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
-auth.useDeviceLanguage()
+auth.useDeviceLanguage();
 
 // Export Firebase Utils
 export { db, auth };
