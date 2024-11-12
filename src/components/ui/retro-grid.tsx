@@ -1,3 +1,5 @@
+"use client";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 
 export default function RetroGrid({
@@ -7,6 +9,7 @@ export default function RetroGrid({
   className?: string;
   angle?: number;
 }) {
+  const isMobile = useIsMobile();
   return (
     <div
       className={cn(
@@ -19,7 +22,7 @@ export default function RetroGrid({
       <div className="absolute inset-0 [transform:rotateX(var(--grid-angle))]">
         <div
           className={cn(
-            "animate-grid",
+            !isMobile && navigator.hardwareConcurrency >= 8 ? "animate-grid" : "",
 
             "[background-repeat:repeat] [background-size:60px_60px] [height:300vh] [inset:0%_0px] [margin-left:-50%] [transform-origin:100%_0_0] [width:600vw]",
 

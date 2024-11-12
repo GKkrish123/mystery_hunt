@@ -26,6 +26,7 @@ import {
 import RetroGrid from "./ui/retro-grid"
 import Meteors from "./ui/meteors"
 import { useRef } from "react"
+import LetterPullup from "./ui/letter-pullup"
 
 const data = {
   user: {
@@ -131,21 +132,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar ref={sidebarRef} variant="inset" {...props}>
       <Meteors key="sidebar-meteors" number={30}/>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">GKrish Mysteryverse</span>
-                  <span className="truncate text-xs">Enterprise</span>
-                </div>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+          <LetterPullup
+            wrapperClassName="justify-start pl-4 pt-2"
+            className="pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ff2975] to-[#8c1eff] bg-clip-text text-xl md:text-2xl font-bold leading-none tracking-tighter text-transparent dark:text-transparent"
+            words="Mysteryverse"
+          />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

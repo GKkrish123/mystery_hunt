@@ -14,7 +14,7 @@ export default async function LoginPage({ searchParams }: { searchParams: { sign
     <div className="relative overflow-hidden flex flex-col gap-2 h-screen w-full items-center justify-center px-4">
       <Meteors key="login-meteors" number={30} />
       <LetterPullup
-        className="pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ff2975] to-[#8c1eff] bg-clip-text text-center text-5xl sm:text-7xl font-bold leading-none tracking-tighter text-transparent"
+        className="pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ff2975] to-[#8c1eff] bg-clip-text text-center text-5xl sm:text-7xl font-bold leading-none tracking-tighter text-transparent dark:text-transparent"
         words="Mysteryverse"
       />
       <BlurFade key={isSignup ? 'signup' : 'login'} className="z-10" yOffset={0} delay={0.25}>

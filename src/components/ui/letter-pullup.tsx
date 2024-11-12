@@ -8,12 +8,14 @@ interface LetterPullupProps {
   className?: string;
   words: string;
   delay?: number;
+  wrapperClassName?: string;
 }
 
 export default function LetterPullup({
   className,
   words,
   delay,
+  wrapperClassName
 }: LetterPullupProps) {
   const letters = words.split("");
 
@@ -29,7 +31,7 @@ export default function LetterPullup({
   };
 
   return (
-    <div className="flex justify-center">
+    <div className={cn("flex justify-center", wrapperClassName)}>
       {letters.map((letter, i) => (
         <motion.h1
           key={i}

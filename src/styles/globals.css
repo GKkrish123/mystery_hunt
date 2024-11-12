@@ -126,7 +126,19 @@
 .dark .scrollbar-shadow > [data-radix-scroll-area-viewport] {
   --rad: radial-gradient(50% 14px, rgba(255, 255, 255, .2), transparent);
   background: 
-    linear-gradient(#000000 12px, transparent 40px calc(100% - 40px), #000000 calc(100% - 12px)) local,
+    linear-gradient(hsl(var(--card)) 12px, transparent 40px calc(100% - 40px), hsl(var(--card)) calc(100% - 12px)) local,
     var(--rad) top   /100% 200%, 
     var(--rad) bottom /100% 200%;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+/* 
+.disable-animations *, ::before, ::after{
+  animation: none !important;
+  transition: none !important;
+} */
