@@ -32,7 +32,7 @@ export default function SupportPage() {
                 className="absolute inset-0"
                 quantity={isMobile ? 200 : 300}
                 ease={80}
-                color={resolvedTheme === "dark" ? "white" : "black"}
+                color={resolvedTheme === "dark" ? "#ffffff" : "#000000"}
                 refresh
             />
         </div>

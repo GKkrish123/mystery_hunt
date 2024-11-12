@@ -8,15 +8,7 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig =  {
-    apiKey: "AIzaSyD7JZZOOoz_KOIDO-vbcibR9x10i2C4Kbs",
-    authDomain: "gkrish-mystery-hunt.firebaseapp.com",
-    projectId: "gkrish-mystery-hunt",
-    storageBucket: "gkrish-mystery-hunt.firebasestorage.app",
-    messagingSenderId: "526345543661",
-    appId: "1:526345543661:web:03d2c65501869d03e4d1e4",
-    measurementId: "G-329FE0BLN8",
-  };
+const firebaseConfig = {};
 
 // Initialize Firebase
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
