@@ -19,5 +19,9 @@ env:
 
   # Grant access to secrets in Cloud Secret Manager.
   # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
+  - variable: NODE_ENV
+    value: production
   - variable: FB_KING
     secret: projects/526345543661/secrets/mystery-hunt-prod
+  - variable: REDIS_URL
+    value: rediss://default:AbXhAAIjcDFhNGI1OWM1N2JkOTQ0YzA2ODdlNjU5YzhmMDIzNDY0MXAxMA@romantic-pegasus-46561.upstash.io:6379

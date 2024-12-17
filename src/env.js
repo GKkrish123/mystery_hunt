@@ -9,6 +9,7 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
     FB_KING: z.string(),
+    REDIS_URL: z.string().optional()
   },
   
   /**
@@ -41,6 +42,7 @@ export const env = createEnv({
     NEXT_PUBLIC_FB_APPID: process.env.NEXT_PUBLIC_FB_APPID,
     NEXT_PUBLIC_FB_MEASUREID: process.env.NEXT_PUBLIC_FB_MEASUREID,
     FB_KING: process.env.FB_KING,
+    REDIS_URL: process.env.REDIS_URL
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
