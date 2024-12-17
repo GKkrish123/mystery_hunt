@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build && next start",
+    "ci": "NODE_ENV=development npm ci",
+    "build": "NODE_ENV=production next build",
     "check": "next lint && tsc --noEmit",
     "dev": "next dev --turbo",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
