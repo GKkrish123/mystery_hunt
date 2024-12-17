@@ -86,7 +86,8 @@
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.170.0",
     "three-globe": "^2.34.4",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "tailwindcss": "^3.4.3"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
@@ -102,7 +103,6 @@
     "postcss": "^8.4.39",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
-    "tailwindcss": "^3.4.3",
     "typescript": "^5.5.3",
     "url-loader": "^4.1.1"
   },
