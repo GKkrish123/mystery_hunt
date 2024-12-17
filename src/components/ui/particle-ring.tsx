@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, type Vector3 } from "@react-three/fiber";
 import { OrbitControls, Sphere } from "@react-three/drei";
 import { type Group } from "three";
 
@@ -125,16 +125,16 @@ const PointCircle = () => {
   return (
     <group ref={ref}>
       {pointsInner.map((point) => (
-        <Point key={point.idx} position={point.position} color={point.color} />
+        <Point key={point.idx} position={point.position as Vector3} color={point.color} />
       ))}
       {pointsOuter.map((point) => (
-        <Point key={point.idx} position={point.position} color={point.color} />
+        <Point key={point.idx} position={point.position as Vector3} color={point.color} />
       ))}
     </group>
   );
 };
 
-const Point = ({ position, color }: { position: number[]; color: string }) => {
+const Point = ({ position, color }: { position: Vector3; color: string }) => {
   return (
     <Sphere position={position} args={[0.1, 10, 10]}>
       <meshStandardMaterial
