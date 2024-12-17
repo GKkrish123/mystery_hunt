@@ -1,14 +1,34 @@
+"use client";
+
 import React from "react";
 
 import { cn } from "@/lib/utils";
 interface RainbowButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  scrollTo?: string;
+}
 
 export function RainbowButton({
   children,
   className,
+  scrollTo,
   ...props
 }: RainbowButtonProps) {
+  const handleScroll = () => {
+    const targetElement = document.getElementById(scrollTo ?? "");
+    if (targetElement) {
+      const topOffset = 50;
+      const targetPosition =
+        targetElement.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = targetPosition - topOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };  
+
   return (
     <button
       className={cn(
@@ -26,6 +46,7 @@ export function RainbowButton({
         className,
       )}
       {...props}
+      onClick={scrollTo ? handleScroll : props.onClick}
     >
       {children}
     </button>

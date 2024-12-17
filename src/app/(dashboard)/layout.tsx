@@ -1,17 +1,34 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { AppHeader } from "@/components/app-header";
+import { FloatingNav } from "@/components/floating-navbar";
+import { Suspense } from "react";
+import VerticalTiles from "@/components/ui/vertical-tiles";
+import { MusicButton } from "@/components/ui/music-button";
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
+    <>
+      <SidebarProvider defaultOpen={false}>
+        <AppSidebar />
+        <SidebarInset>
           <AppHeader />
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-            {children}
-          </div>
-      </SidebarInset>
-    </SidebarProvider>
+          <Suspense>{children}</Suspense>
+        </SidebarInset>
+        <FloatingNav />
+      </SidebarProvider>
+      <VerticalTiles
+        animationDelay={0.5}
+        animationDuration={0.7}
+        minTileWidth={32}
+        stagger={0.02}
+        tileClassName="z-50"
+      />
+      <MusicButton />
+    </>
   );
 }

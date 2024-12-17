@@ -4,33 +4,37 @@ import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
 interface SecretInputProps {
-    value: string;
-    onChange: (value: string) => void;
+  value: string;
+  onChange: (value: string) => void;
   expectedInput: string;
   className?: string;
 }
 
-export function SecretInput({ expectedInput, className, value, onChange }: SecretInputProps) {
+export function SecretInput({
+  expectedInput,
+  className,
+  value,
+  onChange,
+}: SecretInputProps) {
   const splittedInput: string[] = expectedInput.split(" ");
   const lengthWithoutSpaces = expectedInput.replace(/\s+/g, "").length;
   let indexCounter = 0;
 
   return (
     <InputOTP
-        className={className}
-        value={value}
-        onChange={onChange}
+      className={className}
+      value={value}
+      onChange={onChange}
       maxLength={lengthWithoutSpaces}
       pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
     >
       {splittedInput.map((group, groupIndex) => (
         <div className="flex items-center gap-2" key={`secret-${groupIndex}`}>
-          <InputOTPGroup >
+          <InputOTPGroup>
             {group.split("").map((_, charIndex) => (
               <InputOTPSlot
                 className="border-gray-400"

@@ -25,11 +25,11 @@ export const BoxReveal = ({
 
   useEffect(() => {
     if (isInView) {
-      slideControls.start("visible");
-      mainControls.start("visible");
+      void slideControls.start("visible");
+      void mainControls.start("visible");
     } else {
-      slideControls.start("hidden");
-      mainControls.start("hidden");
+      void slideControls.start("hidden");
+      void mainControls.start("hidden");
     }
   }, [isInView, mainControls, slideControls]);
 

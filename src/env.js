@@ -8,14 +8,22 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
+    FB_KING: z.string(),
   },
-
+  
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars. To expose them to the client, prefix them with
    * `NEXT_PUBLIC_`.
-   */
-  client: {
+  */
+ client: {
+    NEXT_PUBLIC_FB_APIKEY: z.string(),
+    NEXT_PUBLIC_FB_AUTHDOMAIN: z.string(),
+    NEXT_PUBLIC_FB_PROJECTID: z.string(),
+    NEXT_PUBLIC_FB_STORAGEBUCKET: z.string(),
+    NEXT_PUBLIC_FB_MESSAGESENDERID: z.string(),
+    NEXT_PUBLIC_FB_APPID: z.string(),
+    NEXT_PUBLIC_FB_MEASUREID: z.string(),
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
 
@@ -25,6 +33,14 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_FB_APIKEY: process.env.NEXT_PUBLIC_FB_APIKEY,
+    NEXT_PUBLIC_FB_AUTHDOMAIN: process.env.NEXT_PUBLIC_FB_AUTHDOMAIN,
+    NEXT_PUBLIC_FB_PROJECTID: process.env.NEXT_PUBLIC_FB_PROJECTID,
+    NEXT_PUBLIC_FB_STORAGEBUCKET: process.env.NEXT_PUBLIC_FB_STORAGEBUCKET,
+    NEXT_PUBLIC_FB_MESSAGESENDERID: process.env.NEXT_PUBLIC_FB_MESSAGESENDERID,
+    NEXT_PUBLIC_FB_APPID: process.env.NEXT_PUBLIC_FB_APPID,
+    NEXT_PUBLIC_FB_MEASUREID: process.env.NEXT_PUBLIC_FB_MEASUREID,
+    FB_KING: process.env.FB_KING,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

@@ -6,10 +6,11 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  reactStrictMode: false,
   webpack(config) {
     config.module.rules.push({
-        test: /\.svg$/,
-        use: ['@svgr/webpack', 'url-loader']
+      test: /\.svg$/,
+      use: ["@svgr/webpack", "url-loader"],
     });
 
     return config;
@@ -19,15 +20,15 @@ const config = {
       {
         protocol: "https",
         hostname: "**",
-      }
+      },
     ],
   },
   experimental: {
     turbo: {
       rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
         },
       },
     },

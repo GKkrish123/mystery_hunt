@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { ThemeProvider as NextThemesProvider } from "next-themes"
-import { type ThemeProviderProps } from "next-themes"
+import * as React from "react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { type ThemeProviderProps } from "next-themes";
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   // React.useEffect(() => {
@@ -11,5 +11,6 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   //     document.body.classList.add('disable-animations');
   //   }
   // }, [])
-  return <NextThemesProvider {...props}><h1>{navigator.hardwareConcurrency}</h1>{children}</NextThemesProvider>
+  // return <NextThemesProvider {...props}><h1>{navigator.hardwareConcurrency}</h1>{children}</NextThemesProvider>
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 }

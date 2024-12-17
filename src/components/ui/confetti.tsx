@@ -15,7 +15,7 @@ import type {
 } from "canvas-confetti";
 import confetti from "canvas-confetti";
 
-import { Button, ButtonProps } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
 
 type Api = {
   fire: (options?: ConfettiOptions) => void;
@@ -81,7 +81,7 @@ const Confetti = forwardRef<ConfettiRef, Props>((props, ref) => {
 
   useEffect(() => {
     if (!manualstart) {
-      fire();
+      void fire();
     }
   }, [manualstart, fire]);
 
@@ -104,7 +104,7 @@ function ConfettiButton({ options, children, ...props }: ConfettiButtonProps) {
     const rect = event.currentTarget.getBoundingClientRect();
     const x = rect.left + rect.width / 2;
     const y = rect.top + rect.height / 2;
-    confetti({
+    void confetti({
       ...options,
       origin: {
         x: x / window.innerWidth,

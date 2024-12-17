@@ -1,9 +1,9 @@
 "use client";
 
 import {
-  CSSProperties,
-  ReactElement,
-  ReactNode,
+  type CSSProperties,
+  type ReactElement,
+  type ReactNode,
   useEffect,
   useRef,
   useState,
@@ -64,6 +64,7 @@ interface NeonGradientCardProps {
    * */
   neonColors?: NeonColorsProps;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 

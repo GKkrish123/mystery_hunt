@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, Variants } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
@@ -30,16 +30,11 @@ export default function HyperText({
   wrapperClassName,
   animateOnLoad = true,
 }: HyperTextProps) {
-  const splittedText = text.split(" ") as string[];
+  const splittedText = text.split(" ");
   const [displayText, setDisplayText] = useState<string[]>(splittedText);
   const [trigger, setTrigger] = useState(false);
   const interations = useRef(0);
   const isFirstRender = useRef(true);
-
-  const triggerAnimation = () => {
-    interations.current = 0;
-    setTrigger(true);
-  };
 
   useEffect(() => {
     const interval = setInterval(
@@ -50,11 +45,15 @@ export default function HyperText({
           return;
         }
         if (interations.current < splittedText.length) {
-          setDisplayText((t) => t.map((word, i) =>
+          setDisplayText((t) =>
+            t.map((word, i) =>
               i <= interations.current
-                ? splittedText[i] as string
-                :  Array.from({ length: word.length }, () => alphabets[getRandomInt(26)]).join(""),
-            )
+                ? splittedText[i]!
+                : Array.from(
+                    { length: word.length },
+                    () => alphabets[getRandomInt(26)],
+                  ).join(""),
+            ),
           );
           interations.current = interations.current + 0.05;
         } else {
@@ -66,25 +65,25 @@ export default function HyperText({
     );
     // Clean up interval on unmount
     return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [splittedText, duration, trigger, animateOnLoad]);
 
   return (
     <div
-      className={cn("overflow-hidden py-2 flex flex-wrap cursor-default scale-100", wrapperClassName)}
+      className={cn(
+        "flex scale-100 cursor-default flex-wrap overflow-hidden py-2",
+        wrapperClassName,
+      )}
       // onMouseEnter={triggerAnimation}
     >
-      <AnimatePresence >
+      <AnimatePresence>
         {displayText.map((word, i) => (
           <motion.span
             key={i}
-            className={cn(
-              "font-mono", 
-              "inline-block", 
-              className
-            )}
+            className={cn("font-mono", "inline-block", className)}
             {...framerProps}
           >
-            {word.toUpperCase() + "\u00A0"} {/* Replace spaces */}
+            {word.toUpperCase() + (i < splittedText.length - 1 ? "\u00A0" : "")}
           </motion.span>
         ))}
       </AnimatePresence>

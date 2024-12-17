@@ -11,6 +11,11 @@
     --popover-foreground: 240 10% 3.9%;
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
+      --color-1: 0 100% 63%;
+      --color-2: 270 100% 63%;
+      --color-3: 210 100% 63%;
+      --color-4: 195 100% 63%;
+      --color-5: 90 100% 63%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
@@ -142,3 +147,74 @@
   animation: none !important;
   transition: none !important;
 } */
+
+
+.like-btn-container {
+  box-shadow: none;
+  transition: all 0.1s ease-out;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  scale: 1;
+  z-index: 1;
+}
+
+.svg-icon-answer-like-circle {
+  position: absolute;
+  left: calc(50% - 13px);
+  top: calc(50% - 13px);
+  z-index: -1;
+}
+
+.like-btn {
+  height: 28px;
+  width: 28px;
+  flex: 0 0 28px;
+  margin: auto auto 0;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: var(--extra-small-regular);
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.1s ease-out;
+  outline: 0;
+  position: relative;
+}
+
+.like-btn svg:not(.svg-icon-answer-like-circle) {
+  transition: all 0.1s ease-out;
+  scale: 1;
+}
+
+.like-btn:active svg:not(.svg-icon-answer-like-circle) {
+  scale: 0.8;
+}
+
+.like-btn svg {
+  height: auto;
+  width: 16px;
+  flex: 0 0 16px;
+  width: auto;
+  transition: all 0.1s ease-out;
+  scale: 1;
+  transition: all 0.2s ease-out;
+  overflow: visible;
+}
+
+.like-btn span + svg {
+  margin-left: 4px;
+}
+
+.like-btn-container.liked .like-btn {
+  color: palevioletred;
+  border-color: rgb(255, 82, 165);
+  fill: #ff52a5;
+}
+

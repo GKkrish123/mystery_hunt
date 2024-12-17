@@ -1,6 +1,8 @@
 "use client";
 
+import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 import React, { useEffect, useRef, useState } from "react";
 
 interface MousePosition {
@@ -36,7 +38,7 @@ interface ParticlesProps {
   ease?: number;
   size?: number;
   refresh?: boolean;
-  color?: string;
+  // color?: string;
   vx?: number;
   vy?: number;
 }
@@ -64,10 +66,13 @@ const Particles: React.FC<ParticlesProps> = ({
   ease = 50,
   size = 0.4,
   refresh = false,
-  color = "#ffffff",
+  // color = "#ffffff",
   vx = 0,
   vy = 0,
 }) => {
+  const isMobile = useIsMobile();
+  const { resolvedTheme } = useTheme();
+  const color = resolvedTheme === "dark" ? "#ffffff" : "#000000";
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>(null);
@@ -88,14 +93,17 @@ const Particles: React.FC<ParticlesProps> = ({
     return () => {
       window.removeEventListener("resize", initCanvas);
     };
-  }, [color]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [color, isMobile]);
 
   useEffect(() => {
     onMouseMove();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mousePosition.x, mousePosition.y]);
 
   useEffect(() => {
     initCanvas();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
 
   const initCanvas = () => {
@@ -133,7 +141,8 @@ const Particles: React.FC<ParticlesProps> = ({
   const resizeCanvas = () => {
     if (canvasContainerRef.current && canvasRef.current && context.current) {
       circles.current.length = 0;
-      canvasSize.current.w = canvasContainerRef.current.offsetWidth;
+      canvasSize.current.w =
+        canvasContainerRef.current.offsetWidth + (isMobile ? 0 : 400);
       canvasSize.current.h = canvasContainerRef.current.offsetHeight;
       canvasRef.current.width = canvasSize.current.w * dpr;
       canvasRef.current.height = canvasSize.current.h * dpr;
@@ -173,10 +182,48 @@ const Particles: React.FC<ParticlesProps> = ({
   const drawCircle = (circle: Circle, update = false) => {
     if (context.current) {
       const { x, y, translateX, translateY, size, alpha } = circle;
+
+      // Define the gradient
+      const gradient = context.current.createRadialGradient(
+        x,
+        y,
+        0,
+        x,
+        y,
+        size,
+      );
+      gradient.addColorStop(0, `rgba(${rgb.join(", ")}, ${alpha})`); // Center color
+      gradient.addColorStop(1, `rgba(${rgb.join(", ")}, 0)`); // Edge fades out
+
       context.current.translate(translateX, translateY);
       context.current.beginPath();
-      context.current.arc(x, y, size, 0, 2 * Math.PI);
-      context.current.fillStyle = `rgba(${rgb.join(", ")}, ${alpha})`;
+
+      // Draw the star
+      const spikes = 5; // Number of points in the star
+      const outerRadius = size;
+      const innerRadius = size / 2;
+      let rotation = (Math.PI / 2) * 3; // Start angle
+
+      const step = Math.PI / spikes;
+
+      context.current.moveTo(x, y - outerRadius); // Move to the top point
+      for (let i = 0; i < spikes; i++) {
+        // Draw outer point
+        const outerX = x + Math.cos(rotation) * outerRadius;
+        const outerY = y + Math.sin(rotation) * outerRadius;
+        context.current.lineTo(outerX, outerY);
+        rotation += step;
+
+        // Draw inner point
+        const innerX = x + Math.cos(rotation) * innerRadius;
+        const innerY = y + Math.sin(rotation) * innerRadius;
+        context.current.lineTo(innerX, innerY);
+        rotation += step;
+      }
+      context.current.closePath();
+
+      // Fill with gradient
+      context.current.fillStyle = gradient;
       context.current.fill();
       context.current.setTransform(dpr, 0, 0, dpr, 0, 0);
 
@@ -199,7 +246,7 @@ const Particles: React.FC<ParticlesProps> = ({
 
   const drawParticles = () => {
     clearContext();
-    const particleCount = quantity;
+    const particleCount = isMobile ? Math.floor(quantity / 2) : quantity;
     for (let i = 0; i < particleCount; i++) {
       const circle = circleParams();
       drawCircle(circle);
@@ -271,11 +318,11 @@ const Particles: React.FC<ParticlesProps> = ({
 
   return (
     <div
-      className={cn("pointer-events-none", className)}
+      className={cn("pointer-events-none size-full", className)}
       ref={canvasContainerRef}
       aria-hidden="true"
     >
-      <canvas ref={canvasRef} className="size-full" />
+      <canvas ref={canvasRef} className="pointer-events-none size-full" />
     </div>
   );
 };

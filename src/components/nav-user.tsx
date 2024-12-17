@@ -1,59 +1,51 @@
-"use client"
+"use client";
 
-import {
-  ChevronsUpDown,
-  LogOut,
-  User2,
-} from "lucide-react"
+import { ChevronsUpDown, LogOut, User2 } from "lucide-react";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { signOut } from "firebase/auth"
-import { auth } from "firebase"
+} from "@/components/ui/sidebar";
+import { auth } from "firebase-user";
 import ShineBorder from "@/components/ui/shine-border";
-import { useTheme } from "next-themes"
 import { toast } from "sonner";
+import { usePathname, useRouter } from "next/navigation";
+import { deleteCookie } from "cookies-next";
+import { type HunterEssentials } from "@/server/model/hunters";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
-  const { isMobile } = useSidebar();
-  const { resolvedTheme } = useTheme();
+interface NavUserProps {
+  user: HunterEssentials;
+}
+
+export function NavUser({ user }: NavUserProps) {
+  const { isMobile, toggleSidebar } = useSidebar();
+  const router = useRouter();
+  const currentPath = usePathname();
 
   const onLogout = async () => {
-    try{
-      await signOut(auth);    
-    } catch(error) {
+    try {
+      toggleSidebar();
+      await deleteCookie("token");
+      await deleteCookie("token-boom");
+      await auth.signOut();
+    } catch (error) {
       console.log("Error in signing out user", error);
       toast.error("Oops, Something went wrong while checking you out!", {
         description: "This shouldn’t have happened but please try again later.",
       });
     }
-  }
+  };
 
   return (
     <SidebarMenu>
@@ -62,22 +54,21 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-full w-full p-0"
+              className="h-full w-full p-0 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-            <ShineBorder
-              className="min-w-full flex gap-2"
-              color={resolvedTheme === "dark" ? "white" : "black"}
-            >
-              <Avatar className="h-8 w-8 rounded-lg z-10">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold z-10">{user.name}</span>
-                <span className="truncate text-xs z-10">{user.email}</span>
-              </div>
-              <ChevronsUpDown className="ml-auto size-4 z-10" />
-            </ShineBorder>
+              <ShineBorder className="flex min-w-full gap-2">
+                <Avatar className="z-10 h-8 w-8 rounded-lg">
+                  <AvatarImage src={user.proPicUrl} alt={user.name} />
+                  <AvatarFallback className="rounded-lg">
+                    {user.name.slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="z-10 grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">{user.name}</span>
+                  <span className="truncate text-xs">{user.email}</span>
+                </div>
+                <ChevronsUpDown className="z-10 ml-auto size-4" />
+              </ShineBorder>
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -86,28 +77,18 @@ export function NavUser({
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <DropdownMenuGroup className="flex-row">
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => {
+                  toggleSidebar();
+                  router.push("/profile");
+                }}
+                isActive={currentPath === "/profile"}
+              >
                 <User2 />
                 Profile
               </DropdownMenuItem>
-              {/* <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem> */}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="cursor-pointer" onClick={onLogout}>
@@ -118,5 +99,5 @@ export function NavUser({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

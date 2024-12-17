@@ -15,7 +15,7 @@ export default function TypingAnimation({
   duration = 200,
   className,
 }: TypingAnimationProps) {
-  const [displayedText, setDisplayedText] = useState<string>(text[0] as string);
+  const [displayedText, setDisplayedText] = useState<string>(text[0]!);
   const [i, setI] = useState<number>(0);
 
   useEffect(() => {
@@ -31,12 +31,18 @@ export default function TypingAnimation({
     return () => {
       clearInterval(typingEffect);
     };
-  }, [duration, i]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [duration, i, displayedText]);
+
+  useEffect(() => {
+    setDisplayedText(text[0]!);
+    setI(1);
+  }, [text]);
 
   return (
     <h1
       className={cn(
-        "font-display text-center text-4xl font-bold leading-[5rem] tracking-[-0.02em] drop-shadow-sm",
+        "text-center text-4xl font-bold leading-[5rem] tracking-[-0.02em] drop-shadow-sm",
         className,
       )}
     >

@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+import { useViewportSize } from "@mantine/hooks";
 import React, {
   useCallback,
   useEffect,
@@ -13,8 +15,8 @@ interface FlickeringGridProps {
   gridGap?: number;
   flickerChance?: number;
   color?: string;
-  width?: number;
-  height?: number;
+  width?: string | number;
+  height?: string | number;
   className?: string;
   maxOpacity?: number;
 }
@@ -24,13 +26,12 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
   gridGap = 6,
   flickerChance = 0.3,
   color = "rgb(0, 0, 0)",
-  width,
-  height,
   className,
   maxOpacity = 0.3,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isInView, setIsInView] = useState(false);
+  const { width, height } = useViewportSize();
 
   const memoizedColor = useMemo(() => {
     const toRGBA = (color: string) => {
@@ -51,7 +52,7 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
 
   const setupCanvas = useCallback(
     (canvas: HTMLCanvasElement) => {
-      const canvasWidth = width || canvas.clientWidth;
+      const canvasWidth = width;
       const canvasHeight = height || canvas.clientHeight;
       const dpr = window.devicePixelRatio || 1;
       canvas.width = canvasWidth * dpr;
@@ -147,7 +148,7 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsInView(entry.isIntersecting);
+        setIsInView(!!entry?.isIntersecting);
       },
       { threshold: 0 },
     );
@@ -170,13 +171,13 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
   return (
     <canvas
       ref={canvasRef}
-      className={`size-full pointer-events-none ${className}`}
+      className={cn(`pointer-events-none absolute z-[-2] size-full`, className)}
       style={{
-        width: width || "100%",
-        height: height || "100%",
+        width: "100%",
+        height: "100%",
       }}
-      width={width}
-      height={height}
+      width="100%"
+      height="100%"
     />
   );
 };

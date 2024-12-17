@@ -6,7 +6,9 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
+import redis from "@/lib/redis";
 import { initTRPC } from "@trpc/server";
+import { adminAuth } from "firebase-king";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -22,8 +24,42 @@ import { ZodError } from "zod";
  *
  * @see https://trpc.io/docs/server/context
  */
+
+interface UserData {
+  uid: string;
+  hunterId: string;
+}
+
 export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const bearer = opts.headers.get("authorization");
+  let user: UserData = {
+    uid: "",
+    hunterId: "",
+  };
+
+  if (bearer) {
+    try {
+      const userTokenData = await adminAuth.verifyIdToken(
+        bearer?.split("Bearer ")[1] ?? "",
+        true,
+      );
+      user.uid = userTokenData.uid;
+      user.hunterId = userTokenData.name as string;
+    } catch (error) {
+      console.error(
+        "Hmmmmm trying to do something fishy",
+        JSON.stringify(error),
+      );
+      user = {
+        uid: "",
+        hunterId: "",
+      };
+    }
+  }
+
   return {
+    user,
+    redis,
     ...opts,
   };
 };
@@ -76,13 +112,37 @@ export const createTRPCRouter = t.router;
  * You can remove this if you don't like it, but it can help catch unwanted waterfalls by simulating
  * network latency that would occur in production but not in local development.
  */
-const timingMiddleware = t.middleware(async ({ next, path }) => {
+const openMiddleware = t.middleware(async ({ next, path }) => {
   const start = Date.now();
 
   if (t._config.isDev) {
     // artificial delay in dev
     const waitMs = Math.floor(Math.random() * 400) + 100;
     await new Promise((resolve) => setTimeout(resolve, waitMs));
+  }
+
+  const result = await next();
+
+  const end = Date.now();
+  console.log(`[TRPC] ${path} took ${end - start}ms to execute`);
+
+  return result;
+});
+
+const authMiddleware = t.middleware(async ({ next, path, ctx }) => {
+  const start = Date.now();
+
+  if (t._config.isDev) {
+    // artificial delay in dev
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+
+  if (
+    !ctx.headers.get("authorization") ||
+    !ctx.user?.uid ||
+    !ctx.user?.hunterId
+  ) {
+    throw new Error("Unauthorized Entry");
   }
 
   const result = await next();
@@ -100,4 +160,5 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure.use(timingMiddleware);
+export const publicProcedure = t.procedure.use(openMiddleware);
+export const privateProcedure = t.procedure.use(authMiddleware);

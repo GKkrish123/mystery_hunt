@@ -11,13 +11,18 @@ const SHUFFLE_TIME = 50;
 const CHARS = "!@#$%^&*():{};|,.<>/?";
 
 interface SecretButtonProps {
-    disabled?: boolean;
-    loading?: boolean;
-    inputText: string;
-    onClick: () => void;
+  disabled?: boolean;
+  loading?: boolean;
+  inputText: string;
+  onClick: () => void;
 }
 
-const SecretButton = ({ disabled = false, inputText, loading=false, onClick }: SecretButtonProps) => {
+const SecretButton = ({
+  disabled = false,
+  inputText,
+  loading = false,
+  onClick,
+}: SecretButtonProps) => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [text, setText] = useState(inputText);
@@ -26,7 +31,8 @@ const SecretButton = ({ disabled = false, inputText, loading=false, onClick }: S
     let pos = 0;
 
     intervalRef.current = setInterval(() => {
-      const scrambled = inputText.split("")
+      const scrambled = inputText
+        .split("")
         .map((char, index) => {
           if (pos / CYCLES_PER_LETTER > index) {
             return char;
@@ -56,7 +62,7 @@ const SecretButton = ({ disabled = false, inputText, loading=false, onClick }: S
 
   return (
     <motion.button
-        disabled={disabled}
+      disabled={disabled}
       whileHover={{
         scale: disabled ? 1 : 1.025,
       }}
@@ -78,16 +84,23 @@ const SecretButton = ({ disabled = false, inputText, loading=false, onClick }: S
         animate={{
           y: "-100%",
         }}
-        transition={disabled ? {} : {
-          repeat: Infinity,
-          repeatType: "mirror",
-          duration: 1,
-          ease: "linear",
-        }}
-        className={cn("duration-300 absolute inset-0 z-0 scale-125 bg-gradient-to-t from-indigo-400/0 from-40% via-indigo-400/100 to-indigo-400/0 to-60% opacity-0 transition-opacity", loading && "opacity-100")}
+        transition={
+          disabled
+            ? {}
+            : {
+                repeat: Infinity,
+                repeatType: "mirror",
+                duration: 1,
+                ease: "linear",
+              }
+        }
+        className={cn(
+          "absolute inset-0 z-0 scale-125 bg-gradient-to-t from-indigo-400/0 from-40% via-indigo-400/100 to-indigo-400/0 to-60% opacity-0 transition-opacity duration-300",
+          loading && "opacity-100",
+        )}
       />
     </motion.button>
   );
 };
 
-export { SecretButton }
+export { SecretButton };
