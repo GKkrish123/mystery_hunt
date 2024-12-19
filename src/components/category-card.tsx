@@ -107,8 +107,8 @@ export function CategoryCard({
             priority
             src={themePicUrl}
             alt={name}
-            width={0}
-            height={0}
+            width={250}
+            height={200}
             style={{
               mask: isMobile
                 ? "radial-gradient(25px at calc(100% - 10px) calc(8px), rgba(0, 0, 0, 0) 95%, rgb(0, 0, 0))"

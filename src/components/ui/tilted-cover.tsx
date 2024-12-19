@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface TiltedCoverProps extends React.HTMLAttributes<HTMLDivElement> {
   direction?: "left" | "right";
@@ -68,12 +69,12 @@ export default function TiltedCover({
         >
           <div className="h-full w-full rounded-md object-cover">
             {image ? (
-              /* Use `next/image` and remove the line below. */
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
+              <Image
                 src=""
                 alt=""
                 {...image}
+                width={200}
+                height={200}
                 className={cn(
                   "h-full w-full rounded-md object-cover",
                   image?.className,

@@ -61,7 +61,6 @@
     "googleapis": "^144.0.0",
     "input-otp": "^1.4.1",
     "ioredis": "^5.4.1",
-    "leva": "^0.9.35",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.454.0",
     "meshline": "^3.3.1",
@@ -72,12 +71,9 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.1",
     "react-icon-cloud": "^4.1.4",
-    "react-lottie": "^1.2.9",
     "react-phone-number-input": "^3.4.9",
     "react-spring": "^9.7.4",
     "react-tinder-card": "^1.6.4",
-    "react-use-measure": "^2.1.1",
-    "react-wrap-balancer": "^1.1.1",
     "react-youtube-music-player": "^1.0.5",
     "server-only": "^0.0.1",
     "simplex-noise": "^4.0.3",
@@ -86,7 +82,6 @@
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.170.0",
-    "three-globe": "^2.34.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {

@@ -106,8 +106,8 @@ export function MysteryCard({
             priority
             src={thumbnailUrl}
             alt={title}
-            width={0}
-            height={0}
+            width={250}
+            height={250}
             style={{
               mask: isMobile
                 ? "radial-gradient(25px at calc(100% - 13px) calc(8px), rgba(0, 0, 0, 0) 95%, rgb(0, 0, 0))"
