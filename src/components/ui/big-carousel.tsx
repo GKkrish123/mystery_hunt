@@ -35,8 +35,8 @@ const List = ({ item, className, index, activeItem, ...props }: ImageProps) => {
       <Image
         src={item.themePicUrl}
         alt={item.name}
-        height={0}
-        width={0}
+        height={700}
+        width={400}
         className={cn("h-full w-full object-cover", {
           "blur-[2px]": index !== activeItem,
         })}

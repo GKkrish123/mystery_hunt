@@ -371,8 +371,8 @@ export const RevealCard = ({
           priority
           src={picUrl}
           alt={name}
-          width={0}
-          height={0}
+          width={180}
+          height={180}
           className={cn(
             "absolute aspect-square h-full w-full object-cover object-top transition-all duration-200 hover:scale-105 group-hover/canvas-card:-translate-y-4 group-hover/canvas-card:opacity-0",
           )}

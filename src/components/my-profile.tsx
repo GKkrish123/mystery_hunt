@@ -12,8 +12,8 @@ export function MyProfile({ className }: { className?: string }) {
     >
       <Image
         alt="Avatar"
-        width={0}
-        height={0}
+        width={64}
+        height={64}
         priority
         src="https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg"
         className="h-16 w-16 rounded-full duration-300 ease-in-out hover:scale-125"

@@ -73,7 +73,7 @@ export default function TiltedCover({
                 src=""
                 alt=""
                 {...image}
-                width={200}
+                width={160}
                 height={200}
                 className={cn(
                   "h-full w-full rounded-md object-cover",
