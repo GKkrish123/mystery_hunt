@@ -7,7 +7,6 @@ import { api } from "@/trpc/server";
 import { type Mystery } from "@/server/model/mysteries";
 import { type Category } from "@/server/model/categories";
 import ProductFeatures from "@/components/ui/feature-card";
-import Particles from "@/components/ui/particles";
 import Link from "next/link";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 
