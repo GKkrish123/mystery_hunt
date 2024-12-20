@@ -87,7 +87,12 @@ const Carousel = memo(function CarouselComponent({
           width: cylinderWidth,
           transformStyle: "preserve-3d",
         }}
+        onClick={async () => {
+          controls.stop();
+          await startSlowRotation();
+        }}
         onDrag={(_, info) => {
+          controls.stop();
           if (isCarouselActive)
             rotation.set(rotation.get() + info.offset.x * 0.007);
         }}
