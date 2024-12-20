@@ -43,11 +43,7 @@ export default async function ExplorerPage() {
           borderClassName="z-[15]"
         >
           <SwipeCards
-            cardData={[
-              ...shuffledMysteries,
-              ...shuffledMysteries,
-              ...shuffledMysteries,
-            ]}
+            cardData={shuffledMysteries}
           />
           <span
             className={cn(
@@ -58,11 +54,7 @@ export default async function ExplorerPage() {
             Mystery Shuffle
           </span>
           <SwipeCards
-            cardData={[
-              ...shuffledCategories,
-              ...shuffledCategories,
-              ...shuffledCategories,
-            ]}
+            cardData={shuffledCategories}
             type="category"
           />
         </ShineBorder>
@@ -77,23 +69,10 @@ export default async function ExplorerPage() {
           <Expandable
             className="col-span-full mt-3"
             autoPlay={false}
-            list={[
-              ...featuredCategories,
-              ...featuredCategories,
-              ...featuredCategories,
-              ...featuredCategories,
-              ...featuredCategories,
-              ...featuredCategories,
-              ...featuredCategories,
-            ]}
+            list={featuredCategories}
           />
         </div>
-        {[
-          ...hallOfFameMysteries,
-          ...hallOfFameMysteries,
-          ...hallOfFameMysteries,
-          ...hallOfFameMysteries,
-        ].map((item, index) => (
+        {hallOfFameMysteries.map((item, index) => (
           <div
             key={`hof-${item.category.name}-${index}`}
             className="z-10 col-span-3"

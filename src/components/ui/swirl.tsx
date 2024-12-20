@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
@@ -22,7 +22,7 @@ interface SwirlProps {
   backgroundColor?: string;
 }
 
-const Swirl: React.FC<SwirlProps> = (props) => {
+const Swirl: React.FC<SwirlProps> = memo((props) => {
   const { resolvedTheme } = useTheme();
   const isMobile = useIsMobile();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -244,6 +244,8 @@ const Swirl: React.FC<SwirlProps> = (props) => {
       {props.children}
     </motion.div>
   );
-};
+});
+
+Swirl.displayName = "Swirl";
 
 export default Swirl;

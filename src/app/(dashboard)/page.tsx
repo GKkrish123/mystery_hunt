@@ -121,13 +121,13 @@ export default async function DashboardPage() {
         </Link>
       </div>
       <BackgroundBeamsWithCollision />
-      <Particles
+      {/* <Particles
         className="absolute inset-0 z-[-1]"
         quantity={200}
         ease={80}
         size={3}
         refresh
-      />
+      /> */}
     </>
   );
 }
