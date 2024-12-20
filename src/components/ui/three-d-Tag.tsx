@@ -50,7 +50,7 @@ export default function Tag3d({ image, onDoubleClick }: Text3DProps) {
     >
       <ambientLight intensity={Math.PI} />
       <Physics interpolate gravity={[0, -40, 0]} timeStep={1 / 60}>
-        <Band image={image} onDoubleClick={onDoubleClick} />
+        <Band image={image} onDoubleClick={onDoubleClick} isMobile={isMobile} />
       </Physics>
       <Environment blur={0.75}>
         <color attach="background" args={["black"]} />
@@ -93,13 +93,14 @@ const Band = memo(
     minSpeed = 10,
     image,
     onDoubleClick,
+    isMobile
   }: {
     maxSpeed?: number;
     minSpeed?: number;
     image: string;
     onDoubleClick: () => void;
+    isMobile: boolean;
   }) => {
-    const isMobile = useIsMobile();
     const band = useRef<THREE.Mesh>(null),
       fixed = useRef<RapierRigidBody | null>(null),
       j1 = useRef<RapierRigidBody | null>(null),
@@ -297,7 +298,7 @@ const Band = memo(
       </>
     );
   },
-  (prev, next) => prev.image === next.image,
+  (prev, next) => prev.image === next.image && prev.isMobile === next.isMobile,
 );
 
 Band.displayName = "Band";

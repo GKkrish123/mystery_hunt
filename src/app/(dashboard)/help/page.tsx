@@ -3,12 +3,7 @@ import BlurIn from "@/components/ui/blur-in";
 import { IconCloud } from "@/components/ui/icon-cloud";
 import VerticalAccordion from "@/components/ui/vertical-accordion";
 import { cn } from "@/lib/utils";
-import { Mystery_Quest } from "next/font/google";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
+import { mysteryFont } from "@/lib/fonts";
 
 const slugs = [
   "typescript",
@@ -51,7 +46,7 @@ export default function HelpPage() {
           word="Guide"
           className={cn(
             "col-span-full mx-auto h-8 text-3xl font-bold text-black dark:text-white md:h-10 md:text-4xl",
-            fontType.className,
+            mysteryFont.className,
           )}
         />
         <div className="col-span-full flex justify-center">

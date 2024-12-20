@@ -1,13 +1,9 @@
 "use client";
 
+import { mysteryFont } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { Mystery_Quest } from "next/font/google";
 
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
 interface TextSplitProps {
   text: string;
   className?: string;
@@ -26,7 +22,7 @@ export const TextSplit: React.FC<TextSplitProps> = ({
       className={cn(
         "relative inline-block w-full text-center",
         containerClassName,
-        fontType.className,
+        mysteryFont.className,
       )}
       whileTap="hover"
       whileHover="hover"

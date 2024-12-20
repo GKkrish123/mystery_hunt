@@ -2,12 +2,8 @@
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Mystery_Quest } from "next/font/google";
+import { mysteryFont } from "@/lib/fonts";
 
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
 interface LetterShootProps {
   className?: string;
   words: string;
@@ -71,7 +67,7 @@ export default function LetterShoot({
       className={cn(
         "z-[51] flex justify-center",
         wrapperClassName,
-        fontType.className,
+        mysteryFont.className,
       )}
     >
       {letters.map((letter, i) => (

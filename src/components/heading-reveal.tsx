@@ -4,12 +4,6 @@ import { cn } from "@/lib/utils";
 import BoxReveal from "./ui/box-reveal";
 import { AnimatedShinyText } from "./ui/animated-shiny-text";
 import { ArrowRightIcon } from "lucide-react";
-// import { Mystery_Quest } from "next/font/google";
-
-// const fontType = Mystery_Quest({
-//     subsets: ["latin"],
-//     weight: "400",
-// });
 
 interface HeadingRevealProps {
   title: string;

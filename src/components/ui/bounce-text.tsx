@@ -1,5 +1,6 @@
 "use client";
 
+import { mysteryFont } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
@@ -10,13 +11,6 @@ interface BouncingTextProps {
   bouncingIndices?: number[];
   wrapperClassName?: string;
 }
-
-import { Mystery_Quest } from "next/font/google";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
 
 export function BounceText({
   text = "BOUNCE",
@@ -76,7 +70,7 @@ export function BounceText({
               "transition-colors duration-200",
               "hover:text-purple-500 dark:hover:text-purple-400",
               className,
-              fontType.className,
+              mysteryFont.className,
             )}
             variants={letterAnimation}
             initial="initial"
@@ -99,7 +93,7 @@ export function BounceText({
               "transition-colors duration-200",
               "hover:text-purple-500 dark:hover:text-purple-400",
               className,
-              fontType.className,
+              mysteryFont.className,
             )}
           >
             {letter}

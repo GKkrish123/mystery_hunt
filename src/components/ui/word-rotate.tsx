@@ -2,14 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, type HTMLMotionProps, motion } from "framer-motion";
-import { Mystery_Quest } from "next/font/google";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
-
 import { cn } from "@/lib/utils";
+import { mysteryFont } from "@/lib/fonts";
 
 interface WordRotateProps {
   words: string[];
@@ -47,7 +41,7 @@ export function WordRotate({
       <AnimatePresence mode="wait">
         <motion.h1
           key={words[index]}
-          className={cn(className, fontType.className)}
+          className={cn(className, mysteryFont.className)}
           {...framerProps}
         >
           {words[index]}

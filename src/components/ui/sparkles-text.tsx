@@ -7,14 +7,8 @@ import {
   useState,
 } from "react";
 import { motion } from "framer-motion";
-
 import { cn } from "@/lib/utils";
-import { Mystery_Quest } from "next/font/google";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
+import { mysteryFont } from "@/lib/fonts";
 
 interface Sparkle {
   id: string;
@@ -118,7 +112,7 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
 
   return (
     <div
-      className={cn("text-6xl font-bold", className, fontType.className)}
+      className={cn("text-6xl font-bold", className, mysteryFont.className)}
       {...props}
       onClick={(e) => {
         e.preventDefault();

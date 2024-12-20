@@ -2,15 +2,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-
 import { cn } from "@/lib/utils";
+import { mysteryFont } from "@/lib/fonts";
 
-import { Mystery_Quest } from "next/font/google";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
 interface LetterPullupProps {
   className?: string;
   words: string;
@@ -57,7 +51,7 @@ export default function LetterPullup({
       className={cn(
         "flex justify-center",
         wrapperClassName,
-        fontType.className,
+        mysteryFont.className,
       )}
     >
       {letters.map((letter, i) => (

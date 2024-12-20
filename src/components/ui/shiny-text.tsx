@@ -2,13 +2,8 @@
 
 import { motion, useAnimationControls } from "framer-motion";
 import { useEffect, useRef, useCallback } from "react";
-import { Mystery_Quest } from "next/font/google";
 import { cn } from "@/lib/utils";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
+import { mysteryFont } from "@/lib/fonts";
 
 interface TextShineProps {
   text: string;
@@ -56,7 +51,7 @@ export const TextShine: React.FC<TextShineProps> = ({
       ref={textRef}
       className={cn(
         "relative w-fit bg-clip-text px-3 text-3xl font-bold text-[rgb(0,0,0)]/[.10] dark:text-[rgb(255,255,255)]/[.70] md:text-4xl",
-        fontType.className,
+        mysteryFont.className,
       )}
       style={{
         backgroundImage: `linear-gradient(to right, #222 0%, ${shineColor} 10%, #222 20%)`,

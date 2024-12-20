@@ -7,15 +7,9 @@ import {
   useState,
 } from "react";
 import { motion } from "framer-motion";
-
 import { cn } from "@/lib/utils";
+import { mysteryFont } from "@/lib/fonts";
 
-import { Mystery_Quest } from "next/font/google";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
 
 interface Heart {
   id: string;
@@ -119,7 +113,7 @@ export const HeartsText: React.FC<HeartsTextProps> = ({
 
   return (
     <div
-      className={cn("text-6xl font-bold", className, fontType.className)}
+      className={cn("text-6xl font-bold", className, mysteryFont.className)}
       {...props}
       style={
         {

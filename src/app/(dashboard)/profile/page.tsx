@@ -19,18 +19,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LampContainer } from "@/components/ui/lamp";
 import Loader from "@/components/ui/loader";
-import Tag3d from "@/components/ui/three-d-Tag";
 import { cn, compressBase64Image } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Mystery_Quest } from "next/font/google";
+import dynamic from "next/dynamic";
+import { mysteryFont } from "@/lib/fonts";
 
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
+const Tag3d = dynamic(() => import("@/components/ui/three-d-Tag"), { ssr: false });
 
 const InfoBlock = ({
   title,
@@ -48,7 +45,7 @@ const InfoBlock = ({
       <span
         className={cn(
           "inline animate-gradient text-[0.8rem] tracking-wide text-black dark:text-white md:text-base",
-          fontType.className,
+          mysteryFont.className,
         )}
       >
         {title}
@@ -86,7 +83,7 @@ const EditableNameBlock = ({
       <span
         className={cn(
           "inline animate-gradient text-[0.8rem] tracking-wide text-black dark:text-white md:text-base",
-          fontType.className,
+          mysteryFont.className,
         )}
       >
         Name
@@ -230,11 +227,6 @@ export default function ProfilePage() {
     }
   };
 
-  useEffect(() => {
-    void (async () => await refetch())();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
       <div className="relative grid h-full w-full auto-rows-min grid-cols-2 gap-x-14 gap-y-10 overflow-hidden px-3 pb-3 pt-0 md:gap-x-32 md:px-4 md:pb-4">
@@ -242,7 +234,7 @@ export default function ProfilePage() {
           word="Profile"
           className={cn(
             "col-span-full mx-auto h-8 text-3xl font-bold text-black dark:text-white md:h-10 md:text-4xl",
-            fontType.className,
+            mysteryFont.className,
           )}
         />
         {!userData || userDataLoading ? (
@@ -297,9 +289,6 @@ export default function ProfilePage() {
               open={proPicModalOpen}
               onOpenChange={(open) => setProPicModalOpen(open)}
             >
-              <DialogTrigger asChild onClick={() => setProPicModalOpen(true)}>
-                <Pencil className="z-[1] ml-2 inline h-3 w-3 cursor-pointer" />
-              </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>Edit Profile Picture</DialogTitle>

@@ -10,14 +10,9 @@ import SwipeCards from "@/components/ui/swipe-cards";
 import Swirl from "@/components/ui/swirl";
 import { api } from "@/trpc/server";
 import Link from "next/link";
-import { Mystery_Quest } from "next/font/google";
 import { cn } from "@/lib/utils";
 import BlurFade from "@/components/ui/blur-fade";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
+import { mysteryFont } from "@/lib/fonts";
 
 export default async function ExplorerPage() {
   const [
@@ -48,7 +43,7 @@ export default async function ExplorerPage() {
           <span
             className={cn(
               "pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-4xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10 md:text-5xl lg:text-7xl",
-              fontType.className,
+              mysteryFont.className,
             )}
           >
             Mystery Shuffle

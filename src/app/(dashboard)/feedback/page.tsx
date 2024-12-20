@@ -13,13 +13,7 @@ import confetti from "canvas-confetti";
 import { useRef } from "react";
 import BlurIn from "@/components/ui/blur-in";
 import Image from "next/image";
-
-import { Mystery_Quest } from "next/font/google";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
+import { mysteryFont } from "@/lib/fonts";
 
 const reviews = [
   {
@@ -168,7 +162,7 @@ export default function FeedbackPage() {
             word="Feedback Corner"
             className={cn(
               "mx-auto h-8 text-3xl font-bold text-black dark:text-white md:h-10 md:text-4xl",
-              fontType.className,
+              mysteryFont.className,
             )}
           />
         </div>

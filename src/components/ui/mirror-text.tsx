@@ -1,10 +1,5 @@
+import { mysteryFont } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
-import { Mystery_Quest } from "next/font/google";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
 
 export default function MirrorText({
   text = "This is a text",
@@ -45,7 +40,7 @@ export default function MirrorText({
       className={cn(
         "group relative w-full justify-end text-foreground",
         containerClassName,
-        fontType.className,
+        mysteryFont.className,
       )}
     >
       {/* <div className={cn("h-3 overflow-hidden delay-200", animation)}>{content}</div> */}

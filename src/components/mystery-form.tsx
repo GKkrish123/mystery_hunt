@@ -24,12 +24,7 @@ import { type Mystery } from "@/server/model/mysteries";
 import { type MysteryFormValues } from "@/server/constants";
 import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
-import { Mystery_Quest } from "next/font/google";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
+import { mysteryFont } from "@/lib/fonts";
 
 interface DragCardsProps {
   items: string[];
@@ -322,7 +317,7 @@ export function MysteryForm({ mystery }: MysteryFormProps) {
         word={mystery.title}
         className={cn(
           "col-span-full mx-auto block min-h-8 text-2xl font-bold text-black dark:text-white md:min-h-12 md:text-3xl",
-          fontType.className,
+          mysteryFont.className,
         )}
       />
       <div className="col-span-1 flex flex-wrap content-center items-center gap-1 md:col-span-2">

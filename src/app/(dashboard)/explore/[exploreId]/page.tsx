@@ -6,12 +6,7 @@ import { cn } from "@/lib/utils";
 import { api } from "@/trpc/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { Mystery_Quest } from "next/font/google";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
+import { mysteryFont } from "@/lib/fonts";
 
 export interface Mystery {
   name: string;
@@ -44,7 +39,7 @@ export default async function ExploreCategoryPage({
           word={exploreId.charAt(0).toUpperCase() + exploreId.slice(1)}
           className={cn(
             "col-span-full mx-auto h-8 text-2xl font-bold text-black dark:text-white md:h-10 md:text-3xl",
-            fontType.className,
+            mysteryFont.className,
           )}
         />
         <Suspense

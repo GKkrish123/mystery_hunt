@@ -4,13 +4,8 @@ import AppLoader from "@/components/ui/app-loader";
 import { AuroraBackground } from "@/components/ui/aurora-bg";
 import SplitText from "@/components/ui/split-text";
 import { Suspense } from "react";
-import { Mystery_Quest } from "next/font/google";
 import { cn } from "@/lib/utils";
-
-const fontType = Mystery_Quest({
-  subsets: ["latin"],
-  weight: "400",
-});
+import { mysteryFont } from "@/lib/fonts";
 
 interface MysteriesPageProps {
   searchParams: Promise<{ search?: string; tags?: string }>;
@@ -28,7 +23,7 @@ export default async function MysteriesPage({
           text="Mysteries"
           className={cn(
             "col-span-full mx-auto h-8 text-3xl font-bold tracking-wider text-black dark:text-white md:h-10 md:text-4xl lg:text-4xl",
-            fontType.className,
+            mysteryFont.className,
           )}
         />
         <SearchBar value={search} />
