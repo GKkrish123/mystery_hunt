@@ -93,7 +93,7 @@ export default function VerticalTiles({
             {showLetters && (
               <LetterShoot
                 wrapperClassName="flex h-screen w-full items-center justify-center"
-                className="pointer-events-none z-[55] whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ed2323] to-[#8c1eff] bg-clip-text text-center text-5xl font-bold uppercase leading-[5rem] tracking-wider text-transparent dark:text-transparent sm:text-7xl md:leading-[8rem]"
+                className="pointer-events-none z-[55] whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ed2323] to-[#8c1eff] bg-clip-text text-center font-bold uppercase leading-[5rem] tracking-wider text-transparent dark:text-transparent"
                 words={"Mysteryverse"}
                 delay={0.05}
                 animationDelay={animationDelay}

@@ -1,14 +1,12 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import React from "react";
+import React, { memo } from "react";
 
-export const BackgroundLines = ({
-  //   children,
+export const BackgroundLines = memo(({
   className,
   svgOptions,
 }: {
-  //   children: React.ReactNode;
   className?: string;
   svgOptions?: {
     duration?: number;
@@ -23,7 +21,9 @@ export const BackgroundLines = ({
       </div>
     </div>
   );
-};
+});
+
+BackgroundLines.displayName = "BackgroundLines";
 
 const pathVariants = {
   initial: { strokeDashoffset: 800, strokeDasharray: "50 800" },

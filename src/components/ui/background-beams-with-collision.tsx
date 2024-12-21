@@ -3,7 +3,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { useViewportSize } from "@mantine/hooks";
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useRef, useState, useEffect, useMemo } from "react";
+import React, { useRef, useState, useEffect, useMemo, memo } from "react";
 
 interface Beam {
   initialX: number; // Starting position (in pixels or percentage)
@@ -34,11 +34,9 @@ const generateRandomBeams = (numBeams: number, screenWidth: number) => {
   });
 };
 
-export const BackgroundBeamsWithCollision = ({
-  // children,
+export const BackgroundBeamsWithCollision = memo(({
   className,
 }: {
-  // children: React.ReactNode;
   className?: string;
 }) => {
   const isMobile = useIsMobile();
@@ -80,7 +78,9 @@ export const BackgroundBeamsWithCollision = ({
       />
     </div>
   );
-};
+});
+
+BackgroundBeamsWithCollision.displayName = "BackgroundBeamsWithCollision";
 
 const CollisionMechanism = React.forwardRef<
   HTMLDivElement,

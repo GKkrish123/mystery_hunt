@@ -41,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar ref={sidebarRef} variant="inset" {...props}>
-      <Meteors key="sidebar-meteors" number={30} />
+      <Meteors key="sidebar-meteors" number={12} />
       <SidebarHeader>
         <AnimatePresence mode="wait">
           {(isMobile ? openMobile : open) ? (

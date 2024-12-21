@@ -21,15 +21,10 @@ export default async function LeaderboardPage({
   return (
     <>
       <div className="relative grid h-full w-full auto-rows-min grid-cols-6 gap-3 px-3 pb-3 pt-0 md:grid-cols-8 md:px-4 md:pb-4">
-        {/* <BlurIn
-          word="Mystery Hall of Fame"
-          className="col-span-full mx-auto h-8 text-xl font-bold text-black dark:text-white md:h-10 md:text-2xl"
-        /> */}
         <MirrorText
           text="Mystery Hall of Fame"
           containerClassName="col-span-full text-center"
         />
-
         <CountriesSelect wrapperClassName="col-span-2 md:col-start-2 z-[12]" />
         <StatesSelect value={state} wrapperClassName="col-span-2 z-[12]" />
         <CitiesSelect wrapperClassName="col-span-2 z-[12]" state={state} />

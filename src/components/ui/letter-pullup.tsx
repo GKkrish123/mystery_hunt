@@ -4,6 +4,7 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
+import { memo } from "react";
 
 interface LetterPullupProps {
   className?: string;
@@ -15,7 +16,7 @@ interface LetterPullupProps {
   forHeader?: boolean;
 }
 
-export default function LetterPullup({
+export default memo(function LetterPullup({
   className,
   words,
   delay,
@@ -93,6 +94,7 @@ export default function LetterPullup({
               forHeader && letter === "e"
                 ? "-left-[0.4em] md:-left-[0.2em]"
                 : "",
+              "drop-shadow-[-0.02em_-0.02em_#000000] dark:drop-shadow-[-0.02em_-0.02em_#cbd5e1]",
             )}
           >
             {letter === " " ? <span>&nbsp;</span> : letter}
@@ -101,4 +103,4 @@ export default function LetterPullup({
       ))}
     </div>
   );
-}
+});

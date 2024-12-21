@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 import createGlobe from "cobe";
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { useSpring } from "react-spring";
 
-export function Cobe() {
+export const Cobe = memo(function Cobe() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pointerInteracting: React.MutableRefObject<number | null> = useRef<number>(null);
   const pointerInteractionMovement = useRef(0);
@@ -119,4 +119,4 @@ export function Cobe() {
       />
     </div>
   );
-}
+});

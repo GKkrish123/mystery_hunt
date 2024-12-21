@@ -3,16 +3,19 @@
  * for Docker builds.
  */
 import "./src/env.js";
+import NextBundleAnalyzer from "@next/bundle-analyzer";
 
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: false,
   webpack(config) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack", "url-loader"],
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return config;
   },
   images: {
@@ -24,6 +27,7 @@ const config = {
     ],
   },
   experimental: {
+    optimizePackageImports: ['lucide-react', 'cobe'],
     turbo: {
       rules: {
         "*.svg": {
@@ -35,4 +39,8 @@ const config = {
   },
 };
 
-export default config;
+const withBundleAnalyzer = NextBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+export default withBundleAnalyzer(config);

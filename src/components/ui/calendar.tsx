@@ -108,6 +108,7 @@ function Calendar({
           nextMonth: nm,
           previousMonth: pm,
           onNextClick,
+          onPreviousClick,
           ...props
         }) => {
           const { nextMonth, previousMonth, goToMonth } = useDayPicker();

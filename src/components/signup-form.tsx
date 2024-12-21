@@ -302,7 +302,7 @@ export function SignupForm() {
         <CardHeader className="pb-5">
           <CardTitle className="text-2xl">Sign Up</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            The mystery portal is waiting to know you to begin
           </CardDescription>
         </CardHeader>
         <CardContent className="p-0">

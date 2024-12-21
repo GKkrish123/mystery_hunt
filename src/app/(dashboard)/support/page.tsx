@@ -36,3 +36,11 @@ export default function SupportPage() {
     </>
   );
 }
+
+export const dynamic = "force-static";
+export const fetchCache = "force-cache";
+export const revalidate = 3600;
+export const metadata = {
+  title: "Mysteryverse Support",
+  description: "This is the support page of Mysteryverse",
+};

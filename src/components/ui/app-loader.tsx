@@ -3,12 +3,13 @@
 import Lottie from "lottie-react";
 import LoaderOrange from "@/components/icons/lottie/LoaderOrange.json";
 import { cn } from "@/lib/utils";
+import { memo } from "react";
 
 interface AppLoaderProps {
   className?: string;
 }
 
-export default function AppLoader({ className }: AppLoaderProps) {
+export default memo(function AppLoader({ className }: AppLoaderProps) {
   return (
     <div
       className={cn(
@@ -29,4 +30,4 @@ export default function AppLoader({ className }: AppLoaderProps) {
       </div>
     </div>
   );
-}
+});

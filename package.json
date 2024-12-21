@@ -6,6 +6,7 @@
   "scripts": {
     "ci": "NODE_ENV=development npm ci",
     "build": "NODE_ENV=production next build",
+    "build-analyze": "NODE_ENV=production ANALYZE=true next build",
     "check": "next lint && tsc --noEmit",
     "dev": "next dev --turbo",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
@@ -96,6 +97,7 @@
     }
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^15.1.2",
     "@svgr/webpack": "^8.1.0",
     "@types/eslint": "^8.56.10",
     "@types/node": "^20.14.10",

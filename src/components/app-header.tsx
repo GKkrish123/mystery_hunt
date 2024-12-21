@@ -62,7 +62,6 @@ export function AppHeader() {
       <AnimatePresence mode="wait">
         {!(isMobile ? openMobile : open) ? (
           <LetterPullup
-            // type="blur"
             wrapperClassName="z-[-1] m-auto absolute left-1/2 right-1/2 transform -translate-x-1/2 w-[calc(100%-5.5rem)] md:w-full justify-end md:justify-center"
             className="pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ed2323] to-[#8c1eff] bg-clip-text text-base font-bold text-transparent dark:text-transparent md:text-2xl"
             words="Mysteryverse"

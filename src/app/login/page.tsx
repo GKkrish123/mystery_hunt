@@ -1,10 +1,16 @@
-import { LoginForm } from "@/components/login-form";
-import { SignupForm } from "@/components/signup-form";
 import BlurFade from "@/components/ui/blur-fade";
 import LetterPullup from "@/components/ui/letter-pullup";
 import Meteors from "@/components/ui/meteors";
 import RetroGrid from "@/components/ui/retro-grid";
 import Ripple from "@/components/ui/ripple";
+import { default as dynamicImport } from "next/dynamic";
+
+const SignupForm = dynamicImport(() =>
+  import("@/components/signup-form").then((mod) => mod.SignupForm),
+);
+const LoginForm = dynamicImport(() =>
+  import("@/components/login-form").then((mod) => mod.LoginForm),
+);
 
 interface LoginPageProps {
   searchParams: Promise<{ signup?: string }>;
@@ -34,3 +40,10 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     </div>
   );
 }
+
+export const revalidate = 3600;
+export const fetchCache = "force-cache";
+export const metadata = {
+  title: "Mysteryverse Login",
+  description: "This is the login page for Mysteryverse.",
+};

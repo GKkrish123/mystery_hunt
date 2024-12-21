@@ -19,9 +19,9 @@ export function MyProfile({ className }: { className?: string }) {
         className="h-16 w-16 rounded-full duration-300 ease-in-out hover:scale-125"
       />
       <div className="mt-2 flex flex-col items-center justify-center">
-        <h3 className="font-sans font-semibold text-foreground">Avatar</h3>
+        <h3 className="font-sans font-semibold text-foreground">GK</h3>
         <p className="text-sm font-light text-muted-foreground">
-          The last air bender - GK
+          Gokulakrishnan
         </p>
       </div>
       <div className="mt-2 flex w-full flex-row justify-evenly rounded-3xl bg-background/70 p-2 text-foreground dark:bg-background/25">

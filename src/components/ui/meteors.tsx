@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useDebouncedValue, useViewportSize } from "@mantine/hooks";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 interface MeteorsProps {
   number?: number;
 }
-export const Meteors = ({ number = 20 }: MeteorsProps) => {
+export const Meteors = memo(({ number = 20 }: MeteorsProps) => {
   const [meteorStyles, setMeteorStyles] = useState<Array<React.CSSProperties>>(
     [],
   );
@@ -49,6 +49,8 @@ export const Meteors = ({ number = 20 }: MeteorsProps) => {
       ))}
     </>
   );
-};
+});
+
+Meteors.displayName = "Meteors";
 
 export default Meteors;

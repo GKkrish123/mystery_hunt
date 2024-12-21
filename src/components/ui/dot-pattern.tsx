@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useId } from "react";
-
+import { memo, useId } from "react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface DotPatternProps {
   width?: any;
@@ -15,7 +15,7 @@ interface DotPatternProps {
   className?: string;
   [key: string]: any;
 }
-export function DotPattern({
+export const DotPattern = memo(function DotPattern({
   width = 16,
   height = 16,
   x = 0,
@@ -27,12 +27,16 @@ export function DotPattern({
   ...props
 }: DotPatternProps) {
   const id = useId();
+  const isMobile = useIsMobile();
 
   return (
     <svg
       aria-hidden="true"
       className={cn(
         "pointer-events-none absolute inset-0 h-full w-full fill-neutral-400/80",
+        isMobile
+            ? "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]"
+            : "[mask-image:radial-gradient(450px_circle_at_center,white,transparent)]",
         className,
       )}
       {...props}
@@ -53,6 +57,6 @@ export function DotPattern({
       <rect width="100%" height="100%" strokeWidth={0} fill={`url(#${id})`} />
     </svg>
   );
-}
+});
 
 export default DotPattern;

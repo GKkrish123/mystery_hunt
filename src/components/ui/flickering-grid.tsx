@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { useViewportSize } from "@mantine/hooks";
 import React, {
+  memo,
   useCallback,
   useEffect,
   useMemo,
@@ -21,7 +22,7 @@ interface FlickeringGridProps {
   maxOpacity?: number;
 }
 
-const FlickeringGrid: React.FC<FlickeringGridProps> = ({
+const FlickeringGrid: React.FC<FlickeringGridProps> = memo(({
   squareSize = 4,
   gridGap = 6,
   flickerChance = 0.3,
@@ -180,6 +181,8 @@ const FlickeringGrid: React.FC<FlickeringGridProps> = ({
       height="100%"
     />
   );
-};
+});
+
+FlickeringGrid.displayName = "FlickeringGrid";
 
 export default FlickeringGrid;

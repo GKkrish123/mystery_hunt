@@ -75,7 +75,7 @@ export default function LetterShoot({
           key={`mysteryverse - ${i}`}
           className={cn(
             "relative h-[10rem]",
-            letter === "e" ? "w-[2.5em]" : "",
+            letter === "e" ? "w-[1.5em] md:w-[2.5em]" : "",
             letter === "M" ? "w-[2.5em]" : "",
           )}
         >
@@ -87,13 +87,13 @@ export default function LetterShoot({
             animate="visible"
             exit="exit"
             className={cn(
-              "font-display inline-block text-center text-4xl font-bold tracking-wide text-black drop-shadow-sm dark:text-white md:text-6xl",
+              "font-display inline-block text-center text-4xl font-bold tracking-wide text-black drop-shadow-sm dark:text-white md:text-6xl md:leading-[7rem]",
               className,
               letter === "e" ? "absolute -left-[0.1em] indent-2" : "",
               letter === "M"
-                ? "absolute -right-[0.08em] -top-[0.2em] leading-[5rem] md:top-0"
+                ? "absolute tracking-[0.14em] -right-[0.08em] top-0 leading-[5rem] md:top-0"
                 : "",
-              // "drop-shadow-[-0.02em_-0.02em_#000000] dark:drop-shadow-[-0.02em_-0.02em_#ffffff]",
+              "drop-shadow-[-0.02em_-0.02em_#000000] dark:drop-shadow-[-0.02em_-0.02em_#ffffff]",
             )}
           >
             {letter === " " ? <span>&nbsp;</span> : letter}
