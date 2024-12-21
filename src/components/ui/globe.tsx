@@ -7,7 +7,8 @@ import { useSpring } from "react-spring";
 
 export const Cobe = memo(function Cobe() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const pointerInteracting: React.MutableRefObject<number | null> = useRef<number>(null);
+  const pointerInteracting: React.MutableRefObject<number | null> =
+    useRef<number>(null);
   const pointerInteractionMovement = useRef(0);
   const [{ r }, api] = useSpring(() => ({
     r: 0,
@@ -52,14 +53,13 @@ export const Cobe = memo(function Cobe() {
       },
     });
     setTimeout(() => {
-      if (canvasRef.current)
-        canvasRef.current.style.opacity = "1"
+      if (canvasRef.current) canvasRef.current.style.opacity = "1";
     });
     return () => {
       globe.destroy();
       window.removeEventListener("resize", onResize);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div

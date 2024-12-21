@@ -58,7 +58,7 @@ export const columns: ColumnDef<HunterRank>[] = [
           alt={`${String(row.getValue("name"))}-${String(row.getValue("rank"))}`}
         />
         <AvatarFallback>
-          {(String(row.getValue("name"))).slice(0, 2).toUpperCase()}
+          {String(row.getValue("name")).slice(0, 2).toUpperCase()}
         </AvatarFallback>
       </Avatar>
     ),

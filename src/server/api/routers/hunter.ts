@@ -193,8 +193,6 @@ export const userRouter = createTRPCRouter({
     .input(z.object({ country: z.string().optional() }))
     .query(async ({ input }) => {
       const { country } = input;
-      console.log("countryyyyyy", country);
-
       const response = await fetch(
         "https://countriesnow.space/api/v0.1/countries/states",
         {
@@ -377,7 +375,7 @@ export const userRouter = createTRPCRouter({
         return { success: true };
       } catch (error: unknown) {
         const err = error as Error;
-        console.log(`Error creating user - ${JSON.stringify(err)}`);
+        console.error(`Error creating user - ${JSON.stringify(err)}`);
         return { success: false, error };
       }
     }),

@@ -186,8 +186,10 @@ function Calendar({
               return;
             }
             goToMonth(nextMonth);
-            onNextClick?.(nextMonth as unknown as React.MouseEvent<HTMLButtonElement>);
-          // eslint-disable-next-line react-hooks/exhaustive-deps
+            onNextClick?.(
+              nextMonth as unknown as React.MouseEvent<HTMLButtonElement>,
+            );
+            // eslint-disable-next-line react-hooks/exhaustive-deps
           }, [goToMonth, nextMonth]);
           return (
             <nav className={cn("flex items-center", className)} {...props}>

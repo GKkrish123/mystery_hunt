@@ -34,51 +34,49 @@ const generateRandomBeams = (numBeams: number, screenWidth: number) => {
   });
 };
 
-export const BackgroundBeamsWithCollision = memo(({
-  className,
-}: {
-  className?: string;
-}) => {
-  const isMobile = useIsMobile();
-  const { width: screenWidth } = useViewportSize();
+export const BackgroundBeamsWithCollision = memo(
+  ({ className }: { className?: string }) => {
+    const isMobile = useIsMobile();
+    const { width: screenWidth } = useViewportSize();
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const parentRef = useRef<HTMLDivElement>(null);
-  const beams: Beam[] = useMemo(() => {
-    return screenWidth
-      ? generateRandomBeams(isMobile ? 10 : 20, screenWidth)
-      : [];
-  }, [isMobile, screenWidth]);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const parentRef = useRef<HTMLDivElement>(null);
+    const beams: Beam[] = useMemo(() => {
+      return screenWidth
+        ? generateRandomBeams(isMobile ? 10 : 20, screenWidth)
+        : [];
+    }, [isMobile, screenWidth]);
 
-  return (
-    <div
-      ref={parentRef}
-      className={cn(
-        "absolute z-[-1] flex h-full w-full items-center justify-center overflow-hidden",
-        className,
-      )}
-    >
-      {beams.map((beam) => (
-        <CollisionMechanism
-          key={beam.initialX + "beam-idx"}
-          beamOptions={beam}
-          containerRef={containerRef}
-          parentRef={parentRef}
-        />
-      ))}
-
-      {/* {children} */}
+    return (
       <div
-        ref={containerRef}
-        className="pointer-events-none absolute inset-x-0 bottom-0 w-full bg-transparent"
-        style={{
-          boxShadow:
-            "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset",
-        }}
-      />
-    </div>
-  );
-});
+        ref={parentRef}
+        className={cn(
+          "absolute z-[-1] flex h-full w-full items-center justify-center overflow-hidden",
+          className,
+        )}
+      >
+        {beams.map((beam) => (
+          <CollisionMechanism
+            key={beam.initialX + "beam-idx"}
+            beamOptions={beam}
+            containerRef={containerRef}
+            parentRef={parentRef}
+          />
+        ))}
+
+        {/* {children} */}
+        <div
+          ref={containerRef}
+          className="pointer-events-none absolute inset-x-0 bottom-0 w-full bg-transparent"
+          style={{
+            boxShadow:
+              "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset",
+          }}
+        />
+      </div>
+    );
+  },
+);
 
 BackgroundBeamsWithCollision.displayName = "BackgroundBeamsWithCollision";
 
@@ -143,7 +141,7 @@ const CollisionMechanism = React.forwardRef<
     const animationInterval = setInterval(checkCollision, 50);
 
     return () => clearInterval(animationInterval);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cycleCollisionDetected, containerRef]);
 
   useEffect(() => {

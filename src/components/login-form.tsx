@@ -64,7 +64,7 @@ export function LoginForm() {
   });
 
   const email = form.watch("email");
-  const isEmailValid = !form.formState.errors.email && email.trim() !== "";  
+  const isEmailValid = !form.formState.errors.email && email.trim() !== "";
 
   useEffect(() => {
     const newRecaptchaVerifier = new RecaptchaVerifier(
@@ -80,7 +80,7 @@ export function LoginForm() {
     return () => {
       recaptchaVerifier?.clear();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -155,7 +155,7 @@ export function LoginForm() {
       });
     } catch (error) {
       if (error instanceof FirebaseError) {
-        console.log("Error during sending password reset email", error);
+        console.error("Error during sending password reset email", error);
         switch (error.code) {
           case "auth/invalid-email":
             toast.error("Email is not formatted for this world", {

@@ -1,11 +1,7 @@
 "use client";
 
 import { auth } from "firebase-user";
-import {
-  onAuthStateChanged,
-  onIdTokenChanged,
-  type User,
-} from "firebase/auth";
+import { onAuthStateChanged, onIdTokenChanged, type User } from "firebase/auth";
 import {
   createContext,
   type ReactNode,
@@ -80,8 +76,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       (user) => {
         void (async () => {
           setLoading(true);
-          console.log("hmmmmmmmmmm", user);
-
           if (!user) {
             if (location.pathname !== "/login") {
               router.push("/login");
@@ -109,8 +103,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const tokenSubscription = onIdTokenChanged(auth, (user) => {
       void (async () => {
-        console.log("TOKEN CHANGED");
-
         await updateToken(user);
       })();
     });
@@ -127,7 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logoutTimeoutRef.current = null;
       }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {

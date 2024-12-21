@@ -76,7 +76,7 @@ export default function VerticalTiles({
       },
       animationDelay + 1.6 * 1000,
     ); // Delay in milliseconds
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

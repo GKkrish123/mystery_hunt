@@ -40,7 +40,7 @@ export function NavUser({ user }: NavUserProps) {
       await deleteCookie("token-boom");
       await auth.signOut();
     } catch (error) {
-      console.log("Error in signing out user", error);
+      console.error("Error in signing out user", error);
       toast.error("Oops, Something went wrong while checking you out!", {
         description: "This shouldn’t have happened but please try again later.",
       });

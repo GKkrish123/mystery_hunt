@@ -1,11 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import React, {
-  type ReactNode,
-  useEffect,
-  useRef,
-} from "react";
+import React, { type ReactNode, useEffect, useRef } from "react";
 
 export interface BaseParticle {
   element: HTMLElement | SVGSVGElement;

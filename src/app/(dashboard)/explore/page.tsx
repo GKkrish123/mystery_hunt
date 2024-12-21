@@ -37,9 +37,7 @@ export default async function ExplorerPage() {
           className="relative col-span-full flex h-[500px] w-full flex-col place-content-center overflow-hidden rounded-lg border bg-[rgb(255,255,255)]/[.50] dark:bg-[rgb(0,0,0)]/[.50] md:h-auto md:flex-row md:shadow-xl"
           borderClassName="z-[15]"
         >
-          <SwipeCards
-            cardData={shuffledMysteries}
-          />
+          <SwipeCards cardData={shuffledMysteries} />
           <span
             className={cn(
               "pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-4xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10 md:text-5xl lg:text-7xl",
@@ -48,10 +46,7 @@ export default async function ExplorerPage() {
           >
             Mystery Shuffle
           </span>
-          <SwipeCards
-            cardData={shuffledCategories}
-            type="category"
-          />
+          <SwipeCards cardData={shuffledCategories} type="category" />
         </ShineBorder>
         <div className="z-10 col-span-full">
           <HeadingReveal

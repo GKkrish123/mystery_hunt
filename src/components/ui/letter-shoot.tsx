@@ -91,7 +91,7 @@ export default function LetterShoot({
               className,
               letter === "e" ? "absolute -left-[0.1em] indent-2" : "",
               letter === "M"
-                ? "absolute tracking-[0.14em] -right-[0.08em] top-0 leading-[5rem] md:top-0"
+                ? "absolute -right-[0.08em] top-0 leading-[5rem] tracking-[0.14em] md:top-0"
                 : "",
               "drop-shadow-[-0.02em_-0.02em_#000000] dark:drop-shadow-[-0.02em_-0.02em_#ffffff]",
             )}

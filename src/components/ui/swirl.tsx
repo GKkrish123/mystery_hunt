@@ -30,7 +30,7 @@ const Swirl: React.FC<SwirlProps> = memo((props) => {
 
   const particleCount = isMobile
     ? Math.floor(props.particleCount / 2)
-    : props.particleCount ?? 700;
+    : (props.particleCount ?? 700);
   const particlePropCount = 9;
   const particlePropsLength = particleCount * particlePropCount;
   const baseTTL = props.baseTTL ?? 100;
@@ -39,8 +39,8 @@ const Swirl: React.FC<SwirlProps> = memo((props) => {
   const rangeSpeed = props.rangeSpeed ?? 1;
   const baseSize = props.baseSize ?? 2;
   const rangeSize = props.rangeSize ?? 10;
-  const baseHue = resolvedTheme === "light" ? 220 : props.baseHue ?? 10;
-  const rangeHue = resolvedTheme === "light" ? 40 : props.rangeHue ?? 100;
+  const baseHue = resolvedTheme === "light" ? 220 : (props.baseHue ?? 10);
+  const rangeHue = resolvedTheme === "light" ? 40 : (props.rangeHue ?? 100);
   // const backgroundColor = props.backgroundColor ?? 'hsla(60,50%,3%,1)';
   // const backgroundColor = resolvedTheme === "light" ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0,0,0,0.5)';
   const backgroundColor = "transparent";
@@ -182,9 +182,7 @@ const Swirl: React.FC<SwirlProps> = memo((props) => {
     ctx.restore();
   };
 
-  const resize = (
-    canvas: HTMLCanvasElement,
-  ) => {
+  const resize = (canvas: HTMLCanvasElement) => {
     const { innerWidth, innerHeight } = window;
 
     canvas.width = innerWidth / 2;
@@ -227,7 +225,7 @@ const Swirl: React.FC<SwirlProps> = memo((props) => {
         resize(canvas);
       }
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resolvedTheme]);
 
   return (

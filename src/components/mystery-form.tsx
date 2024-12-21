@@ -142,9 +142,12 @@ const Card = ({
 
   useGesture(
     {
-      onPinch: ({ movement: [
-        // scale
-      ], offset: [_, angle] }) => {
+      onPinch: ({
+        movement: [
+          // scale
+        ],
+        offset: [_, angle],
+      }) => {
         // setScale(scale);
         setRotate(angle);
       },
@@ -208,7 +211,7 @@ export function MysteryForm({ mystery }: MysteryFormProps) {
         console.error("Failed to record mystery view", error);
       }
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSubmit = () => {

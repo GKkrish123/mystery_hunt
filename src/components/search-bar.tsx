@@ -28,7 +28,7 @@ export function SearchBar({
     router.replace(
       `/mysteries?search=${encodeURIComponent(debouncedSearchValue)}`,
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchValue]);
 
   return (

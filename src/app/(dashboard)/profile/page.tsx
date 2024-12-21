@@ -27,7 +27,9 @@ import { toast } from "sonner";
 import dynamic from "next/dynamic";
 import { mysteryFont } from "@/lib/fonts";
 
-const Tag3d = dynamic(() => import("@/components/ui/three-d-Tag"), { ssr: false });
+const Tag3d = dynamic(() => import("@/components/ui/three-d-Tag"), {
+  ssr: false,
+});
 
 const InfoBlock = ({
   title,
@@ -189,7 +191,7 @@ export default function ProfilePage() {
           "Remember, a name's just a name if you don't bring your game!",
       });
     } catch (error) {
-      console.log("Error in updating name", error);
+      console.error("Error in updating name", error);
       toast.error("Oops, Something went wrong while updating your name!", {
         description: "This shouldn’t have happened but please try again later.",
       });
@@ -216,7 +218,7 @@ export default function ProfilePage() {
         description: "Remember, a single frame can rewrite your tale!",
       });
     } catch (error) {
-      console.log("Error in updating profile picture", error);
+      console.error("Error in updating profile picture", error);
       toast.error(
         "Oops, Something went wrong while updating your profile picture!",
         {

@@ -35,8 +35,8 @@ export const DotPattern = memo(function DotPattern({
       className={cn(
         "pointer-events-none absolute inset-0 h-full w-full fill-neutral-400/80",
         isMobile
-            ? "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]"
-            : "[mask-image:radial-gradient(450px_circle_at_center,white,transparent)]",
+          ? "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]"
+          : "[mask-image:radial-gradient(450px_circle_at_center,white,transparent)]",
         className,
       )}
       {...props}

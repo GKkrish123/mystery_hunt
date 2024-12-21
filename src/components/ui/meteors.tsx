@@ -28,7 +28,7 @@ export const Meteors = memo(({ number = 20 }: MeteorsProps) => {
       animationDuration: Math.floor(Math.random() * 8 + 2) + "s",
     }));
     setMeteorStyles(styles);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [number, debouncedWidth]);
 
   return (

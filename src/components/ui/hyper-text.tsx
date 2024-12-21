@@ -65,7 +65,7 @@ export default function HyperText({
     );
     // Clean up interval on unmount
     return () => clearInterval(interval);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [splittedText, duration, trigger, animateOnLoad]);
 
   return (

@@ -4,11 +4,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-export const LampContainer = ({
-  className,
-}: {
-  className?: string;
-}) => {
+export const LampContainer = ({ className }: { className?: string }) => {
   const isMobile = useIsMobile();
   return (
     <div

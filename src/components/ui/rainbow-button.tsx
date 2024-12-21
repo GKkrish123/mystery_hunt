@@ -27,7 +27,7 @@ export function RainbowButton({
         behavior: "smooth",
       });
     }
-  };  
+  };
 
   return (
     <button

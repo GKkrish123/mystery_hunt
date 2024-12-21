@@ -81,13 +81,12 @@ declare namespace YT {
 }
 
 // declare global {
-  interface Window {
-    confirmationResult?: firebase.auth.ConfirmationResult;
-    YT: YT;
-    onYouTubeIframeAPIReady?: () => void;
-  }
+interface Window {
+  confirmationResult?: firebase.auth.ConfirmationResult;
+  YT: YT;
+  onYouTubeIframeAPIReady?: () => void;
+}
 // }
-
 
 declare namespace JSX {
   interface IntrinsicElements {

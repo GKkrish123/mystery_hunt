@@ -66,7 +66,7 @@ const Carousel = memo(function CarouselComponent({
 
   useEffect(() => {
     void startSlowRotation();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -170,10 +170,6 @@ function ThreeDPhotoCarousel() {
     () => keywords.map((keyword) => `https://picsum.photos/200/300?${keyword}`),
     [],
   );
-
-  useEffect(() => {
-    console.log("Cards loaded:", cards);
-  }, [cards]);
 
   const handleClick = () => {
     controls.stop();

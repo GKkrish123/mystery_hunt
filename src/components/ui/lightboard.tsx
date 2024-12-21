@@ -174,11 +174,9 @@ function LightBoard({
   // This helps us know when to update our animation
   const [lastUpdateTime, setLastUpdateTime] = useState(0);
 
-  const drawState =
-    controlledDrawState ?? defaultDrawState;
+  const drawState = controlledDrawState ?? defaultDrawState;
 
-  const isHovered =
-    controlledHoverState ?? internalHoverState;
+  const isHovered = controlledHoverState ?? internalHoverState;
 
   // Calculate the number of columns based on container width
   useEffect(() => {
@@ -245,7 +243,7 @@ function LightBoard({
 
     // We clean up our animation when we're done
     return () => cancelAnimationFrame(animationFrameId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [basePattern, isHovered, drawToCanvas]);
 
   // This updates our light pattern when the text changes

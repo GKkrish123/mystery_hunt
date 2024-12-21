@@ -10,7 +10,6 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
 
-
 interface Heart {
   id: string;
   x: string;
@@ -108,7 +107,7 @@ export const HeartsText: React.FC<HeartsTextProps> = ({
     const interval = setInterval(updateStars, 100);
 
     return () => clearInterval(interval);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [colors.first, colors.second]);
 
   return (

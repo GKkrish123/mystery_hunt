@@ -173,7 +173,7 @@ export function SignupForm() {
     return () => {
       recaptchaVerifier?.clear();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
   const verifyPhoneNumber = async (phoneNumber: string) => {

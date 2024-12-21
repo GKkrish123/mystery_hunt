@@ -18,10 +18,7 @@ import {
 } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import {
-  type TooltipContent,
-  TooltipProvider,
-} from "@/components/ui/tooltip";
+import { type TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { type HTMLMotionProps, motion } from "framer-motion";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
@@ -616,9 +613,7 @@ const SidebarMenuButton = React.forwardRef<
       };
     }
 
-    return (
-      button
-    );
+    return button;
   },
 );
 SidebarMenuButton.displayName = "SidebarMenuButton";

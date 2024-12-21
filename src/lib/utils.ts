@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import imageCompression, {type Options} from "browser-image-compression";
+import imageCompression, { type Options } from "browser-image-compression";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -44,7 +44,10 @@ export function chunkArray<T>(array: T[], size: number): T[][] {
   return result;
 }
 
-export function pick<T extends object, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
+export function pick<T extends object, K extends keyof T>(
+  obj: T,
+  keys: K[],
+): Pick<T, K> {
   return keys.reduce(
     (acc, key) => {
       if (key in obj) {

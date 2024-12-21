@@ -80,4 +80,4 @@ export const FeedbackForm = () => {
       <FeedbackDisplay />
     </>
   );
-}
+};

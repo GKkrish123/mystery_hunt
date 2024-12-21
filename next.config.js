@@ -12,7 +12,7 @@ const config = {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     config.module.rules.push({
       test: /\.svg$/,
-      use: ["@svgr/webpack", "url-loader"],
+      use: [{ loader: "@svgr/webpack", options: { icon: true } }],
     });
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -27,20 +27,12 @@ const config = {
     ],
   },
   experimental: {
-    optimizePackageImports: ['lucide-react', 'cobe'],
-    turbo: {
-      rules: {
-        "*.svg": {
-          loaders: ["@svgr/webpack"],
-          as: "*.js",
-        },
-      },
-    },
+    optimizePackageImports: ["lucide-react", "cobe"],
   },
 };
 
 const withBundleAnalyzer = NextBundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-})
+  enabled: process.env.ANALYZE === "true",
+});
 
 export default withBundleAnalyzer(config);

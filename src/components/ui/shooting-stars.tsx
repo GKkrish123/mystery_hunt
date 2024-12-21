@@ -74,7 +74,6 @@ export const ShootingStars: React.FC<ShootingStarsProps> = ({
     };
 
     createStar();
-
   }, [minSpeed, maxSpeed, minDelay, maxDelay]);
 
   useEffect(() => {

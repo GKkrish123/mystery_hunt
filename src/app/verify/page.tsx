@@ -41,7 +41,7 @@ const VerifyEmailPage = () => {
       retryInterval.stop();
       setRetryCountdown(RETRY_INTERVAL);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [retryCountdown]);
 
   async function verifyEmailWithLink() {
@@ -125,8 +125,6 @@ const VerifyEmailPage = () => {
   const handleTokenExpiry = async () => {
     const token = await getCookie("token");
     const tokenBoom = await getCookie("token-boom");
-    console.log("innnnnn", user, token, tokenBoom, Date.now());
-
     if (
       (user && !token) ||
       !tokenBoom ||
@@ -153,7 +151,7 @@ const VerifyEmailPage = () => {
 
   useEffect(() => {
     void handleVerification();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (

@@ -93,7 +93,7 @@ const Band = memo(
     minSpeed = 10,
     image,
     onDoubleClick,
-    isMobile
+    isMobile,
   }: {
     maxSpeed?: number;
     minSpeed?: number;
@@ -182,7 +182,9 @@ const Band = memo(
             0.1,
             Math.min(
               1,
-              (ref.current! as any).lerped.distanceTo(ref.current!.translation()),
+              (ref.current! as any).lerped.distanceTo(
+                ref.current!.translation(),
+              ),
             ),
           );
           (ref.current! as any).lerped.lerp(
@@ -199,7 +201,10 @@ const Band = memo(
         // Tilt it back towards the screen
         ang.copy(card.current!.angvel());
         rot.copy(card.current!.rotation());
-        card.current!.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z }, true);
+        card.current!.setAngvel(
+          { x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z },
+          true,
+        );
       }
     });
 
@@ -246,7 +251,8 @@ const Band = memo(
               onPointerOver={() => hover(true)}
               onPointerOut={() => hover(false)}
               onPointerUp={(e) => (
-                (e.target! as any).releasePointerCapture(e.pointerId), drag(false)
+                (e.target! as any).releasePointerCapture(e.pointerId),
+                drag(false)
               )}
               onPointerDown={(e) => (
                 (e.target! as any).setPointerCapture(e.pointerId),

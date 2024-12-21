@@ -9,15 +9,15 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
     FB_KING: z.string(),
-    REDIS_URL: z.string().optional()
+    REDIS_URL: z.string().optional(),
   },
-  
+
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars. To expose them to the client, prefix them with
    * `NEXT_PUBLIC_`.
-  */
- client: {
+   */
+  client: {
     NEXT_PUBLIC_FB_APIKEY: z.string(),
     NEXT_PUBLIC_FB_AUTHDOMAIN: z.string(),
     NEXT_PUBLIC_FB_PROJECTID: z.string(),
@@ -42,7 +42,7 @@ export const env = createEnv({
     NEXT_PUBLIC_FB_APPID: process.env.NEXT_PUBLIC_FB_APPID,
     NEXT_PUBLIC_FB_MEASUREID: process.env.NEXT_PUBLIC_FB_MEASUREID,
     FB_KING: process.env.FB_KING,
-    REDIS_URL: process.env.REDIS_URL
+    REDIS_URL: process.env.REDIS_URL,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

@@ -1,14 +1,13 @@
 "use client";
 
-import {
-  type LucideIcon
-} from "lucide-react";
+import { type LucideIcon } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarMenu, SidebarMenuButton,
+  SidebarMenu,
+  SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

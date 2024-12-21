@@ -3,25 +3,30 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import React, { memo } from "react";
 
-export const BackgroundLines = memo(({
-  className,
-  svgOptions,
-}: {
-  className?: string;
-  svgOptions?: {
-    duration?: number;
-  };
-}) => {
-  return (
-    <div
-      className={cn("absolute z-[-1] h-full w-full bg-transparent", className)}
-    >
-      <div className="relative size-full">
-        <SVG svgOptions={svgOptions} />
+export const BackgroundLines = memo(
+  ({
+    className,
+    svgOptions,
+  }: {
+    className?: string;
+    svgOptions?: {
+      duration?: number;
+    };
+  }) => {
+    return (
+      <div
+        className={cn(
+          "absolute z-[-1] h-full w-full bg-transparent",
+          className,
+        )}
+      >
+        <div className="relative size-full">
+          <SVG svgOptions={svgOptions} />
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 BackgroundLines.displayName = "BackgroundLines";
 
