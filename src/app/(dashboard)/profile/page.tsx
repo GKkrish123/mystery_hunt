@@ -9,26 +9,84 @@ import { mysteryFont } from "@/lib/fonts";
 
 import { default as dynamicImport } from "next/dynamic";
 
-const AvatarUpload = dynamicImport(() => import("@/components/avatar-upload").then(mod => mod.AvatarUpload), { ssr: false });
-const AnimatedGradientText = dynamicImport(() => import("@/components/ui/animated-gradient-text").then(mod => mod.AnimatedGradientText), { ssr: false });
-const AppLoader = dynamicImport(() => import("@/components/ui/app-loader").then(mod => mod.default), { ssr: false });
-const BlurIn = dynamicImport(() => import("@/components/ui/blur-in").then(mod => mod.default), { ssr: false });
-const Button = dynamicImport(() => import("@/components/ui/button").then(mod => mod.Button), { ssr: false });
-const Dialog = dynamicImport(() => import("@/components/ui/dialog").then(mod => mod.Dialog), { ssr: false });
-const DialogContent = dynamicImport(() => import("@/components/ui/dialog").then(mod => mod.DialogContent), { ssr: false });
-const DialogDescription = dynamicImport(() => import("@/components/ui/dialog").then(mod => mod.DialogDescription), { ssr: false });
-const DialogFooter = dynamicImport(() => import("@/components/ui/dialog").then(mod => mod.DialogFooter), { ssr: false });
-const DialogHeader = dynamicImport(() => import("@/components/ui/dialog").then(mod => mod.DialogHeader), { ssr: false });
-const DialogTitle = dynamicImport(() => import("@/components/ui/dialog").then(mod => mod.DialogTitle), { ssr: false });
-const DialogTrigger = dynamicImport(() => import("@/components/ui/dialog").then(mod => mod.DialogTrigger), { ssr: false });
-const GradualSpacing = dynamicImport(() => import("@/components/ui/gradual-spacing").then(mod => mod.GradualSpacing), { ssr: false });
-const Input = dynamicImport(() => import("@/components/ui/input").then(mod => mod.Input), { ssr: false });
-const Label = dynamicImport(() => import("@/components/ui/label").then(mod => mod.Label), { ssr: false });
-const LampContainer = dynamicImport(() => import("@/components/ui/lamp").then(mod => mod.LampContainer), { ssr: false });
-const Loader = dynamicImport(() => import("@/components/ui/loader").then(mod => mod.default), { ssr: false });
-const Tag3d = dynamicImport(() => import("@/components/ui/three-d-Tag").then(mod => mod.default), {
-  ssr: false,
-});
+const AvatarUpload = dynamicImport(
+  () => import("@/components/avatar-upload").then((mod) => mod.AvatarUpload),
+  { ssr: false },
+);
+const AnimatedGradientText = dynamicImport(
+  () =>
+    import("@/components/ui/animated-gradient-text").then(
+      (mod) => mod.AnimatedGradientText,
+    ),
+  { ssr: false },
+);
+const AppLoader = dynamicImport(
+  () => import("@/components/ui/app-loader").then((mod) => mod.default),
+  { ssr: false },
+);
+const BlurIn = dynamicImport(
+  () => import("@/components/ui/blur-in").then((mod) => mod.default),
+  { ssr: false },
+);
+const Button = dynamicImport(
+  () => import("@/components/ui/button").then((mod) => mod.Button),
+  { ssr: false },
+);
+const Dialog = dynamicImport(
+  () => import("@/components/ui/dialog").then((mod) => mod.Dialog),
+  { ssr: false },
+);
+const DialogContent = dynamicImport(
+  () => import("@/components/ui/dialog").then((mod) => mod.DialogContent),
+  { ssr: false },
+);
+const DialogDescription = dynamicImport(
+  () => import("@/components/ui/dialog").then((mod) => mod.DialogDescription),
+  { ssr: false },
+);
+const DialogFooter = dynamicImport(
+  () => import("@/components/ui/dialog").then((mod) => mod.DialogFooter),
+  { ssr: false },
+);
+const DialogHeader = dynamicImport(
+  () => import("@/components/ui/dialog").then((mod) => mod.DialogHeader),
+  { ssr: false },
+);
+const DialogTitle = dynamicImport(
+  () => import("@/components/ui/dialog").then((mod) => mod.DialogTitle),
+  { ssr: false },
+);
+const DialogTrigger = dynamicImport(
+  () => import("@/components/ui/dialog").then((mod) => mod.DialogTrigger),
+  { ssr: false },
+);
+const GradualSpacing = dynamicImport(
+  () =>
+    import("@/components/ui/gradual-spacing").then((mod) => mod.GradualSpacing),
+  { ssr: false },
+);
+const Input = dynamicImport(
+  () => import("@/components/ui/input").then((mod) => mod.Input),
+  { ssr: false },
+);
+const Label = dynamicImport(
+  () => import("@/components/ui/label").then((mod) => mod.Label),
+  { ssr: false },
+);
+const LampContainer = dynamicImport(
+  () => import("@/components/ui/lamp").then((mod) => mod.LampContainer),
+  { ssr: false },
+);
+const Loader = dynamicImport(
+  () => import("@/components/ui/loader").then((mod) => mod.default),
+  { ssr: false },
+);
+const Tag3d = dynamicImport(
+  () => import("@/components/ui/three-d-Tag").then((mod) => mod.default),
+  {
+    ssr: false,
+  },
+);
 
 const InfoBlock = ({
   title,
@@ -342,6 +400,5 @@ export default function ProfilePage() {
     </>
   );
 }
-
 
 export const dynamic = "force-dynamic";

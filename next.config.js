@@ -30,9 +30,9 @@ const config = {
     optimizePackageImports: ["lucide-react", "cobe"],
     turbo: {
       rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
         },
       },
     },
@@ -45,11 +45,15 @@ const config = {
           { key: "Access-Control-Allow-Credentials", value: "true" },
           { key: "Access-Control-Allow-Origin", value: "*" },
           { key: "Access-Control-Allow-Methods", value: "GET,POST" },
-          { key: "Access-Control-Allow-Headers", value: "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Authorization" },
-        ]
-      }
-    ]
-  }
+          {
+            key: "Access-Control-Allow-Headers",
+            value:
+              "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Authorization",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 const withBundleAnalyzer = NextBundleAnalyzer({

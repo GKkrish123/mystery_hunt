@@ -30,7 +30,7 @@ export default async function NotFound() {
       <NotFoundEffects />
     </div>
   );
-};
+}
 
 export const dynamic = "force-static";
 export const fetchCache = "force-cache";
@@ -39,4 +39,3 @@ export const metadata = {
   title: "Mysteryverse Void",
   description: "This is a void page of Mysteryverse",
 };
-

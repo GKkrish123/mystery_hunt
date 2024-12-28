@@ -2,9 +2,15 @@ import { api } from "@/trpc/server";
 
 import { default as dynamicImport } from "next/dynamic";
 
-const ProgressEffects = dynamicImport(() => import("@/components/effects/progress").then(mod => mod.default));
-const ParallaxScroll = dynamicImport(() => import("@/components/ui/parallax.scroll").then(mod => mod.ParallaxScroll));
-const TextSplit = dynamicImport(() => import("@/components/ui/text-split").then(mod => mod.TextSplit));
+const ProgressEffects = dynamicImport(() =>
+  import("@/components/effects/progress").then((mod) => mod.default),
+);
+const ParallaxScroll = dynamicImport(() =>
+  import("@/components/ui/parallax.scroll").then((mod) => mod.ParallaxScroll),
+);
+const TextSplit = dynamicImport(() =>
+  import("@/components/ui/text-split").then((mod) => mod.TextSplit),
+);
 
 export default async function ProgressPage() {
   const mysteriesData = await api.mystery

@@ -49,7 +49,7 @@ const Carousel = memo(function CarouselComponent({
   const rotation = useMotionValue(0);
   const transform = useTransform(
     rotation,
-    (value) => `rotate3d(0, 1, 0, ${value}deg)`
+    (value) => `rotate3d(0, 1, 0, ${value}deg)`,
   );
 
   const startSlowRotation = async () => {
@@ -156,7 +156,7 @@ const ThreeDPhotoCarousel = () => {
   const controls = useAnimation();
   const cards = useMemo(
     () => keywords.map((keyword) => `https://picsum.photos/200/300?${keyword}`),
-    []
+    [],
   );
 
   const handleClick = () => {

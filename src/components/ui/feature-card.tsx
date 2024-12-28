@@ -1,16 +1,41 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { ThreeDPhotoCarousel } from "./threeDCarousel";
-import { BoldCopy } from "./bold-copy";
-import { WordRotate } from "./word-rotate";
-import { CoolMode } from "./cool-mode";
-import BlurFade from "./blur-fade";
-import { RainbowButton } from "./rainbow-button";
 import { ArrowDown, ChevronRight, Map } from "lucide-react";
-import { AnimatedGradientText } from "./animated-gradient-text";
 import Link from "next/link";
 import { memo } from "react";
+import { cn } from "@/lib/utils";
+
+import { default as dynamicImport } from "next/dynamic";
+
+const ThreeDPhotoCarousel = dynamicImport(
+  () => import("./threeDCarousel").then((mod) => mod.ThreeDPhotoCarousel),
+  { ssr: false },
+);
+const BoldCopy = dynamicImport(
+  () => import("./bold-copy").then((mod) => mod.BoldCopy),
+  { ssr: false },
+);
+const WordRotate = dynamicImport(
+  () => import("./word-rotate").then((mod) => mod.WordRotate),
+  { ssr: false },
+);
+const CoolMode = dynamicImport(
+  () => import("./cool-mode").then((mod) => mod.default),
+  { ssr: false },
+);
+const BlurFade = dynamicImport(
+  () => import("./blur-fade").then((mod) => mod.default),
+  { ssr: false },
+);
+const RainbowButton = dynamicImport(
+  () => import("./rainbow-button").then((mod) => mod.RainbowButton),
+  { ssr: false },
+);
+const AnimatedGradientText = dynamicImport(
+  () =>
+    import("./animated-gradient-text").then((mod) => mod.AnimatedGradientText),
+  { ssr: false },
+);
 
 export default memo(function ProductFeatures({
   className,

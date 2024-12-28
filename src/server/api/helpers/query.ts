@@ -44,24 +44,28 @@ export async function getHiddenGemsByUrl(url: string, tool: string) {
       collection(db, MysteryCollections.hiddenGems),
       where("url", "==", url),
       where("tool", "==", tool),
-    )
+    ),
   );
   if (hiddenGemsSnaps.empty || !hiddenGemsSnaps.docs[0]) {
     return null;
   }
-  return hiddenGemsSnaps.docs.map((hiddenGem) => ({
-    ...hiddenGem.data(),
-    id: hiddenGem.id,
-  }) as HiddenGems);
+  return hiddenGemsSnaps.docs.map(
+    (hiddenGem) =>
+      ({
+        ...hiddenGem.data(),
+        id: hiddenGem.id,
+      }) as HiddenGems,
+  );
 }
 
-export async function updateToolTrail(hunterId: string, tool: string, time: number) {
-  await updateDoc(
-    doc(db, MysteryCollections.hunterTrails, hunterId),
-    {
-      [`interactions.tools.${tool}`]: time,
-    },
-  );
+export async function updateToolTrail(
+  hunterId: string,
+  tool: string,
+  time: number,
+) {
+  await updateDoc(doc(db, MysteryCollections.hunterTrails, hunterId), {
+    [`interactions.tools.${tool}`]: time,
+  });
 }
 
 export function extractHunterEssentials(hunter: Hunter) {

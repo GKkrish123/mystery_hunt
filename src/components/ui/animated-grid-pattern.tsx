@@ -135,6 +135,6 @@ export const GridPattern = memo(function GridPattern({
       </svg>
     </svg>
   );
-})
+});
 
 export default GridPattern;

@@ -3,7 +3,10 @@
 import dynamic from "next/dynamic";
 
 const BackgroundBeamsWithCollision = dynamic(
-  () => import("@/components/ui/background-beams-with-collision").then((mod) => mod.BackgroundBeamsWithCollision),
+  () =>
+    import("@/components/ui/background-beams-with-collision").then(
+      (mod) => mod.BackgroundBeamsWithCollision,
+    ),
   {
     ssr: false,
   },

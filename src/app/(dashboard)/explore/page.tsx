@@ -3,7 +3,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
 
-import {default as dynamicImport} from "next/dynamic";
+import { default as dynamicImport } from "next/dynamic";
 
 const HeadingReveal = dynamicImport(() =>
   import("@/components/heading-reveal").then((mod) => mod.HeadingReveal),
@@ -112,7 +112,7 @@ export default async function ExplorerPage() {
       <ExploreEffects />
     </>
   );
-};
+}
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60;
@@ -120,4 +120,3 @@ export const metadata = {
   title: "Mysteryverse Explore",
   description: "This is a explore page of Mysteryverse",
 };
-

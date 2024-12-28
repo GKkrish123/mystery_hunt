@@ -56,4 +56,3 @@ export const metadata = {
   title: "Mysteryverse Void",
   description: "This is a void page of Mysteryverse",
 };
-

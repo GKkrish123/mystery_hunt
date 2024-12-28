@@ -148,4 +148,3 @@ export const metadata = {
   title: "Mysteryverse Home",
   description: "This is a home page of Mysteryverse",
 };
-

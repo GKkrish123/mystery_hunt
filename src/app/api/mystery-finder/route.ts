@@ -64,13 +64,13 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(
       { trails: hunterTrailsData.interactions.tools || {} },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error in GET handler:", JSON.stringify(error));
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Record<string, unknown>;
     const validationResult = PayloadSchema.safeParse(body);
-    
+
     if (!validationResult.success) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
     const user = await authenticate(req);
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }    
+    }
 
     const hunterTrailsData = await fetchHunterTrail(user.hunterId);
     if (!hunterTrailsData) {
@@ -99,10 +99,10 @@ export async function POST(req: NextRequest) {
     const now = Date.now();
     const lastUsed = toolsTrails[tool];
 
-    if (lastUsed && now - lastUsed < 5 * 60 * 1000) {      
+    if (lastUsed && now - lastUsed < 5 * 60 * 1000) {
       return NextResponse.json(
         { success: false, message: "try-later", trails: toolsTrails },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
           message: "not-found",
           trails: { ...toolsTrails, [tool]: now },
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -126,8 +126,8 @@ export async function POST(req: NextRequest) {
         Object.entries(gem.attributeMatch).every(
           ([key, values]) =>
             Array.isArray(attributes[key]) &&
-            values.every((value) => attributes[key]?.includes(value))
-        )
+            values.every((value) => attributes[key]?.includes(value)),
+        ),
     );
 
     if (!trueGem) {
@@ -137,7 +137,7 @@ export async function POST(req: NextRequest) {
           message: "not-found",
           trails: { ...toolsTrails, [tool]: now },
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -148,13 +148,13 @@ export async function POST(req: NextRequest) {
         html: trueGem.gem,
         trails: { ...toolsTrails, [tool]: now },
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error in POST handler:", JSON.stringify(error));
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
