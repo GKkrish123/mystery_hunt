@@ -2,7 +2,13 @@
 
 import { mysteryFont } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+
+import dynamic from "next/dynamic";
+
+const MotionSpan = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.span),
+  { ssr: false },
+);
 
 interface BouncingTextProps {
   text?: string;
@@ -63,7 +69,7 @@ export function BounceText({
     >
       {text.split("").map((letter, index) =>
         bouncingIndices.includes(index) ? (
-          <motion.span
+          <MotionSpan
             key={`text-05-${letter}-${index}`}
             className={cn(
               "text-4xl font-bold text-black dark:text-white",
@@ -84,7 +90,7 @@ export function BounceText({
             }}
           >
             {letter}
-          </motion.span>
+          </MotionSpan>
         ) : (
           <span
             key={`text-05-1-${letter}-${index}`}

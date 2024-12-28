@@ -1,8 +1,14 @@
 "use client";
 
 import { memo, useEffect, useId, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+
+import dynamic from "next/dynamic";
+
+const MotionRect = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.rect),
+  { ssr: false },
+);
 
 interface GridPatternProps {
   width?: number;
@@ -113,7 +119,7 @@ export const GridPattern = memo(function GridPattern({
       <rect width="100%" height="100%" fill={`url(#${id})`} />
       <svg x={x} y={y} className="overflow-visible">
         {squares.map(({ pos: [x, y], id }, index) => (
-          <motion.rect
+          <MotionRect
             key={id}
             initial={{ opacity: 0 }}
             animate={{ opacity: maxOpacity }}

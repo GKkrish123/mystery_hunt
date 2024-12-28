@@ -1,10 +1,16 @@
 "use client";
 
-import React, { memo, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { memo, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import { useIsMobile } from "@/hooks/use-mobile";
+
+import dynamic from "next/dynamic";
+
+const MotionDiv = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.div),
+  { ssr: false },
+);
 
 interface SwirlProps {
   children?: React.ReactNode;
@@ -229,7 +235,7 @@ const Swirl: React.FC<SwirlProps> = memo((props) => {
   }, [resolvedTheme]);
 
   return (
-    <motion.div
+    <MotionDiv
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       ref={containerRef}
@@ -240,7 +246,7 @@ const Swirl: React.FC<SwirlProps> = memo((props) => {
     >
       <canvas ref={canvasRef} className="z-[-1] size-full" />
       {props.children}
-    </motion.div>
+    </MotionDiv>
   );
 });
 

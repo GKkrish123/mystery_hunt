@@ -1,8 +1,18 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import React, { memo } from "react";
+import { memo } from "react";
+
+import dynamic from "next/dynamic";
+
+const MotionPath = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.path),
+  { ssr: false },
+);
+const MotionSvg = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.svg),
+  { ssr: false },
+);
 
 export const BackgroundLines = memo(
   ({
@@ -95,7 +105,7 @@ const SVG = ({
     "#604483",
   ];
   return (
-    <motion.svg
+    <MotionSvg
       viewBox="0 0 1440 900"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +115,7 @@ const SVG = ({
       className="absolute inset-0 h-80 w-full md:h-screen"
     >
       {paths.map((path, idx) => (
-        <motion.path
+        <MotionPath
           d={path}
           stroke={colors[idx]}
           strokeWidth="2.3"
@@ -127,7 +137,7 @@ const SVG = ({
 
       {/* duplicate for more paths */}
       {paths.map((path, idx) => (
-        <motion.path
+        <MotionPath
           d={path}
           stroke={colors[idx]}
           strokeWidth="2.3"
@@ -146,6 +156,6 @@ const SVG = ({
           key={`path-second-${idx}`}
         />
       ))}
-    </motion.svg>
+    </MotionSvg>
   );
 };

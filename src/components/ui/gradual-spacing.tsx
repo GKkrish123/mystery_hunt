@@ -6,7 +6,6 @@ import {
   useInView,
   type Variants,
 } from "framer-motion";
-
 import { cn } from "@/lib/utils";
 import { useRef } from "react";
 

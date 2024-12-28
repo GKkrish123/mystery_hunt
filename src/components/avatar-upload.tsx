@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toBase64 } from "@/lib/utils";
 import { PencilIcon, User2Icon } from "lucide-react";
-import React from "react";
+import { useRef } from "react";
 
 type AvatarUploadProps = {
   value?: string;
@@ -13,7 +13,7 @@ type AvatarUploadProps = {
 };
 
 export function AvatarUpload({ value, onChange }: AvatarUploadProps) {
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]!;

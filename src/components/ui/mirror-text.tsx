@@ -1,3 +1,5 @@
+"use client";
+
 import { mysteryFont } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 

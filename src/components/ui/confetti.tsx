@@ -1,5 +1,7 @@
-import type { ReactNode } from "react";
-import React, {
+"use client";
+
+import type { ComponentPropsWithRef, MouseEvent, ReactNode } from "react";
+import {
   createContext,
   forwardRef,
   useCallback,
@@ -14,14 +16,13 @@ import type {
   Options as ConfettiOptions,
 } from "canvas-confetti";
 import confetti from "canvas-confetti";
-
 import { Button, type ButtonProps } from "@/components/ui/button";
 
 type Api = {
   fire: (options?: ConfettiOptions) => void;
 };
 
-type Props = React.ComponentPropsWithRef<"canvas"> & {
+type Props = ComponentPropsWithRef<"canvas"> & {
   options?: ConfettiOptions;
   globalOptions?: ConfettiGlobalOptions;
   manualstart?: boolean;
@@ -96,11 +97,11 @@ const Confetti = forwardRef<ConfettiRef, Props>((props, ref) => {
 interface ConfettiButtonProps extends ButtonProps {
   options?: ConfettiOptions &
     ConfettiGlobalOptions & { canvas?: HTMLCanvasElement };
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 function ConfettiButton({ options, children, ...props }: ConfettiButtonProps) {
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const x = rect.left + rect.width / 2;
     const y = rect.top + rect.height / 2;

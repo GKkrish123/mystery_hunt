@@ -1,9 +1,24 @@
 "use client";
+
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { useViewportSize } from "@mantine/hooks";
-import { motion, AnimatePresence } from "framer-motion";
-import React, { useRef, useState, useEffect, useMemo, memo } from "react";
+import { useRef, useState, useEffect, useMemo, memo, forwardRef } from "react";
+
+import dynamic from "next/dynamic";
+
+const MotionDiv = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.div),
+  { ssr: false },
+);
+const MotionSpan = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.span),
+  { ssr: false },
+);
+const AnimatePresence = dynamic(
+  () => import("framer-motion").then((mod) => mod.AnimatePresence),
+  { ssr: false },
+);
 
 interface Beam {
   initialX: number; // Starting position (in pixels or percentage)
@@ -78,7 +93,7 @@ export const BackgroundBeamsWithCollision = memo(
 
 BackgroundBeamsWithCollision.displayName = "BackgroundBeamsWithCollision";
 
-const CollisionMechanism = React.forwardRef<
+const CollisionMechanism = forwardRef<
   HTMLDivElement,
   {
     containerRef: React.RefObject<HTMLDivElement>;
@@ -157,7 +172,7 @@ const CollisionMechanism = React.forwardRef<
 
   return (
     <>
-      <motion.div
+      <MotionDiv
         key={beamKey}
         ref={beamRef}
         animate="animate"
@@ -217,15 +232,15 @@ const Explosion = ({ ...props }: React.HTMLProps<HTMLDivElement>) => {
 
   return (
     <div {...props} className={cn("absolute z-50 h-2 w-2", props.className)}>
-      <motion.div
+      <MotionDiv
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
         className="absolute -inset-x-10 top-0 m-auto h-2 w-10 rounded-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent blur-sm"
-      ></motion.div>
+      ></MotionDiv>
       {spans.map((span) => (
-        <motion.span
+        <MotionSpan
           key={span.id}
           initial={{ x: span.initialX, y: span.initialY, opacity: 1 }}
           animate={{

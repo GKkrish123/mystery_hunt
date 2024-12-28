@@ -1,8 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 import { cn } from "@/lib/utils";
+
+import dynamic from "next/dynamic";
+
+const MotionH1 = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.h1),
+  { ssr: false },
+);
 
 interface BlurIntProps {
   word: string;
@@ -21,7 +26,7 @@ const BlurIn = ({ word, className, variant, duration = 1 }: BlurIntProps) => {
   const combinedVariants = variant ?? defaultVariants;
 
   return (
-    <motion.h1
+    <MotionH1
       initial="hidden"
       animate="visible"
       transition={{ duration }}
@@ -32,7 +37,7 @@ const BlurIn = ({ word, className, variant, duration = 1 }: BlurIntProps) => {
       )}
     >
       {word}
-    </motion.h1>
+    </MotionH1>
   );
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, {
+import {
   memo,
   type MutableRefObject,
   useEffect,

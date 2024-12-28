@@ -5,7 +5,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 "use client";
-import * as THREE from "three";
 import { memo, useEffect, useRef, useState } from "react";
 import { Canvas, extend, useThree, useFrame } from "@react-three/fiber";
 import {
@@ -26,6 +25,13 @@ import {
 } from "@react-three/rapier";
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  CatmullRomCurve3,
+  ClampToEdgeWrapping,
+  type Mesh,
+  RepeatWrapping,
+  Vector3,
+} from "three";
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 useGLTF.preload(
@@ -101,16 +107,16 @@ const Band = memo(
     onDoubleClick: () => void;
     isMobile: boolean;
   }) => {
-    const band = useRef<THREE.Mesh>(null),
+    const band = useRef<Mesh>(null),
       fixed = useRef<RapierRigidBody | null>(null),
       j1 = useRef<RapierRigidBody | null>(null),
       j2 = useRef<RapierRigidBody | null>(null),
       j3 = useRef<RapierRigidBody | null>(null),
       card = useRef<RapierRigidBody | null>(null);
-    const vec = new THREE.Vector3(),
-      ang = new THREE.Vector3(),
-      rot = new THREE.Vector3(),
-      dir = new THREE.Vector3();
+    const vec = new Vector3(),
+      ang = new Vector3(),
+      rot = new Vector3(),
+      dir = new Vector3();
     const segmentProps: RigidBodyProps = {
       type: "dynamic",
       canSleep: true,
@@ -128,8 +134,8 @@ const Band = memo(
     const imageTexture = useTexture(image);
 
     imageTexture.anisotropy = 16;
-    imageTexture.wrapS = THREE.ClampToEdgeWrapping;
-    imageTexture.wrapT = THREE.ClampToEdgeWrapping;
+    imageTexture.wrapS = ClampToEdgeWrapping;
+    imageTexture.wrapT = ClampToEdgeWrapping;
     imageTexture.flipY = false;
     imageTexture.repeat.set(1.9, 1.3); // Scale to fit (modify if needed)
     imageTexture.offset.set(0, 0);
@@ -137,14 +143,14 @@ const Band = memo(
     const { width, height } = useThree((state) => state.size);
     const [curve] = useState(
       () =>
-        new THREE.CatmullRomCurve3([
-          new THREE.Vector3(),
-          new THREE.Vector3(),
-          new THREE.Vector3(),
-          new THREE.Vector3(),
+        new CatmullRomCurve3([
+          new Vector3(),
+          new Vector3(),
+          new Vector3(),
+          new Vector3(),
         ]),
     );
-    const [dragged, drag] = useState<THREE.Vector3 | boolean>(false);
+    const [dragged, drag] = useState<Vector3 | boolean>(false);
     const [hovered, hover] = useState(false);
 
     useRopeJoint(fixed , j1, [[0, 0, 0], [0, 0, 0], 1]) // prettier-ignore
@@ -166,16 +172,16 @@ const Band = memo(
         vec.add(dir.multiplyScalar(state.camera.position.length()));
         [card, j1, j2, j3, fixed].forEach((ref) => ref.current?.wakeUp());
         card.current?.setNextKinematicTranslation({
-          x: vec.x - (dragged as THREE.Vector3).x,
-          y: vec.y - (dragged as THREE.Vector3).y,
-          z: vec.z - (dragged as THREE.Vector3).z,
+          x: vec.x - (dragged as Vector3).x,
+          y: vec.y - (dragged as Vector3).y,
+          z: vec.z - (dragged as Vector3).z,
         });
       }
       if (fixed.current) {
         // Fix most of the jitter when over pulling the card
         [j1, j2].forEach((ref) => {
           if (!(ref.current! as any).lerped)
-            (ref.current! as any).lerped = new THREE.Vector3().copy(
+            (ref.current! as any).lerped = new Vector3().copy(
               ref.current!.translation(),
             );
           const clampedDistance = Math.max(
@@ -209,7 +215,7 @@ const Band = memo(
     });
 
     curve.curveType = "chordal";
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.wrapS = texture.wrapT = RepeatWrapping;
 
     const lastClickTime = useRef(0);
 
@@ -257,7 +263,7 @@ const Band = memo(
               onPointerDown={(e) => (
                 (e.target! as any).setPointerCapture(e.pointerId),
                 drag(
-                  new THREE.Vector3()
+                  new Vector3()
                     .copy(e.point)
                     .sub(vec.copy(card.current!.translation())),
                 )

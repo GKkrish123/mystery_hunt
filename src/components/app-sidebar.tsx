@@ -11,15 +11,27 @@ import {
   SidebarHeader,
   useSidebar,
 } from "@/components/ui/sidebar";
-import RetroGrid from "./ui/retro-grid";
-import Meteors from "./ui/meteors";
 import { useEffect, useRef } from "react";
-import LetterPullup from "./ui/letter-pullup";
 import { AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { navData } from "./nav-data";
 import { api } from "@/trpc/react";
 import AppLoader from "./ui/app-loader";
+
+import dynamic from "next/dynamic";
+
+const RetroGrid = dynamic(
+  () => import("./ui/retro-grid").then((mod) => mod.default),
+  { ssr: false },
+);
+const Meteors = dynamic(
+  () => import("./ui/meteors").then((mod) => mod.default),
+  { ssr: false },
+);
+const LetterPullup = dynamic(
+  () => import("./ui/letter-pullup").then((mod) => mod.default),
+  { ssr: false },
+);
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const sidebarRef = useRef(null);

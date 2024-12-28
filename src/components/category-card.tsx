@@ -5,7 +5,6 @@ import BlurFade from "./ui/blur-fade";
 import Lottie from "lottie-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-// import LottieStar from "@/components/icons/lottie/Star.json";
 import LottieWingsBlack from "@/components/icons/lottie/WingsBlack.json";
 import LottieWingsWhite from "@/components/icons/lottie/WingsWhite.json";
 import LottieWingsColor from "@/components/icons/lottie/WingsColor.json";

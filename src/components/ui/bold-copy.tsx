@@ -1,7 +1,6 @@
 "use client";
 
 import { Tourney } from "next/font/google";
-
 import { cn } from "@/lib/utils";
 
 const tourney = Tourney({

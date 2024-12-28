@@ -1,7 +1,6 @@
 "use client";
 
-import React, { type CSSProperties } from "react";
-
+import { memo, type CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
 interface RippleProps {
@@ -11,7 +10,7 @@ interface RippleProps {
   className?: string;
 }
 
-const Ripple = React.memo(function Ripple({
+const Ripple = memo(function Ripple({
   mainCircleSize = 210,
   mainCircleOpacity = 0.24,
   numCircles = 8,

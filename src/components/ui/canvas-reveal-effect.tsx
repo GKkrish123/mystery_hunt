@@ -2,17 +2,34 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 "use client";
+
 import { cn } from "@/lib/utils";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useMemo, useRef } from "react";
-import * as THREE from "three";
-import { BackgroundGradient } from "./background-gradient";
+import { type FC, type ReactNode, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Lottie from "lottie-react";
 import TrophyGold from "@/components/icons/lottie/TrophyGold.json";
 import TrophySilver from "@/components/icons/lottie/TrophySilver.json";
 import TrophyBronze from "@/components/icons/lottie/TrophyBronze.json";
+import {
+  CustomBlending,
+  GLSL3,
+  type IUniform,
+  type Mesh,
+  OneFactor,
+  ShaderMaterial,
+  SrcAlphaFactor,
+  Vector2,
+  Vector3,
+} from "three";
+
+import dynamic from "next/dynamic";
+
+const BackgroundGradient = dynamic(
+  () => import("./background-gradient").then((mod) => mod.BackgroundGradient),
+  { ssr: false },
+);
 
 export const CanvasRevealEffect = ({
   animationSpeed = 0.4,
@@ -67,7 +84,7 @@ interface DotMatrixProps {
   center?: ("x" | "y")[];
 }
 
-const DotMatrix: React.FC<DotMatrixProps> = ({
+const DotMatrix: FC<DotMatrixProps> = ({
   colors = [[0, 0, 0]],
   opacities = [0.04, 0.04, 0.04, 0.04, 0.04, 0.08, 0.08, 0.08, 0.08, 0.14],
   totalSize = 4,
@@ -75,7 +92,7 @@ const DotMatrix: React.FC<DotMatrixProps> = ({
   shader = "",
   center = ["x", "y"],
 }) => {
-  const uniforms = React.useMemo(() => {
+  const uniforms = useMemo(() => {
     let colorsArray = [
       colors[0],
       colors[0],
@@ -192,7 +209,7 @@ type Uniforms = Record<
     type: string;
   }
 >;
-const ShaderMaterial = ({
+const ShaderMat = ({
   source,
   uniforms,
   maxFps = 60,
@@ -203,7 +220,7 @@ const ShaderMaterial = ({
   uniforms: Uniforms;
 }) => {
   const { size } = useThree();
-  const ref = useRef<THREE.Mesh>(null);
+  const ref = useRef<Mesh>(null);
   let lastFrameTime = 0;
 
   useFrame(({ clock }) => {
@@ -214,7 +231,7 @@ const ShaderMaterial = ({
     }
     lastFrameTime = timestamp;
 
-    const material = ref.current.material as THREE.ShaderMaterial;
+    const material = ref.current.material as ShaderMaterial;
     const timeLocation = material.uniforms.u_time!;
     timeLocation.value = timestamp;
   });
@@ -231,7 +248,7 @@ const ShaderMaterial = ({
           break;
         case "uniform3f":
           preparedUniforms[uniformName] = {
-            value: new THREE.Vector3().fromArray(uniform.value as number[]),
+            value: new Vector3().fromArray(uniform.value as number[]),
             type: "3f",
           };
           break;
@@ -241,14 +258,14 @@ const ShaderMaterial = ({
         case "uniform3fv":
           preparedUniforms[uniformName] = {
             value: (uniform.value as Array<number[]>).map((v: number[]) =>
-              new THREE.Vector3().fromArray(v),
+              new Vector3().fromArray(v),
             ),
             type: "3fv",
           };
           break;
         case "uniform2f":
           preparedUniforms[uniformName] = {
-            value: new THREE.Vector2().fromArray(uniform.value as number[]),
+            value: new Vector2().fromArray(uniform.value as number[]),
             type: "2f",
           };
           break;
@@ -260,14 +277,14 @@ const ShaderMaterial = ({
 
     preparedUniforms.u_time = { value: 0, type: "1f" };
     preparedUniforms.u_resolution = {
-      value: new THREE.Vector2(size.width * 2, size.height * 2),
+      value: new Vector2(size.width * 2, size.height * 2),
     }; // Initialize u_resolution
     return preparedUniforms;
   };
 
   // Shader material
   const material = useMemo(() => {
-    const materialObject = new THREE.ShaderMaterial({
+    const materialObject = new ShaderMaterial({
       vertexShader: `
       precision mediump float;
       in vec2 coordinates;
@@ -282,11 +299,11 @@ const ShaderMaterial = ({
       }
       `,
       fragmentShader: source,
-      uniforms: getUniforms() as Record<string, THREE.IUniform<unknown>>,
-      glslVersion: THREE.GLSL3,
-      blending: THREE.CustomBlending,
-      blendSrc: THREE.SrcAlphaFactor,
-      blendDst: THREE.OneFactor,
+      uniforms: getUniforms() as Record<string, IUniform<unknown>>,
+      glslVersion: GLSL3,
+      blending: CustomBlending,
+      blendSrc: SrcAlphaFactor,
+      blendDst: OneFactor,
     });
 
     return materialObject;
@@ -301,10 +318,10 @@ const ShaderMaterial = ({
   );
 };
 
-const Shader: React.FC<ShaderProps> = ({ source, uniforms, maxFps = 60 }) => {
+const Shader: FC<ShaderProps> = ({ source, uniforms, maxFps = 60 }) => {
   return (
     <Canvas className="absolute inset-0 h-full w-full">
-      <ShaderMaterial source={source} uniforms={uniforms} maxFps={maxFps} />
+      <ShaderMat source={source} uniforms={uniforms} maxFps={maxFps} />
     </Canvas>
   );
 };
@@ -329,9 +346,9 @@ export const RevealCard = ({
   name: string;
   picUrl: string;
   position: 1 | 2 | 3;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }) => {
-  const [hovered, setHovered] = React.useState(false);
+  const [hovered, setHovered] = useState(false);
   return (
     <div className="relative h-28 md:h-48">
       <Lottie

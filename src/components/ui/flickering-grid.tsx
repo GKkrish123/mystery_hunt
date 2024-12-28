@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useViewportSize } from "@mantine/hooks";
-import React, {
+import {
   memo,
   useCallback,
   useEffect,

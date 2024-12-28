@@ -1,8 +1,7 @@
 "use client";
 
-import { useScroll, useTransform } from "framer-motion";
+import { useScroll, useTransform, motion } from "framer-motion";
 import { useRef } from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { MysteryCard } from "../mystery-card";

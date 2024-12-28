@@ -5,7 +5,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { differenceInCalendarDays } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import * as React from "react";
+import { type MouseEvent, useCallback, useMemo, useState } from "react";
 import {
   DayPicker,
   labelNext,
@@ -30,12 +30,12 @@ function Calendar({
   numberOfMonths,
   ...props
 }: CalendarProps) {
-  const [navView, setNavView] = React.useState<"days" | "years">("days");
-  const [displayYears, setDisplayYears] = React.useState<{
+  const [navView, setNavView] = useState<"days" | "years">("days");
+  const [displayYears, setDisplayYears] = useState<{
     from: number;
     to: number;
   }>(
-    React.useMemo(() => {
+    useMemo(() => {
       const currentYear = new Date().getFullYear();
       return {
         from: currentYear - Math.floor(yearRange / 2 - 1),
@@ -149,7 +149,7 @@ function Calendar({
             return !nextMonth;
           })();
 
-          const handlePreviousClick = React.useCallback(() => {
+          const handlePreviousClick = useCallback(() => {
             if (!previousMonth) return;
             if (navView === "years") {
               setDisplayYears((prev) => ({
@@ -169,7 +169,7 @@ function Calendar({
             onPrevClick?.(previousMonth);
           }, [previousMonth, goToMonth]);
 
-          const handleNextClick = React.useCallback(() => {
+          const handleNextClick = useCallback(() => {
             if (!nextMonth) return;
             if (navView === "years") {
               setDisplayYears((prev) => ({
@@ -181,13 +181,13 @@ function Calendar({
                   displayYears.from + (displayYears.to - displayYears.from),
                   0,
                   1,
-                ) as unknown as React.MouseEvent<HTMLButtonElement>,
+                ) as unknown as MouseEvent<HTMLButtonElement>,
               );
               return;
             }
             goToMonth(nextMonth);
             onNextClick?.(
-              nextMonth as unknown as React.MouseEvent<HTMLButtonElement>,
+              nextMonth as unknown as MouseEvent<HTMLButtonElement>,
             );
             // eslint-disable-next-line react-hooks/exhaustive-deps
           }, [goToMonth, nextMonth]);

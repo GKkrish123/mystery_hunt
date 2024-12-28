@@ -4,7 +4,6 @@ import { type Dispatch, type SetStateAction, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useViewportSize } from "@mantine/hooks";
 import { type LucideIcon } from "lucide-react";
-
 import { Bell, ChartArea, DollarSign, Play } from "lucide-react";
 import ShineBorder from "./shine-border";
 

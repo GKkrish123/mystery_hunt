@@ -1,6 +1,12 @@
 import { cn } from "@/lib/utils";
 import React from "react";
-import { motion } from "framer-motion";
+
+import dynamic from "next/dynamic";
+
+const MotionDiv = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.div),
+  { ssr: false },
+);
 
 export const BackgroundGradient = ({
   children,
@@ -29,7 +35,7 @@ export const BackgroundGradient = ({
       className={cn("group relative p-[2px]", containerClassName)}
       {...props}
     >
-      <motion.div
+      <MotionDiv
         variants={animate ? variants : undefined}
         initial={animate ? "initial" : undefined}
         animate={animate ? "animate" : undefined}
@@ -50,7 +56,7 @@ export const BackgroundGradient = ({
           "bg-[radial-gradient(circle_farthest-side_at_0_100%,#00ccb1,transparent),radial-gradient(circle_farthest-side_at_100%_0,#7b61ff,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#ffc414,transparent),radial-gradient(circle_farthest-side_at_0_0,#1ca0fb,#141316)]",
         )}
       />
-      <motion.div
+      <MotionDiv
         variants={animate ? variants : undefined}
         initial={animate ? "initial" : undefined}
         animate={animate ? "animate" : undefined}

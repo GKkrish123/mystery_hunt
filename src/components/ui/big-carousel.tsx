@@ -1,12 +1,14 @@
 "use client";
 
 import { type HTMLAttributes, useEffect, useState } from "react";
-
-import WaveReveal from "./wave-reveal";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { type Category } from "@/server/model/categories";
+
+import dynamic from "next/dynamic";
+
+const WaveReveal = dynamic(() => import("./wave-reveal"), { ssr: false });
 
 interface ImageProps extends HTMLAttributes<HTMLDivElement> {
   item: Category;

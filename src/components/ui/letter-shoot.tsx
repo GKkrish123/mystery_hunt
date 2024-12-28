@@ -1,9 +1,15 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
 import { memo } from "react";
+
+import dynamic from "next/dynamic";
+
+const MotionSpan = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.span),
+  { ssr: false },
+);
 
 interface LetterShootProps {
   className?: string;
@@ -80,7 +86,7 @@ export default memo(function LetterShoot({
             letter === "M" ? "w-[2.5em]" : "",
           )}
         >
-          <motion.span
+          <MotionSpan
             key={`letter-${i}`}
             custom={i}
             variants={scaleVariant}
@@ -98,7 +104,7 @@ export default memo(function LetterShoot({
             )}
           >
             {letter === " " ? <span>&nbsp;</span> : letter}
-          </motion.span>
+          </MotionSpan>
         </div>
       ))}
     </div>

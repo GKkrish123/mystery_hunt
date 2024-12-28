@@ -1,8 +1,18 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+
+import dynamic from "next/dynamic";
+
+const MotionPath = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.path),
+  { ssr: false },
+);
+const MotionLinearGradient = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.linearGradient),
+  { ssr: false },
+);
 
 export const BackgroundBeams = React.memo(
   ({ className }: { className?: string }) => {
@@ -74,17 +84,17 @@ export const BackgroundBeams = React.memo(
           xmlns="http://www.w3.org/2000/svg"
         >
           {paths.map((path, index) => (
-            <motion.path
+            <MotionPath
               className="stroke-2 md:stroke-[0.5]"
               key={`path-` + index}
               d={path}
               stroke={`url(#linearGradient-${index})`}
               strokeOpacity="0.4"
-            ></motion.path>
+            ></MotionPath>
           ))}
           <defs>
             {paths.map((path, index) => (
-              <motion.linearGradient
+              <MotionLinearGradient
                 id={`linearGradient-${index}`}
                 key={`gradient-${index}`}
                 initial={{
@@ -110,7 +120,7 @@ export const BackgroundBeams = React.memo(
                 <stop stopColor="#18CCFC"></stop>
                 <stop offset="32.5%" stopColor="#6344F5"></stop>
                 <stop offset="100%" stopColor="#AE48FF" stopOpacity="0"></stop>
-              </motion.linearGradient>
+              </MotionLinearGradient>
             ))}
 
             <radialGradient

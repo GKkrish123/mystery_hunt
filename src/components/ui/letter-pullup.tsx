@@ -1,10 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
 import { memo } from "react";
+
+import dynamic from "next/dynamic";
+
+const MotionH1 = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.h1),
+  { ssr: false },
+);
 
 interface LetterPullupProps {
   className?: string;
@@ -66,7 +72,7 @@ export default memo(function LetterPullup({
             forHeader && letter === "e" ? "w-[0.7em] md:w-[1.1em]" : "",
           )}
         >
-          <motion.h1
+          <MotionH1
             variants={pullupVariant}
             initial={type === "blur" ? "hidden" : "initial"}
             animate={type === "blur" ? "visible" : "animate"}
@@ -98,7 +104,7 @@ export default memo(function LetterPullup({
             )}
           >
             {letter === " " ? <span>&nbsp;</span> : letter}
-          </motion.h1>
+          </MotionH1>
         </div>
       ))}
     </div>

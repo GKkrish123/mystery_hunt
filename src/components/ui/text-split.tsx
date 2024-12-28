@@ -2,7 +2,13 @@
 
 import { mysteryFont } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+
+import dynamic from "next/dynamic";
+
+const MotionDiv = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.div),
+  { ssr: false },
+);
 
 interface TextSplitProps {
   text: string;
@@ -18,7 +24,7 @@ export const TextSplit: React.FC<TextSplitProps> = ({
   splitSpacing = 2,
 }) => {
   return (
-    <motion.div
+    <MotionDiv
       className={cn(
         "relative inline-block w-full text-center",
         containerClassName,
@@ -28,7 +34,7 @@ export const TextSplit: React.FC<TextSplitProps> = ({
       whileHover="hover"
       initial="default"
     >
-      <motion.div
+      <MotionDiv
         className={cn(
           "absolute -ml-0.5 w-full text-3xl md:text-4xl",
           className,
@@ -48,8 +54,8 @@ export const TextSplit: React.FC<TextSplitProps> = ({
         transition={{ duration: 0.1 }}
       >
         {text}
-      </motion.div>
-      <motion.div
+      </MotionDiv>
+      <MotionDiv
         className={cn("absolute w-full text-3xl md:text-4xl", className)}
         variants={{
           default: {
@@ -66,12 +72,12 @@ export const TextSplit: React.FC<TextSplitProps> = ({
         transition={{ duration: 0.1 }}
       >
         {text}
-      </motion.div>
+      </MotionDiv>
 
       {/* Hidden text for maintaining layout size */}
       <div className={cn("invisible text-3xl md:text-4xl", className)}>
         {text}
       </div>
-    </motion.div>
+    </MotionDiv>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import TinderCard from "react-tinder-card";

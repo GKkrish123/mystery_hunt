@@ -1,7 +1,6 @@
 "use client";
 
 import { type FC, memo, type ReactNode, useState } from "react";
-import { motion } from "framer-motion";
 import { Pause, Play, SkipBack, SkipForward, XIcon } from "lucide-react";
 import YoutubeColor from "@/components/icons/lottie/YoutubeColor.json";
 import YoutubeColorDark from "@/components/icons/lottie/YoutubeColorDark.json";
@@ -13,6 +12,13 @@ import { Button } from "./button";
 import { useTheme } from "next-themes";
 import TypingAnimation from "./typing-animation";
 import { PlayerState, useYoutube } from "@/hooks/use-youtube";
+
+import dynamic from "next/dynamic";
+
+const MotionDiv = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.div),
+  { ssr: false },
+);
 
 const CONTAINER_SIZE = 200;
 
@@ -88,7 +94,7 @@ export const MusicButton: React.FC<FamilyButtonProps> = memo(() => {
                 playerDetails={playerDetails}
               >
                 {isExpanded ? (
-                  <motion.div
+                  <MotionDiv
                     initial={{ opacity: 0 }}
                     animate={{
                       opacity: 1,
@@ -162,7 +168,7 @@ export const MusicButton: React.FC<FamilyButtonProps> = memo(() => {
                         <SkipForward className="h-4 w-4 text-white dark:text-black" />
                       </Button>
                     </div>
-                  </motion.div>
+                  </MotionDiv>
                 ) : null}
               </FamilyButtonContainer>
             </div>
@@ -192,7 +198,7 @@ const FamilyButtonContainer: FC<FamilyButtonContainerProps> = ({
   theme,
 }) => {
   return (
-    <motion.div
+    <MotionDiv
       className={cn(
         "relative z-10 flex cursor-pointer flex-col items-center justify-center space-y-1 border border-white/10 bg-transparent text-white shadow-lg",
         !isExpanded ? "" : "",
@@ -222,7 +228,7 @@ const FamilyButtonContainer: FC<FamilyButtonContainerProps> = ({
       }
     >
       {children}
-      <motion.div
+      <MotionDiv
         animate={{
           transition: {
             type: "tween",
@@ -236,7 +242,7 @@ const FamilyButtonContainer: FC<FamilyButtonContainerProps> = ({
         }}
       >
         {isExpanded ? (
-          <motion.div
+          <MotionDiv
             className="group rounded-full border bg-neutral-800/50 p-[10px] text-orange-50 shadow-2xl transition-colors duration-300 hover:border-neutral-200 dark:bg-black/50"
             onClick={toggleExpand}
             layoutId="expand-toggle"
@@ -253,9 +259,9 @@ const FamilyButtonContainer: FC<FamilyButtonContainerProps> = ({
                 "h-4 w-4 text-black transition-colors duration-200 group-hover:text-neutral-500 dark:text-white",
               )}
             />
-          </motion.div>
+          </MotionDiv>
         ) : (
-          <motion.div
+          <MotionDiv
             className={cn(
               "flex items-center justify-center rounded-full",
               // "group border border-cyan-100/10 bg-neutral-200 p-[10px] text-cyan-50 shadow-2xl transition-colors duration-200 dark:bg-cyan-500/90",
@@ -278,9 +284,9 @@ const FamilyButtonContainer: FC<FamilyButtonContainerProps> = ({
               autoplay={playerDetails?.state === PlayerState.PLAYING}
               loop={playerDetails?.state === PlayerState.PLAYING}
             />
-          </motion.div>
+          </MotionDiv>
         )}
-      </motion.div>
-    </motion.div>
+      </MotionDiv>
+    </MotionDiv>
   );
 };
