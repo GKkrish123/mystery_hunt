@@ -10,6 +10,7 @@ export enum MysteryCollections {
   hunterTrails = "hunter-trails",
   secretChamber = "secret-chamber",
   categories = "categories",
+  hiddenGems = "hidden-gems",
 }
 
 export interface State {

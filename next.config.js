@@ -28,7 +28,28 @@ const config = {
   },
   experimental: {
     optimizePackageImports: ["lucide-react", "cobe"],
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
   },
+  async headers() {
+    return [
+      {
+        source: "/api/mystery-finder",
+        headers: [
+          { key: "Access-Control-Allow-Credentials", value: "true" },
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Access-Control-Allow-Methods", value: "GET,POST" },
+          { key: "Access-Control-Allow-Headers", value: "Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, Authorization" },
+        ]
+      }
+    ]
+  }
 };
 
 const withBundleAnalyzer = NextBundleAnalyzer({

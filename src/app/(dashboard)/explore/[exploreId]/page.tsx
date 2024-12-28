@@ -1,18 +1,23 @@
-import { MysteriesList } from "@/components/mysteries-list";
-import AppLoader from "@/components/ui/app-loader";
-import BlurIn from "@/components/ui/blur-in";
-import { SparklingGrid } from "@/components/ui/sparkling-grid";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { mysteryFont } from "@/lib/fonts";
 
-export interface Mystery {
-  name: string;
-  description: string;
-  cover: string;
-}
+import { default as dynamicImport } from "next/dynamic";
+
+const MysteriesList = dynamicImport(() =>
+  import("@/components/mysteries-list").then((mod) => mod.MysteriesList),
+);
+const AppLoader = dynamicImport(() =>
+  import("@/components/ui/app-loader").then((mod) => mod.default),
+);
+const BlurIn = dynamicImport(() =>
+  import("@/components/ui/blur-in").then((mod) => mod.default),
+);
+const CategoryEffects = dynamicImport(() =>
+  import("@/components/effects/category").then((mod) => mod.default),
+);
 
 interface ExploreCategoryProps {
   params: Promise<{
@@ -54,7 +59,13 @@ export default async function ExploreCategoryPage({
           />
         </Suspense>
       </div>
-      <SparklingGrid />
+      <CategoryEffects />
     </>
   );
 }
+
+export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "Mysteryverse Category",
+  description: "This is a category page of Mysteryverse",
+};

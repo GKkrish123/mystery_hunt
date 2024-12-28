@@ -25,9 +25,17 @@ export interface CategoryInteraction {
   viewCount: number;
 }
 
+export interface ToolsInteraction {
+  torch: number | null;
+  eye: number | null;
+  brush: number | null;
+  axe: number | null;
+}
+
 export interface Interactions {
   mysteries: Record<string, MysteryInteraction>;
   categories: Record<string, CategoryInteraction>;
+  tools: ToolsInteraction;
 }
 
 export interface HunterTrail {

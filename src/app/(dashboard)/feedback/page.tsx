@@ -1,10 +1,22 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import DotPattern from "@/components/ui/dot-pattern";
-import BlurIn from "@/components/ui/blur-in";
 import { mysteryFont } from "@/lib/fonts";
-import { FeedbackForm } from "@/components/feedback-form";
+
+import { default as dynamicImport } from "next/dynamic";
+
+const DotPattern = dynamicImport(
+  () => import("@/components/ui/dot-pattern").then((mod) => mod.default),
+  { ssr: false },
+);
+const BlurIn = dynamicImport(
+  () => import("@/components/ui/blur-in").then((mod) => mod.default),
+  { ssr: false },
+);
+const FeedbackForm = dynamicImport(
+  () => import("@/components/feedback-form").then((mod) => mod.FeedbackForm),
+  { ssr: false },
+);
 
 export default function FeedbackPage() {
   return (
@@ -25,6 +37,3 @@ export default function FeedbackPage() {
     </>
   );
 }
-
-export const dynamic = "force-static";
-export const fetchCache = "force-cache";

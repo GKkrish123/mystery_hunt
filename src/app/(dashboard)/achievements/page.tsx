@@ -1,8 +1,10 @@
-import { BackgroundLines } from "@/components/backrgound-lines";
-import { SparklesText } from "@/components/ui/sparkles-text";
-import { LightBoard } from "@/components/ui/lightboard";
-import { FocusCards } from "@/components/ui/focus-cards";
-import { CoolMode } from "@/components/ui/cool-mode";
+import { default as dynamicImport } from "next/dynamic";
+
+const SparklesText = dynamicImport(() => import("@/components/ui/sparkles-text").then(mod => mod.SparklesText));
+const LightBoard = dynamicImport(() => import("@/components/ui/lightboard").then(mod => mod.LightBoard));
+const FocusCards = dynamicImport(() => import("@/components/ui/focus-cards").then(mod => mod.FocusCards));
+const CoolMode = dynamicImport(() => import("@/components/ui/cool-mode").then(mod => mod.CoolMode));
+const AchievementsEffects = dynamicImport(() => import("@/components/effects/achievements").then(mod => mod.default));
 
 const cards = [
   {
@@ -69,7 +71,14 @@ export default function AchievementsPage() {
         />
         <FocusCards className="col-span-full" cards={cards} />
       </div>
-      <BackgroundLines />
+      <AchievementsEffects />
     </>
   );
 }
+
+export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "Mysteryverse Achievements",
+  description: "This is a achievements page of Mysteryverse",
+};
+

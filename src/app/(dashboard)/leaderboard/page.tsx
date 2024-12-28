@@ -1,13 +1,30 @@
-import { CitiesSelect } from "@/components/cities-select";
-import { CountriesSelect } from "@/components/countries-select";
-import { LeaderboardsSection } from "@/components/leaderboards-section";
-import { StatesSelect } from "@/components/states-select";
-import AppLoader from "@/components/ui/app-loader";
-import { BackgroundBeams } from "@/components/ui/background-beams";
-import { Cobe } from "@/components/ui/globe";
-import MirrorText from "@/components/ui/mirror-text";
-import { StarsBackground } from "@/components/ui/stars-background";
 import { Suspense } from "react";
+
+import { default as dynamicImport } from "next/dynamic";
+
+const CitiesSelect = dynamicImport(() =>
+  import("@/components/cities-select").then((mod) => mod.CitiesSelect),
+);
+const CountriesSelect = dynamicImport(() =>
+  import("@/components/countries-select").then((mod) => mod.CountriesSelect),
+);
+const LeaderboardsSection = dynamicImport(() =>
+  import("@/components/leaderboards-section").then(
+    (mod) => mod.LeaderboardsSection,
+  ),
+);
+const StatesSelect = dynamicImport(() =>
+  import("@/components/states-select").then((mod) => mod.StatesSelect),
+);
+const AppLoader = dynamicImport(() =>
+  import("@/components/ui/app-loader").then((mod) => mod.default),
+);
+const LeaderboardEffects = dynamicImport(() =>
+  import("@/components/effects/leaderboard").then((mod) => mod.default),
+);
+const MirrorText = dynamicImport(() =>
+  import("@/components/ui/mirror-text").then((mod) => mod.default),
+);
 
 interface LeaderboardPageProps {
   searchParams: Promise<{ state?: string; city?: string }>;
@@ -37,9 +54,13 @@ export default async function LeaderboardPage({
           <LeaderboardsSection state={state} city={city} />
         </Suspense>
       </div>
-      <StarsBackground />
-      <BackgroundBeams />
-      <Cobe />
+      <LeaderboardEffects />
     </>
   );
 }
+
+export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "Mysteryverse Leaderboard",
+  description: "This is a leaderboard page of Mysteryverse",
+};

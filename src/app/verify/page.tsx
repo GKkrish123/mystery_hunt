@@ -6,21 +6,38 @@ import { sendEmailVerification } from "firebase/auth";
 import { useAuth } from "@/components/auth-provider";
 import { FirebaseError } from "firebase/app";
 import { toast } from "sonner";
-import Meteors from "@/components/ui/meteors";
-import LetterPullup from "@/components/ui/letter-pullup";
-import BlurFade from "@/components/ui/blur-fade";
-import Ripple from "@/components/ui/ripple";
-import RetroGrid from "@/components/ui/retro-grid";
-import { RainbowButton } from "@/components/ui/rainbow-button";
-import HyperText from "@/components/ui/hyper-text";
 import { api } from "@/trpc/react";
-import AppLoader from "@/components/ui/app-loader";
-import Loader from "@/components/ui/loader";
 import { useInterval } from "@mantine/hooks";
-import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { ArrowRightIcon } from "lucide-react";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { auth } from "firebase-user";
+import dynamic from "next/dynamic";
+
+const BlurFade = dynamic(() => import("@/components/ui/blur-fade"), {
+  ssr: false,
+});
+const RainbowButton = dynamic(
+  () =>
+    import("@/components/ui/rainbow-button").then((mod) => mod.RainbowButton),
+  { ssr: false },
+);
+const HyperText = dynamic(() => import("@/components/ui/hyper-text"), {
+  ssr: false,
+});
+const AppLoader = dynamic(() => import("@/components/ui/app-loader"), {
+  ssr: false,
+});
+const Loader = dynamic(() => import("@/components/ui/loader"), { ssr: false });
+const AnimatedShinyText = dynamic(
+  () =>
+    import("@/components/ui/animated-shiny-text").then(
+      (mod) => mod.AnimatedShinyText,
+    ),
+  { ssr: false },
+);
+const LoginEffects = dynamic(() => import("@/components/effects/login"), {
+  ssr: false,
+});
 
 const RETRY_INTERVAL = 30;
 
@@ -156,16 +173,11 @@ const VerifyEmailPage = () => {
 
   return (
     <div className="relative flex h-screen w-full flex-col items-center justify-center gap-2 overflow-hidden px-4">
-      <Meteors key="login-meteors" number={30} />
+      <LoginEffects />
       {user?.emailVerified || !user ? (
         <AppLoader />
       ) : (
         <>
-          <LetterPullup
-            wrapperClassName="-mt-20 pb-5"
-            className="pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ed2323] to-[#8c1eff] bg-clip-text py-5 text-center text-4xl font-bold text-transparent dark:text-transparent md:py-0"
-            words="Mysteryverse"
-          />
           <BlurFade className="z-10" yOffset={0} delay={0.25}>
             {completionStatus ? (
               <AppLoader />
@@ -204,8 +216,6 @@ const VerifyEmailPage = () => {
           </BlurFade>
         </>
       )}
-      <Ripple key="login-ripple" />
-      <RetroGrid key="login-retro" />
     </div>
   );
 };

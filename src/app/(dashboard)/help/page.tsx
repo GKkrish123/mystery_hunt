@@ -1,9 +1,18 @@
-import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
-import BlurIn from "@/components/ui/blur-in";
-import { IconCloud } from "@/components/ui/icon-cloud";
-import VerticalAccordion from "@/components/ui/vertical-accordion";
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
+
+import { default as dynamicImport } from "next/dynamic";
+
+const HomeEffects = dynamicImport(() => import("@/components/effects/home"));
+const BlurIn = dynamicImport(() =>
+  import("@/components/ui/blur-in").then((mod) => mod.default),
+);
+const IconCloud = dynamicImport(() =>
+  import("@/components/ui/icon-cloud").then((mod) => mod.IconCloud),
+);
+const VerticalAccordion = dynamicImport(() =>
+  import("@/components/ui/vertical-accordion").then((mod) => mod.default),
+);
 
 const slugs = [
   "typescript",
@@ -58,7 +67,15 @@ export default function HelpPage() {
           </div>
         </div>
       </div>
-      <BackgroundBeamsWithCollision />
+      <HomeEffects />
     </>
   );
 }
+
+export const dynamic = "force-static";
+export const fetchCache = "force-cache";
+export const revalidate = 3600;
+export const metadata = {
+  title: "Mysteryverse Help",
+  description: "This is a help page of Mysteryverse",
+};

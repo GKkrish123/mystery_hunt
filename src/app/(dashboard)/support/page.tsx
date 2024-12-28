@@ -1,6 +1,14 @@
-import { MyProfile } from "@/components/my-profile";
-import Particles from "@/components/ui/particles";
-import { PinContainer } from "@/components/ui/td-pin";
+import { default as dynamicImport } from "next/dynamic";
+
+const MyProfile = dynamicImport(() =>
+  import("@/components/my-profile").then((mod) => mod.MyProfile),
+);
+const SupportEffects = dynamicImport(
+  () => import("@/components/effects/support"),
+);
+const PinContainer = dynamicImport(() =>
+  import("@/components/ui/td-pin").then((mod) => mod.PinContainer),
+);
 
 export default function SupportPage() {
   return (
@@ -26,13 +34,7 @@ export default function SupportPage() {
         </div>
         <MyProfile className="col-span-full justify-self-center" />
       </div>
-      <Particles
-        className="absolute inset-0 z-[-1]"
-        quantity={100}
-        ease={80}
-        size={4}
-        refresh
-      />
+      <SupportEffects />
     </>
   );
 }
@@ -42,5 +44,5 @@ export const fetchCache = "force-cache";
 export const revalidate = 3600;
 export const metadata = {
   title: "Mysteryverse Support",
-  description: "This is the support page of Mysteryverse",
+  description: "This is a support page of Mysteryverse",
 };

@@ -1,11 +1,24 @@
-import { MysteriesList } from "@/components/mysteries-list";
-import { SearchBar } from "@/components/search-bar";
-import AppLoader from "@/components/ui/app-loader";
-import { AuroraBackground } from "@/components/ui/aurora-bg";
-import SplitText from "@/components/ui/split-text";
 import { Suspense } from "react";
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
+
+import { default as dynamicImport } from "next/dynamic";
+
+const MysteriesList = dynamicImport(() =>
+  import("@/components/mysteries-list").then((mod) => mod.MysteriesList),
+);
+const SearchBar = dynamicImport(() =>
+  import("@/components/search-bar").then((mod) => mod.SearchBar),
+);
+const AppLoader = dynamicImport(() =>
+  import("@/components/ui/app-loader").then((mod) => mod.default),
+);
+const SplitText = dynamicImport(() =>
+  import("@/components/ui/split-text").then((mod) => mod.default),
+);
+const MysteriesEffects = dynamicImport(() =>
+  import("@/components/effects/mysteries").then((mod) => mod.default),
+);
 
 interface MysteriesPageProps {
   searchParams: Promise<{ search?: string; tags?: string }>;
@@ -40,7 +53,13 @@ export default async function MysteriesPage({
           />
         </Suspense>
       </div>
-      <AuroraBackground />
+      <MysteriesEffects />
     </>
   );
 }
+
+export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "Mysteryverse Mysteries",
+  description: "This is a mysteries page of Mysteryverse",
+};

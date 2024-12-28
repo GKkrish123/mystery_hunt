@@ -1,10 +1,24 @@
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { AppHeader } from "@/components/app-header";
-import { FloatingNav } from "@/components/floating-navbar";
 import { Suspense } from "react";
-import VerticalTiles from "@/components/ui/vertical-tiles";
-import { MusicButton } from "@/components/ui/music-button";
+import dynamic from "next/dynamic";
+
+const DashboardEffects = dynamic(
+  () => import("@/components/effects/dashboard"),
+);
+const SidebarProvider = dynamic(() =>
+  import("@/components/ui/sidebar").then((mod) => mod.SidebarProvider),
+);
+const SidebarInset = dynamic(() =>
+  import("@/components/ui/sidebar").then((mod) => mod.SidebarInset),
+);
+const AppSidebar = dynamic(() =>
+  import("@/components/app-sidebar").then((mod) => mod.AppSidebar),
+);
+const AppHeader = dynamic(() =>
+  import("@/components/app-header").then((mod) => mod.AppHeader),
+);
+const FloatingNav = dynamic(() =>
+  import("@/components/floating-navbar").then((mod) => mod.FloatingNav),
+);
 
 export default async function DashboardLayout({
   children,
@@ -21,14 +35,7 @@ export default async function DashboardLayout({
         </SidebarInset>
         <FloatingNav />
       </SidebarProvider>
-      <VerticalTiles
-        animationDelay={0.5}
-        animationDuration={0.7}
-        minTileWidth={32}
-        stagger={0.02}
-        tileClassName="z-50"
-      />
-      <MusicButton />
+      <DashboardEffects />
     </>
   );
 }

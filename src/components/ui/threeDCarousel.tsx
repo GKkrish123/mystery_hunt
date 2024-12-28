@@ -2,7 +2,6 @@
 
 import { memo, useEffect, useMemo } from "react";
 import {
-  type AnimationControls,
   motion,
   useAnimation,
   useMotionValue,
@@ -37,7 +36,7 @@ const Carousel = memo(function CarouselComponent({
   isCarouselActive,
 }: {
   handleClick: (imgUrl: string, index: number) => void;
-  controls: AnimationControls;
+  controls: ReturnType<typeof useAnimation>;
   cards: string[];
   isCarouselActive: boolean;
 }) {
@@ -46,20 +45,20 @@ const Carousel = memo(function CarouselComponent({
   const faceCount = cards.length;
   const faceWidth = cylinderWidth / faceCount;
   const radius = cylinderWidth / (2 * Math.PI);
+
   const rotation = useMotionValue(0);
   const transform = useTransform(
     rotation,
-    (value) => `rotate3d(0, 1, 0, ${value}deg)`,
+    (value) => `rotate3d(0, 1, 0, ${value}deg)`
   );
 
   const startSlowRotation = async () => {
     await controls.start({
-      rotateY: [rotation.get(), rotation.get() + 360], // Use current value as the starting point
+      rotateY: [rotation.get(), rotation.get() + 360],
       transition: {
-        // rotateY: [rotation.get(), rotation.get() + 360], // Ensure it continues smoothly
         repeat: Infinity,
         ease: "linear",
-        duration: 40, // Adjust for slow rotation
+        duration: 40,
       },
     });
   };
@@ -93,12 +92,13 @@ const Carousel = memo(function CarouselComponent({
         }}
         onDrag={(_, info) => {
           controls.stop();
-          if (isCarouselActive)
+          if (isCarouselActive) {
             rotation.set(rotation.get() + info.offset.x * 0.007);
+          }
         }}
         onDragEnd={async (_, info) => {
           if (isCarouselActive) {
-            await controls?.start({
+            await controls.start({
               rotateY: rotation.get() + info.velocity.x * 0.007,
               transition: {
                 type: "spring",
@@ -113,28 +113,18 @@ const Carousel = memo(function CarouselComponent({
         }}
         animate={controls}
       >
-        {cards.map((imgUrl, i) => (
+        {cards.map((imgUrl, index) => (
           <motion.div
-            key={`key-${imgUrl}-${i}`}
+            key={`key-${imgUrl}-${index}`}
             className="bg-mauve-dark-2 absolute flex h-full origin-center items-center justify-center rounded-xl p-2"
             style={{
               width: `${faceWidth}px`,
               transform: `rotateY(${
-                i * (360 / faceCount)
+                index * (360 / faceCount)
               }deg) translateZ(${radius}px)`,
             }}
-            onPointerDown={() => handleClick(imgUrl, i)}
+            onPointerDown={() => handleClick(imgUrl, index)}
           >
-            {/* <motion.img
-                    src={imgUrl}
-                    alt={`keyword_${i} ${imgUrl}`}
-                    layoutId={`img-${imgUrl}`}
-                    className="pointer-events-none w-full rounded-xl object-cover dark:border-zinc-600 border border-zinc-300"
-                    initial={{ filter: "blur(4px)" }}
-                    layout="position"
-                    animate={{ filter: "blur(0px)" }}
-                    transition={transition}
-                    /> */}
             <CardContainer className="w-full">
               <CardItem translateZ="100" className="w-full">
                 <ShineBorder
@@ -142,7 +132,6 @@ const Carousel = memo(function CarouselComponent({
                   borderRadius={10}
                   borderWidth={1.5}
                   duration={7}
-                  // color={resolvedTheme === "dark" ? "white" : "black"}
                   color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
                 >
                   <Image
@@ -162,13 +151,12 @@ const Carousel = memo(function CarouselComponent({
   );
 });
 
-function ThreeDPhotoCarousel() {
-  // const [isCarouselActive, setIsCarouselActive] = useState(true);
+const ThreeDPhotoCarousel = () => {
   const isCarouselActive = true;
   const controls = useAnimation();
   const cards = useMemo(
     () => keywords.map((keyword) => `https://picsum.photos/200/300?${keyword}`),
-    [],
+    []
   );
 
   const handleClick = () => {
@@ -187,6 +175,6 @@ function ThreeDPhotoCarousel() {
       </div>
     </motion.div>
   );
-}
+};
 
 export { ThreeDPhotoCarousel };

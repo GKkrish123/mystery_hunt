@@ -1,8 +1,14 @@
 import { notFound } from "next/navigation";
-import AnimatedGridPattern from "@/components/ui/animated-grid-pattern";
-import { cn } from "@/lib/utils";
-import { MysteryForm } from "@/components/mystery-form";
 import { api } from "@/trpc/server";
+
+import { default as dynamicImport } from "next/dynamic";
+
+const MysteryForm = dynamicImport(() =>
+  import("@/components/mystery-form").then((mod) => mod.MysteryForm),
+);
+const MysteryEffects = dynamicImport(() =>
+  import("@/components/effects/mystery").then((mod) => mod.default),
+);
 
 interface MysteryPageProps {
   params: Promise<{ mysteryId: string }>;
@@ -23,16 +29,14 @@ export default async function MysteryPage({ params }: MysteryPageProps) {
       <div className="relative h-full px-3 pb-3 pt-0 md:px-4 md:pb-4">
         <MysteryForm mystery={mystery} />
       </div>
-      <AnimatedGridPattern
-        numSquares={30}
-        maxOpacity={0.1}
-        duration={3}
-        repeatDur={1}
-        className={cn(
-          "z-[-1] [mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
-          "inset-x-0 h-full skew-y-12",
-        )}
-      />
+      <MysteryEffects />
     </>
   );
 }
+
+export const dynamic = "force-dynamic";
+export const revalidate = 60;
+export const metadata = {
+  title: "Mysteryverse",
+  description: "This is mystery page of Mysteryverse",
+};

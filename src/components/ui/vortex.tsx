@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from "@/lib/utils";
-import React, { useEffect, useRef } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import { createNoise3D } from "simplex-noise";
 import { motion } from "framer-motion";
 
@@ -18,7 +18,7 @@ interface VortexProps {
   backgroundColor?: string;
 }
 
-export const Vortex = (props: VortexProps) => {
+const Vortex = memo((props: VortexProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef(null);
   const particleCount = props.particleCount ?? 700;
@@ -69,7 +69,6 @@ export const Vortex = (props: VortexProps) => {
 
   const initParticles = () => {
     tick = 0;
-    // simplex = new SimplexNoise();
     particleProps = new Float32Array(particlePropsLength);
 
     for (let i = 0; i < particlePropsLength; i += particlePropCount) {
@@ -240,10 +239,10 @@ export const Vortex = (props: VortexProps) => {
       >
         <canvas ref={canvasRef}></canvas>
       </motion.div>
-
-      <div className={cn("relative z-10", props.className)}>
-        {props.children}
-      </div>
     </div>
   );
-};
+});
+
+Vortex.displayName = "Vortex";
+
+export default Vortex;

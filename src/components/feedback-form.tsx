@@ -1,12 +1,30 @@
 "use client";
 
-import Ripple from "@/components/ui/ripple";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useRef } from "react";
-import { FeedbackDisplay } from "./feedback-display";
+
+import { default as dynamicImport } from "next/dynamic";
+
+const Ripple = dynamicImport(
+  () => import("@/components/ui/ripple").then((mod) => mod.default),
+  { ssr: false },
+);
+const Textarea = dynamicImport(
+  () => import("@/components/ui/textarea").then((mod) => mod.Textarea),
+  { ssr: false },
+);
+const Button = dynamicImport(
+  () => import("@/components/ui/button").then((mod) => mod.Button),
+  { ssr: false },
+);
+const Send = dynamicImport(
+  () => import("lucide-react").then((mod) => mod.Send),
+  { ssr: false },
+);
+const FeedbackDisplay = dynamicImport(
+  () => import("./feedback-display").then((mod) => mod.FeedbackDisplay),
+  { ssr: false },
+);
 
 export const FeedbackForm = () => {
   const sendButtonRef = useRef<HTMLButtonElement>(null);

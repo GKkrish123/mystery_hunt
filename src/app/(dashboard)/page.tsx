@@ -1,14 +1,32 @@
-import { Separator } from "@/components/ui/separator";
-import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
-import { HeadingReveal } from "@/components/heading-reveal";
-import { HorizontalMysteries } from "@/components/horizontal-mysteries";
-import { CarouselCategories } from "@/components/carousel-categories";
 import { api } from "@/trpc/server";
 import { type Mystery } from "@/server/model/mysteries";
 import { type Category } from "@/server/model/categories";
-import ProductFeatures from "@/components/ui/feature-card";
+import { default as dynamicImport } from "next/dynamic";
 import Link from "next/link";
-import { RainbowButton } from "@/components/ui/rainbow-button";
+
+const HomeEffects = dynamicImport(() => import("@/components/effects/home"));
+const HomeHeader = dynamicImport(
+  () => import("@/components/effects/home-header"),
+);
+const RainbowButton = dynamicImport(() =>
+  import("@/components/ui/rainbow-button").then((mod) => mod.RainbowButton),
+);
+const HorizontalMysteries = dynamicImport(() =>
+  import("@/components/horizontal-mysteries").then(
+    (mod) => mod.HorizontalMysteries,
+  ),
+);
+const CarouselCategories = dynamicImport(() =>
+  import("@/components/carousel-categories").then(
+    (mod) => mod.CarouselCategories,
+  ),
+);
+const HeadingReveal = dynamicImport(() =>
+  import("@/components/heading-reveal").then((mod) => mod.HeadingReveal),
+);
+const Separator = dynamicImport(() =>
+  import("@/components/ui/separator").then((mod) => mod.Separator),
+);
 
 type DashboardContentType = {
   title: string;
@@ -97,7 +115,7 @@ export default async function DashboardPage() {
   return (
     <>
       <div className="relative grid auto-rows-min grid-cols-1 gap-4 px-3 pb-3 pt-0 sm:grid-cols-3 md:px-4 md:pb-4">
-        <ProductFeatures className="col-span-full bg-transparent" />
+        <HomeHeader />
         {dashboardContents.map(({ title, description, type, id }, index) => (
           <div id={id} key={id} className="z-10 col-span-full">
             <HeadingReveal title={title} description={description} />
@@ -119,10 +137,15 @@ export default async function DashboardPage() {
           <RainbowButton className="size-full">Explore More</RainbowButton>
         </Link>
       </div>
-      <BackgroundBeamsWithCollision />
+      <HomeEffects />
     </>
   );
 }
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60;
+export const metadata = {
+  title: "Mysteryverse Home",
+  description: "This is a home page of Mysteryverse",
+};
+

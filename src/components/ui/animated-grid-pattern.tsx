@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { memo, useEffect, useId, useRef, useState } from "react";
 import { motion } from "framer-motion";
-
 import { cn } from "@/lib/utils";
 
 interface GridPatternProps {
@@ -10,8 +9,7 @@ interface GridPatternProps {
   height?: number;
   x?: number;
   y?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  strokeDasharray?: any;
+  strokeDasharray?: string | number;
   numSquares?: number;
   className?: string;
   maxOpacity?: number;
@@ -19,12 +17,12 @@ interface GridPatternProps {
   repeatDur?: number;
 }
 
-export function GridPattern({
+export const GridPattern = memo(function GridPattern({
   width = 40,
   height = 40,
   x = -1,
   y = -1,
-  strokeDasharray = 0,
+  strokeDasharray = "0",
   numSquares = 50,
   className,
   maxOpacity = 0.5,
@@ -32,40 +30,26 @@ export function GridPattern({
   ...props
 }: GridPatternProps) {
   const id = useId();
-  const containerRef = useRef(null);
+  const containerRef = useRef<SVGSVGElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [squares, setSquares] = useState(() => generateSquares(numSquares));
+  const [squares, setSquares] = useState<Array<{ id: number; pos: number[] }>>(
+    [],
+  );
 
-  function getPos() {
-    return [
-      Math.floor((Math.random() * dimensions.width) / width),
-      Math.floor((Math.random() * dimensions.height) / height),
-    ];
-  }
+  // Generate random position within container bounds
+  const getPos = () => [
+    Math.floor((Math.random() * dimensions.width) / width),
+    Math.floor((Math.random() * dimensions.height) / height),
+  ];
 
-  // Adjust the generateSquares function to return objects with an id, x, and y
-  function generateSquares(count: number) {
-    return Array.from({ length: count }, (_, i) => ({
+  // Generate an array of squares
+  const generateSquares = (count: number) =>
+    Array.from({ length: count }, (_, i) => ({
       id: i,
       pos: getPos(),
     }));
-  }
 
-  // Function to update a single square's position
-  const updateSquarePosition = (id: number) => {
-    setSquares((currentSquares) =>
-      currentSquares.map((sq) =>
-        sq.id === id
-          ? {
-              ...sq,
-              pos: getPos(),
-            }
-          : sq,
-      ),
-    );
-  };
-
-  // Update squares to animate in
+  // Update squares when dimensions change
   useEffect(() => {
     if (dimensions.width && dimensions.height) {
       setSquares(generateSquares(numSquares));
@@ -73,7 +57,7 @@ export function GridPattern({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dimensions, numSquares]);
 
-  // Resize observer to update container dimensions
+  // Update container dimensions using ResizeObserver
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
@@ -88,14 +72,17 @@ export function GridPattern({
       resizeObserver.observe(containerRef.current);
     }
 
-    return () => {
-      if (containerRef.current) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        resizeObserver.unobserve(containerRef.current);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [containerRef]);
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  // Update individual square position after animation
+  const handleAnimationComplete = (id: number) => {
+    setSquares((currentSquares) =>
+      currentSquares.map((square) =>
+        square.id === id ? { ...square, pos: getPos() } : square,
+      ),
+    );
+  };
 
   return (
     <svg
@@ -119,7 +106,7 @@ export function GridPattern({
           <path
             d={`M.5 ${height}V.5H${width}`}
             fill="none"
-            strokeDasharray={strokeDasharray as string}
+            strokeDasharray={String(strokeDasharray)}
           />
         </pattern>
       </defs>
@@ -127,16 +114,16 @@ export function GridPattern({
       <svg x={x} y={y} className="overflow-visible">
         {squares.map(({ pos: [x, y], id }, index) => (
           <motion.rect
+            key={id}
             initial={{ opacity: 0 }}
             animate={{ opacity: maxOpacity }}
             transition={{
               duration,
-              repeat: 1,
-              delay: index * 0.1,
-              repeatType: "reverse",
+              repeat: Infinity, // Infinite loop
+              repeatType: "reverse", // Reverse the animation
+              delay: index * 0.1, // Stagger the animations for a cascading effect
             }}
-            onAnimationComplete={() => updateSquarePosition(id)}
-            key={`${x}-${y}-${index}`}
+            onAnimationComplete={() => handleAnimationComplete(id)}
             width={width - 1}
             height={height - 1}
             x={(x ?? 0) * width + 1}
@@ -148,6 +135,6 @@ export function GridPattern({
       </svg>
     </svg>
   );
-}
+})
 
 export default GridPattern;

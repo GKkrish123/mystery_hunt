@@ -1,11 +1,5 @@
 "use client";
 
-import BlurIn from "@/components/ui/blur-in";
-import HyperText from "@/components/ui/hyper-text";
-import { SecretInput } from "@/components/ui/secret-input";
-import { Badge } from "@/components/ui/badge";
-import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
-import { SecretButton } from "@/components/ui/secret-button";
 import React, {
   memo,
   type MutableRefObject,
@@ -13,18 +7,52 @@ import React, {
   useRef,
   useState,
 } from "react";
-import ShineBorder from "./ui/shine-border";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
-import { Vortex } from "./ui/vortex";
-import confetti from "canvas-confetti";
-import NumberTicker from "./ui/number-ticker";
 import { useGesture } from "@use-gesture/react";
 import { type Mystery } from "@/server/model/mysteries";
 import { type MysteryFormValues } from "@/server/constants";
 import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
+import confetti from "canvas-confetti";
+
+import { default as dynamicImport } from "next/dynamic";
+
+const BlurIn = dynamicImport(
+  () => import("@/components/ui/blur-in").then((mod) => mod.default),
+  { ssr: false },
+);
+const HyperText = dynamicImport(
+  () => import("@/components/ui/hyper-text").then((mod) => mod.default),
+  { ssr: false },
+);
+const SecretInput = dynamicImport(
+  () => import("@/components/ui/secret-input").then((mod) => mod.SecretInput),
+  { ssr: false },
+);
+const Badge = dynamicImport(
+  () => import("@/components/ui/badge").then((mod) => mod.Badge),
+  { ssr: false },
+);
+const AnimatedTooltip = dynamicImport(
+  () =>
+    import("@/components/ui/animated-tooltip").then(
+      (mod) => mod.AnimatedTooltip,
+    ),
+  { ssr: false },
+);
+const SecretButton = dynamicImport(
+  () => import("@/components/ui/secret-button").then((mod) => mod.SecretButton),
+  { ssr: false },
+);
+const Vortex = dynamicImport(() => import("./ui/vortex"), { ssr: false });
+const NumberTicker = dynamicImport(() => import("./ui/number-ticker"), {
+  ssr: false,
+});
+const ShineBorder = dynamicImport(() => import("./ui/shine-border"), {
+  ssr: false,
+});
 
 interface DragCardsProps {
   items: string[];

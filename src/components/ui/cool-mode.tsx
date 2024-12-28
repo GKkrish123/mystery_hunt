@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import React, { type ReactNode, useEffect, useRef } from "react";
+import React, { memo, type ReactNode, useEffect, useRef } from "react";
 
 export interface BaseParticle {
   element: HTMLElement | SVGSVGElement;
@@ -255,15 +255,19 @@ interface CoolModeProps {
   options?: CoolParticleOptions;
 }
 
-export const CoolMode: React.FC<CoolModeProps> = ({ children, options }) => {
-  const ref = useRef<HTMLElement>(null);
-  const { resolvedTheme } = useTheme();
+export const CoolMode: React.FC<CoolModeProps> = memo(
+  ({ children, options }) => {
+    const ref = useRef<HTMLElement>(null);
+    const { resolvedTheme } = useTheme();
 
-  useEffect(() => {
-    if (ref.current) {
-      return applyParticleEffect(ref.current, options, resolvedTheme);
-    }
-  }, [options, resolvedTheme]);
+    useEffect(() => {
+      if (ref.current) {
+        return applyParticleEffect(ref.current, options, resolvedTheme);
+      }
+    }, [options, resolvedTheme]);
 
-  return React.cloneElement(children as React.ReactElement, { ref });
-};
+    return React.cloneElement(children as React.ReactElement, { ref });
+  },
+);
+
+CoolMode.displayName = "CoolMode";

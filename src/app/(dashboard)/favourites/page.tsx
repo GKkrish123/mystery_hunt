@@ -1,8 +1,15 @@
-import { HeartsText } from "@/components/ui/hearts-text";
-import { ParallaxScroll } from "@/components/ui/parallax.scroll";
-import { ShootingStars } from "@/components/ui/shooting-stars";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { api } from "@/trpc/server";
+
+import { default as dynamicImport } from "next/dynamic";
+
+const FavouritesEffects = dynamicImport(() => import("@/components/effects/favourites").then(mod => mod.default));
+const HeartsText = dynamicImport(() => import("@/components/ui/hearts-text").then(mod => mod.HeartsText));
+const ParallaxScroll = dynamicImport(() => import("@/components/ui/parallax.scroll").then(mod => mod.ParallaxScroll));
+const Tabs = dynamicImport(() => import("@/components/ui/tabs").then(mod => mod.Tabs));
+const TabsContent = dynamicImport(() => import("@/components/ui/tabs").then(mod => mod.TabsContent));
+const TabsList = dynamicImport(() => import("@/components/ui/tabs").then(mod => mod.TabsList));
+const TabsTrigger = dynamicImport(() => import("@/components/ui/tabs").then(mod => mod.TabsTrigger));
 
 export default async function FavouritesPage() {
   const favouritesData = await api.user.getFavourites().catch(() => {
@@ -48,7 +55,13 @@ export default async function FavouritesPage() {
           </TabsContent>
         </Tabs>
       </div>
-      <ShootingStars />
+      <FavouritesEffects />
     </>
   );
 }
+
+export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "Mysteryverse Favourites",
+  description: "This is a favourites page of Mysteryverse",
+};

@@ -63,8 +63,6 @@ export const BackgroundBeamsWithCollision = memo(
             parentRef={parentRef}
           />
         ))}
-
-        {/* {children} */}
         <div
           ref={containerRef}
           className="pointer-events-none absolute inset-x-0 bottom-0 w-full bg-transparent"

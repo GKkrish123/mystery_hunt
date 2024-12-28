@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { ThreeDPhotoCarousel } from "./threeDCarousel";
 import { BoldCopy } from "./bold-copy";
@@ -8,8 +10,13 @@ import { RainbowButton } from "./rainbow-button";
 import { ArrowDown, ChevronRight, Map } from "lucide-react";
 import { AnimatedGradientText } from "./animated-gradient-text";
 import Link from "next/link";
+import { memo } from "react";
 
-export default function ProductFeatures({ className }: { className?: string }) {
+export default memo(function ProductFeatures({
+  className,
+}: {
+  className?: string;
+}) {
   return (
     <section
       className={cn(
@@ -79,4 +86,4 @@ export default function ProductFeatures({ className }: { className?: string }) {
       <ThreeDPhotoCarousel />
     </section>
   );
-}
+});

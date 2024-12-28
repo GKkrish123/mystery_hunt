@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
+import { memo } from "react";
 
 interface LetterShootProps {
   className?: string;
@@ -12,7 +13,7 @@ interface LetterShootProps {
   wrapperClassName?: string;
 }
 
-export default function LetterShoot({
+export default memo(function LetterShoot({
   className,
   words,
   delay = 0.1, // Delay between each letter animation in seconds
@@ -102,4 +103,4 @@ export default function LetterShoot({
       ))}
     </div>
   );
-}
+});

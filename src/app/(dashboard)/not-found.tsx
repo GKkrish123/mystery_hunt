@@ -1,7 +1,15 @@
-import FlickeringGrid from "@/components/ui/flickering-grid";
-import { RainbowButton } from "@/components/ui/rainbow-button";
-import { ShinyButton } from "@/components/ui/shiny-button";
+import { default as dynamicImport } from "next/dynamic";
 import Link from "next/link";
+
+const NotFoundEffects = dynamicImport(
+  () => import("@/components/effects/not-found"),
+);
+const RainbowButton = dynamicImport(() =>
+  import("@/components/ui/rainbow-button").then((mod) => mod.RainbowButton),
+);
+const ShinyButton = dynamicImport(() =>
+  import("@/components/ui/shiny-button").then((mod) => mod.ShinyButton),
+);
 
 export default async function NotFound() {
   return (
@@ -36,13 +44,16 @@ export default async function NotFound() {
           <ShinyButton className="size-full">More Categories</ShinyButton>
         </Link>
       </div>
-      <FlickeringGrid
-        squareSize={4}
-        gridGap={6}
-        color="#6B7280"
-        maxOpacity={0.5}
-        flickerChance={0.1}
-      />
+      <NotFoundEffects />
     </>
   );
 }
+
+export const dynamic = "force-static";
+export const fetchCache = "force-cache";
+export const revalidate = 3600;
+export const metadata = {
+  title: "Mysteryverse Void",
+  description: "This is a void page of Mysteryverse",
+};
+

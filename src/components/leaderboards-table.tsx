@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -26,7 +26,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { type HunterRank } from "@/server/model/hunters";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+
+import { default as dynamicImport } from "next/dynamic";
+
+const Avatar = dynamicImport(
+  () => import("./ui/avatar").then((mod) => mod.Avatar),
+  { ssr: false },
+);
+const AvatarFallback = dynamicImport(
+  () => import("./ui/avatar").then((mod) => mod.AvatarFallback),
+  { ssr: false },
+);
+const AvatarImage = dynamicImport(
+  () => import("./ui/avatar").then((mod) => mod.AvatarImage),
+  { ssr: false },
+);
 
 export const columns: ColumnDef<HunterRank>[] = [
   {
@@ -140,13 +154,10 @@ export function LeaderboardsTable({
   state = "",
   city = "",
 }: LeaderboardsTableProps) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,

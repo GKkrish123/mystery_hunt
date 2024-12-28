@@ -431,6 +431,7 @@ export const userRouter = createTRPCRouter({
         interactions: {
           categories: {},
           mysteries: {},
+          tools: {},
         },
         trails: [],
       });

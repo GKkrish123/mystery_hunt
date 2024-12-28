@@ -60,7 +60,7 @@ export const PinContainer = ({
   );
 };
 
-export const PinPerspective = ({
+const PinPerspective = ({
   title,
 }: {
   title?: string;

@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
-import LetterShoot from "./letter-shoot";
 import { useTheme } from "next-themes";
+import dynamic from "next/dynamic";
+
+const LetterShoot = dynamic(() => import("./letter-shoot"), { ssr: false });
 
 interface Tile {
   id: number;
@@ -21,7 +23,7 @@ interface VerticalTilesProps {
   stagger?: number;
 }
 
-export default function VerticalTiles({
+export default memo(function VerticalTiles({
   tileClassName,
   minTileWidth = 32,
   animationDuration = 0.5,
@@ -57,10 +59,6 @@ export default function VerticalTiles({
 
   useEffect(() => {
     calculateTiles();
-    // const resizeObserver = new ResizeObserver(calculateTiles);
-    // if (containerRef.current) {
-    //   resizeObserver.observe(containerRef.current);
-    // }
 
     setTimeout(
       () => {
@@ -69,7 +67,6 @@ export default function VerticalTiles({
       (animationDelay + 3.5) * 1000,
     );
 
-    // Set a timer to hide the LetterShoot component after the animation delay
     setTimeout(
       () => {
         setShowLetters(false); // This will remove the LetterShoot component from the DOM
@@ -134,4 +131,4 @@ export default function VerticalTiles({
       ) : null}
     </div>
   );
-}
+});

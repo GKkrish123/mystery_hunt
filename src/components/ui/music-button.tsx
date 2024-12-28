@@ -1,6 +1,6 @@
 "use client";
 
-import { type FC, type ReactNode, useState } from "react";
+import { type FC, memo, type ReactNode, useState } from "react";
 import { motion } from "framer-motion";
 import { Pause, Play, SkipBack, SkipForward, XIcon } from "lucide-react";
 import YoutubeColor from "@/components/icons/lottie/YoutubeColor.json";
@@ -46,7 +46,7 @@ function createRandomGenerator(min: number, max: number): () => number {
   };
 }
 
-export const MusicButton: React.FC<FamilyButtonProps> = () => {
+export const MusicButton: React.FC<FamilyButtonProps> = memo(() => {
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleExpand = () => setIsExpanded(!isExpanded);
   const { resolvedTheme } = useTheme();
@@ -171,7 +171,9 @@ export const MusicButton: React.FC<FamilyButtonProps> = () => {
       </div>
     </div>
   );
-};
+});
+
+MusicButton.displayName = "MusicButton";
 
 // A container that wraps content and handles animations
 interface FamilyButtonContainerProps {

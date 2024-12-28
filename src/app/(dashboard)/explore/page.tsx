@@ -1,18 +1,41 @@
-import { HeadingReveal } from "@/components/heading-reveal";
-import { Expandable } from "@/components/ui/big-carousel";
-import { ImageCarousel } from "@/components/ui/button-carousel";
-import { RainbowButton } from "@/components/ui/rainbow-button";
-import { Separator } from "@/components/ui/separator";
-import ShineBorder from "@/components/ui/shine-border";
-import { ShinyButton } from "@/components/ui/shiny-button";
-import { TextShine } from "@/components/ui/shiny-text";
-import SwipeCards from "@/components/ui/swipe-cards";
-import Swirl from "@/components/ui/swirl";
 import { api } from "@/trpc/server";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import BlurFade from "@/components/ui/blur-fade";
 import { mysteryFont } from "@/lib/fonts";
+
+import {default as dynamicImport} from "next/dynamic";
+
+const HeadingReveal = dynamicImport(() =>
+  import("@/components/heading-reveal").then((mod) => mod.HeadingReveal),
+);
+const Expandable = dynamicImport(() =>
+  import("@/components/ui/big-carousel").then((mod) => mod.Expandable),
+);
+const ImageCarousel = dynamicImport(() =>
+  import("@/components/ui/button-carousel").then((mod) => mod.ImageCarousel),
+);
+const RainbowButton = dynamicImport(() =>
+  import("@/components/ui/rainbow-button").then((mod) => mod.RainbowButton),
+);
+const Separator = dynamicImport(() =>
+  import("@/components/ui/separator").then((mod) => mod.Separator),
+);
+const ShineBorder = dynamicImport(() => import("@/components/ui/shine-border"));
+const ShinyButton = dynamicImport(() =>
+  import("@/components/ui/shiny-button").then((mod) => mod.ShinyButton),
+);
+const TextShine = dynamicImport(() =>
+  import("@/components/ui/shiny-text").then((mod) => mod.TextShine),
+);
+const SwipeCards = dynamicImport(() =>
+  import("@/components/ui/swipe-cards").then((mod) => mod.default),
+);
+const ExploreEffects = dynamicImport(() =>
+  import("@/components/effects/explore").then((mod) => mod.default),
+);
+const BlurFade = dynamicImport(() =>
+  import("@/components/ui/blur-fade").then((mod) => mod.default),
+);
 
 export default async function ExplorerPage() {
   const [
@@ -86,20 +109,15 @@ export default async function ExplorerPage() {
           <ShinyButton className="size-full">More Categories</ShinyButton>
         </Link>
       </div>
-      <Swirl
-        particleCount={50}
-        baseTTL={150}
-        rangeTTL={300}
-        baseSpeed={1}
-        rangeSpeed={2}
-        baseSize={0.5}
-        rangeSize={1}
-        baseHue={130}
-        rangeHue={90}
-        backgroundColor="black"
-        className="absolute left-0 top-0"
-        containerClassName="relative h-full w-full"
-      />
+      <ExploreEffects />
     </>
   );
-}
+};
+
+export const dynamic = "force-dynamic";
+export const revalidate = 60;
+export const metadata = {
+  title: "Mysteryverse Explore",
+  description: "This is a explore page of Mysteryverse",
+};
+

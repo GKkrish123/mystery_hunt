@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 export type PatternCell = "0" | "1" | "2" | "3";
 type Pattern = PatternCell[][];
@@ -131,7 +131,7 @@ function getLightColor(
 
 const defaultDrawState: PatternCell = "2";
 
-function LightBoard({
+const LightBoard = memo(function LightBoard({
   className,
   text,
   gap = 1,
@@ -491,7 +491,7 @@ function LightBoard({
       )}
     </div>
   );
-}
+});
 
 export { LightBoard };
 

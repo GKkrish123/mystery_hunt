@@ -1,7 +1,19 @@
 import { api } from "@/trpc/server";
-import { LeaderboardsTable } from "./leaderboards-table";
-import { CanvasRevealEffect, RevealCard } from "./ui/canvas-reveal-effect";
-import BlurFade from "./ui/blur-fade";
+
+import { default as dynamicImport } from "next/dynamic";
+
+const LeaderboardsTable = dynamicImport(() =>
+  import("./leaderboards-table").then((mod) => mod.LeaderboardsTable),
+);
+const CanvasRevealEffect = dynamicImport(() =>
+  import("./ui/canvas-reveal-effect").then((mod) => mod.CanvasRevealEffect),
+);
+const RevealCard = dynamicImport(() =>
+  import("./ui/canvas-reveal-effect").then((mod) => mod.RevealCard),
+);
+const BlurFade = dynamicImport(() =>
+  import("./ui/blur-fade").then((mod) => mod.default),
+);
 
 interface LeaderboardsSectionProps {
   state?: string;
