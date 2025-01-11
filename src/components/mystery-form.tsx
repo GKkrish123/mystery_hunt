@@ -416,7 +416,7 @@ export function MysteryForm({ mystery }: MysteryFormProps) {
           >
             <SecretInput
               value={secretInput}
-              onChange={(v) => setSecretInput(v)}
+              onChange={(v) => setSecretInput(v.trim())}
               expectedInput={mystery.expectedSecret}
               className="col-span-full"
             />
