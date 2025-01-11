@@ -1,6 +1,5 @@
 "use client";
 
-import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import {
   InputOTP,
   InputOTPGroup,
@@ -30,7 +29,6 @@ export function SecretInput({
       value={value}
       onChange={onChange}
       maxLength={lengthWithoutSpaces}
-      pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
     >
       {splittedInput.map((group, groupIndex) => (
         <div className="flex items-center gap-2" key={`secret-${groupIndex}`}>

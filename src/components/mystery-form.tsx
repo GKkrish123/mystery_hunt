@@ -43,6 +43,10 @@ const AnimatedTooltip = dynamicImport(
     ),
   { ssr: false },
 );
+const MorphingText = dynamicImport(
+  () => import("@/components/ui/morphing-text").then((mod) => mod.MorphingText),
+  { ssr: false },
+);
 const SecretButton = dynamicImport(
   () => import("@/components/ui/secret-button").then((mod) => mod.SecretButton),
   { ssr: false },
@@ -404,7 +408,7 @@ export function MysteryForm({ mystery }: MysteryFormProps) {
           />
         </div>
       ))}
-      {mystery.triesLeft !== 0 ? (
+      {mystery.triesLeft > 0 ? (
         <div className="col-span-full flex justify-center">
           <ShineBorder
             className="relative flex w-fit flex-col items-center justify-center overflow-hidden rounded-lg border bg-background p-5 md:shadow-xl"
@@ -432,15 +436,17 @@ export function MysteryForm({ mystery }: MysteryFormProps) {
         />
       </div>
       <div className="col-span-full flex justify-center">
-        <SecretButton
-          disabled={
-            mystery.triesLeft === 0 ||
-            secretInput.length !==
-              mystery.expectedSecret?.split(" ")?.join("").length
-          }
-          onClick={onSubmit}
-          inputText="Decode Secret"
-          loading={loading}
+        <MorphingText
+          texts={[`${mystery.triesLeft > 0 ? mystery.triesLeft : "No"}`]}
+          className="h-6 w-4 text-base lg:h-6 lg:text-base"
+        />
+        <MorphingText
+          texts={["Tries"]}
+          className="mr-1 h-6 w-10 text-base lg:h-6 lg:text-base"
+        />
+        <MorphingText
+          texts={["Left"]}
+          className="mr-1 h-6 w-7 text-base lg:h-6 lg:text-base"
         />
       </div>
     </div>
