@@ -2,12 +2,10 @@ import { api } from "@/trpc/server";
 import { type Mystery } from "@/server/model/mysteries";
 import { type Category } from "@/server/model/categories";
 import { default as dynamicImport } from "next/dynamic";
+import HomeHeader from "@/components/effects/home-header";
 import Link from "next/link";
 
 const HomeEffects = dynamicImport(() => import("@/components/effects/home"));
-const HomeHeader = dynamicImport(
-  () => import("@/components/effects/home-header"),
-);
 const RainbowButton = dynamicImport(() =>
   import("@/components/ui/rainbow-button").then((mod) => mod.RainbowButton),
 );

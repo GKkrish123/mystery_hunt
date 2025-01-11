@@ -51,12 +51,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const isOpen = isMobile ? openMobile : open;
+
   return (
     <Sidebar ref={sidebarRef} variant="inset" {...props}>
-      <Meteors key="sidebar-meteors" number={12} />
+      {isOpen ? (
+        <>
+          <Meteors key="sidebar-meteors" number={12} />
+          <RetroGrid key="sidebar-retro" />
+        </>
+      ) : null}
       <SidebarHeader>
         <AnimatePresence mode="wait">
-          {(isMobile ? openMobile : open) ? (
+          {isOpen ? (
             <LetterPullup
               wrapperClassName="justify-start pl-4 pt-2"
               className="pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ed2323] to-[#8c1eff] bg-clip-text text-2xl font-bold text-transparent dark:text-transparent"
@@ -80,7 +87,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarFooter>
         </>
       )}
-      <RetroGrid key="sidebar-retro" />
     </Sidebar>
   );
 }

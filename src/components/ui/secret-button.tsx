@@ -72,7 +72,10 @@ const SecretButton = ({
       onTapStart={() => !disabled && scramble()}
       onTap={() => !disabled && onClick()}
       onMouseDownCapture={() => !disabled && scramble()}
-      className="group relative cursor-pointer overflow-hidden rounded-lg border-[1px] border-neutral-500 bg-neutral-700 px-4 py-2 font-mono font-medium uppercase text-neutral-300 transition-colors hover:text-indigo-300"
+      className={cn(
+        "group relative overflow-hidden rounded-lg border-[1px] border-neutral-500 bg-neutral-700 px-4 py-2 font-mono font-medium uppercase text-neutral-300 transition-colors",
+        !disabled && "hover:text-indigo-300 cursor-pointer",
+      )}
     >
       <div className="relative z-10 flex items-center gap-2">
         {disabled ? <Lock /> : <span>{text}</span>}

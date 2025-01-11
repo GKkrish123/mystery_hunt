@@ -6,6 +6,7 @@ import {
 } from "@/server/api/trpc";
 import {
   addDoc,
+  arrayUnion,
   collection,
   doc,
   getDocs,
@@ -19,6 +20,7 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "firebase-user";
 import {
+  feedbackAddCooldown,
   MysteryCollections,
   proPicUpdateCooldown,
   type State,
@@ -111,6 +113,49 @@ export const userRouter = createTRPCRouter({
       );
       return { success: true };
     }),
+
+  addFeedback: privateProcedure
+    .input(z.object({ feedback: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { feedback } = input;
+      const hunterTrailsSnapshot = await getHunterTrailById(ctx.user.hunterId);
+      const hunterTrailsData = hunterTrailsSnapshot.data() as HunterTrail;
+
+      const now = Date.now();
+      if (
+        hunterTrailsData.lastFeedbackAt &&
+        now - hunterTrailsData.lastFeedbackAt < feedbackAddCooldown
+      ) {
+        console.error("Feedback addition isn't cooled down");
+        return { success: false };
+      }
+      await setDoc(
+        doc(db, MysteryCollections.hunterTrails, ctx.user.hunterId),
+        {
+          feedbacks: arrayUnion({
+            text: feedback,
+            at: new Date(now).toLocaleString(),
+          }),
+          lastFeedbackAt: now,
+        },
+        { merge: true },
+      );
+      return { success: true };
+    }),
+
+  isFeedbackValid: privateProcedure.query(async ({ ctx }) => {
+    const hunterTrailsSnapshot = await getHunterTrailById(ctx.user.hunterId);
+    const hunterTrailsData = hunterTrailsSnapshot.data() as HunterTrail;
+
+    const now = Date.now();
+    if (
+      hunterTrailsData.lastFeedbackAt &&
+      now - hunterTrailsData.lastFeedbackAt < feedbackAddCooldown
+    ) {
+      return { success: false };
+    }
+    return { success: true };
+  }),
 
   getFavourites: privateProcedure.query(async ({ ctx }) => {
     const hunterTrailsSnapshot = await getHunterTrailById(ctx.user.hunterId);

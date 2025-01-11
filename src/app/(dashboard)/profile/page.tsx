@@ -104,7 +104,6 @@ const InfoBlock = ({
       <span
         className={cn(
           "inline animate-gradient text-[0.8rem] tracking-wide text-black dark:text-white md:text-base",
-          mysteryFont.className,
         )}
       >
         {title}
@@ -142,7 +141,6 @@ const EditableNameBlock = ({
       <span
         className={cn(
           "inline animate-gradient text-[0.8rem] tracking-wide text-black dark:text-white md:text-base",
-          mysteryFont.className,
         )}
       >
         Name

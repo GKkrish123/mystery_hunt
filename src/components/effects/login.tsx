@@ -29,3 +29,13 @@ export default function LoginEffects() {
     </>
   );
 }
+
+export function VerifyEffects() {
+  return (
+    <>
+      <Meteors key="login-meteors" number={30} />
+      <Ripple key="login-ripple" />
+      <RetroGrid key="login-retro" />
+    </>
+  );
+}

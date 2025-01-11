@@ -12,6 +12,7 @@ import { ArrowRightIcon } from "lucide-react";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { auth } from "firebase-user";
 import dynamic from "next/dynamic";
+import LetterPullup from "@/components/ui/letter-pullup";
 
 const BlurFade = dynamic(() => import("@/components/ui/blur-fade"), {
   ssr: false,
@@ -35,9 +36,12 @@ const AnimatedShinyText = dynamic(
     ),
   { ssr: false },
 );
-const LoginEffects = dynamic(() => import("@/components/effects/login"), {
-  ssr: false,
-});
+const LoginEffects = dynamic(
+  () => import("@/components/effects/login").then((mod) => mod.VerifyEffects),
+  {
+    ssr: false,
+  },
+);
 
 const RETRY_INTERVAL = 30;
 
@@ -178,6 +182,10 @@ const VerifyEmailPage = () => {
         <AppLoader />
       ) : (
         <>
+          <LetterPullup
+            className="pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ed2323] to-[#8c1eff] bg-clip-text py-5 text-center text-4xl font-bold text-transparent dark:text-transparent md:py-0"
+            words="Mysteryverse"
+          />
           <BlurFade className="z-10" yOffset={0} delay={0.25}>
             {completionStatus ? (
               <AppLoader />

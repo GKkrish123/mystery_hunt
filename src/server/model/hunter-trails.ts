@@ -43,4 +43,6 @@ export interface HunterTrail {
   hunterId: string;
   trails: Trail[];
   interactions: Interactions;
+  feedbacks: string[];
+  lastFeedbackAt: number | null
 }

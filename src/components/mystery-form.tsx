@@ -18,6 +18,7 @@ import { mysteryFont } from "@/lib/fonts";
 import confetti from "canvas-confetti";
 
 import { default as dynamicImport } from "next/dynamic";
+import Image from "next/image";
 
 const BlurIn = dynamicImport(
   () => import("@/components/ui/blur-in").then((mod) => mod.default),
@@ -187,7 +188,7 @@ const Card = ({
 
   return (
     <motion.div
-      className="drag-elements absolute"
+      className="drag-elements absolute rounded bg-zinc-700 p-0.5 pb-3 dark:bg-slate-300"
       ref={target}
       style={{
         top,
@@ -213,8 +214,11 @@ const Card = ({
         }
       }}
     >
-      <motion.img
-        className={twMerge("w-48 bg-neutral-200 p-1 pb-4", className)}
+      <Image
+        width={300}
+        height={500}
+        priority
+        className={twMerge("w-48", className)}
         src={src}
         alt={alt}
       />
@@ -400,18 +404,32 @@ export function MysteryForm({ mystery }: MysteryFormProps) {
           />
         </div>
       ))}
+      {mystery.triesLeft !== 0 ? (
+        <div className="col-span-full flex justify-center">
+          <ShineBorder
+            className="relative flex w-fit flex-col items-center justify-center overflow-hidden rounded-lg border bg-background p-5 md:shadow-xl"
+            color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+          >
+            <SecretInput
+              value={secretInput}
+              onChange={(v) => setSecretInput(v)}
+              expectedInput={mystery.expectedSecret}
+              className="col-span-full"
+            />
+          </ShineBorder>
+        </div>
+      ) : null}
       <div className="col-span-full flex justify-center">
-        <ShineBorder
-          className="relative flex w-fit flex-col items-center justify-center overflow-hidden rounded-lg border bg-background p-5 md:shadow-xl"
-          color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
-        >
-          <SecretInput
-            value={secretInput}
-            onChange={(v) => setSecretInput(v)}
-            expectedInput={mystery.expectedSecret}
-            className="col-span-full"
-          />
-        </ShineBorder>
+        <SecretButton
+          disabled={
+            mystery.triesLeft === 0 ||
+            secretInput.length !==
+              mystery.expectedSecret?.split(" ")?.join("").length
+          }
+          onClick={onSubmit}
+          inputText="Decode Secret"
+          loading={loading}
+        />
       </div>
       <div className="col-span-full flex justify-center">
         <SecretButton
