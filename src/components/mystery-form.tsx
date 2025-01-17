@@ -377,7 +377,7 @@ export function MysteryForm({ mystery }: MysteryFormProps) {
         />
       </div>
       <div className="col-span-1 col-start-3 ml-auto flex flex-row-reverse items-center pr-5 sm:col-start-4 md:col-span-2 md:col-start-6">
-        <AnimatedTooltip items={mystery.topThree} />
+        <AnimatedTooltip items={mystery.topThree.slice(0, 1)} />
       </div>
       <div className="col-span-full">
         <HyperText

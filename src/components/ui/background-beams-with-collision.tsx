@@ -2,8 +2,7 @@
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import { useViewportSize } from "@mantine/hooks";
-import { useRef, useState, useEffect, useMemo, memo, forwardRef } from "react";
+import { useRef, useState, useEffect, memo, forwardRef } from "react";
 
 import dynamic from "next/dynamic";
 
@@ -49,26 +48,45 @@ const generateRandomBeams = (numBeams: number, screenWidth: number) => {
   });
 };
 
-const useContainerRect = (containerRef: React.RefObject<HTMLDivElement>) => {
+const useContainerRect = (
+  containerRef: React.RefObject<HTMLDivElement>,
+  parentRef: React.RefObject<HTMLDivElement>,
+) => {
   const [containerRect, setContainerRect] = useState<{
     rect: DOMRect;
     offset: number;
+    width: number;
+    height: number;
   } | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !parentRef.current) return;
 
-    const observer = new ResizeObserver(() => {
+    const updateRect = () => {
+      if (!containerRef.current || !parentRef.current) return;
+      const containerElement = containerRef.current;
+      const parentElement = parentRef.current;
+      const computedStyle = window.getComputedStyle(containerElement);
+
       setContainerRect({
-        rect: containerRef.current!.getBoundingClientRect(),
-        offset: containerRef.current!.offsetTop,
+        rect: {
+          ...containerElement.getBoundingClientRect(),
+          top: parseFloat(computedStyle.marginTop),
+        },
+        offset: parseFloat(computedStyle.marginTop),
+        width: parentElement.getBoundingClientRect().width,
+        height: parentElement.getBoundingClientRect().height,
       });
-    });
+    };
 
+    updateRect();
+
+    const observer = new ResizeObserver(updateRect);
     observer.observe(containerRef.current);
+    observer.observe(parentRef.current);
 
     return () => observer.disconnect();
-  }, [containerRef]);
+  }, [containerRef, parentRef]);
 
   return containerRect;
 };
@@ -76,25 +94,27 @@ const useContainerRect = (containerRef: React.RefObject<HTMLDivElement>) => {
 export const BackgroundBeamsWithCollision = memo(
   ({ className }: { className?: string }) => {
     const isMobile = useIsMobile();
-    const { width: screenWidth, height } = useViewportSize();
-
     const containerRef = useRef<HTMLDivElement>(null);
     const parentRef = useRef<HTMLDivElement>(null);
 
-    const containerRect = useContainerRect(containerRef);
+    const containerRect = useContainerRect(containerRef, parentRef);
+    const [beams, setBeams] = useState<Beam[]>([]);
 
-    const beams: Beam[] = useMemo(() => {
-      return screenWidth
-        ? generateRandomBeams(isMobile ? 10 : 20, screenWidth)
-        : [];
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isMobile, screenWidth, height, containerRect]);
+    useEffect(() => {
+      if (containerRect?.width && containerRect?.height) {
+        const newBeams = generateRandomBeams(
+          isMobile ? 10 : 20,
+          containerRect.width,
+        );
+        setBeams(newBeams);
+      }
+    }, [isMobile, containerRect]);
 
     return (
       <div
         ref={parentRef}
         className={cn(
-          "absolute z-[-1] flex h-full w-full items-center justify-center overflow-hidden",
+          "absolute z-[-1] flex h-full w-full flex-col overflow-hidden",
           className,
         )}
       >
@@ -108,7 +128,7 @@ export const BackgroundBeamsWithCollision = memo(
         ))}
         <div
           ref={containerRef}
-          className="pointer-events-none absolute inset-x-0 bottom-0 w-full bg-transparent"
+          className="pointer-events-none mt-auto h-0 w-full bg-transparent"
           style={{
             boxShadow:
               "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset",
@@ -153,34 +173,44 @@ const CollisionMechanism = forwardRef<
   const [beamKey, setBeamKey] = useState(0);
   const [cycleCollisionDetected, setCycleCollisionDetected] = useState(false);
 
-  useEffect(() => {
-    const checkCollision = () => {
-      if (
-        beamRef.current &&
-        containerRect?.rect &&
-        parentRef.current &&
-        !cycleCollisionDetected
-      ) {
-        const beamRect = beamRef.current.getBoundingClientRect();
-        const parentRect = parentRef.current.getBoundingClientRect();
+  const checkCollision = () => {
+    if (
+      beamRef.current &&
+      containerRect?.rect &&
+      parentRef.current &&
+      !cycleCollisionDetected
+    ) {
+      const beamRect = beamRef.current.getBoundingClientRect();
+      const parentRect = parentRef.current.getBoundingClientRect();
 
-        if (beamRect.bottom >= containerRect.rect.top) {
-          const relativeX =
-            beamRect.left - parentRect.left + beamRect.width / 2;
-          const relativeY = beamRect.bottom - parentRect.top;
-
-          setCollision({
-            detected: true,
-            coordinates: {
-              x: relativeX,
-              y: relativeY,
-            },
-          });
-          setCycleCollisionDetected(true);
+      const computedStyle = window.getComputedStyle(beamRef.current);
+      const transform = computedStyle.transform;
+      let translateYValue = 0;
+      if (transform && transform !== "none") {
+        const matrixValues = /matrix.*\((.+)\)/.exec(transform);
+        if (matrixValues) {
+          const values = matrixValues[1]!.split(", ");
+          translateYValue = parseFloat(values[5]!);
         }
       }
-    };
 
+      if (translateYValue >= containerRect.rect.top - 20) {
+        const relativeX = beamRect.left - parentRect.left + beamRect.width / 2;
+        const relativeY = beamRect.bottom - parentRect.top;
+
+        setCollision({
+          detected: true,
+          coordinates: {
+            x: relativeX,
+            y: relativeY - 60,
+          },
+        });
+        setCycleCollisionDetected(true);
+      }
+    }
+  };
+
+  useEffect(() => {
     const animationInterval = setInterval(checkCollision, 50);
 
     return () => clearInterval(animationInterval);
@@ -214,7 +244,7 @@ const CollisionMechanism = forwardRef<
         variants={{
           animate: {
             translateY:
-              beamOptions.translateY ?? `${containerRect?.offset ?? 0}px`,
+              beamOptions.translateY ?? `${(containerRect?.offset ?? 0) - 5}px`,
             translateX: beamOptions.translateX ?? "0px",
             rotate: beamOptions.rotate ?? 0,
           },

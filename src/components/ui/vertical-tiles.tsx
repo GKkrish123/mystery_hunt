@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useRef, useState, useEffect } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -8,12 +8,6 @@ import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 
 const LetterShoot = dynamic(() => import("./letter-shoot"), { ssr: false });
-
-interface Tile {
-  id: number;
-  width: number;
-  order: number;
-}
 
 interface VerticalTilesProps {
   tileClassName?: string;
@@ -30,13 +24,12 @@ export default memo(function VerticalTiles({
   animationDelay = 1,
   stagger = 0.05,
 }: VerticalTilesProps) {
-  const [tiles, setTiles] = useState<Tile[]>([]);
-  const [showLetters, setShowLetters] = useState(true); // Control visibility of LetterShoot
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef);
   const isMobile = useIsMobile();
   const { resolvedTheme } = useTheme();
-  const [isAnimating, setIsAnimating] = useState(true);
+  const [hasAnimated, setHasAnimated] = useState(false); // Track animation completion
+  const [letterShootExiting, setLetterShootExiting] = useState(false);
 
   const calculateTiles = useCallback(() => {
     if (containerRef.current) {
@@ -47,88 +40,101 @@ export default memo(function VerticalTiles({
       );
       const tileWidth = width / tileCount + 1;
 
-      const newTiles = Array.from({ length: tileCount }, (_, index) => ({
+      return Array.from({ length: tileCount }, (_, index) => ({
         id: index,
         width: tileWidth,
         order: Math.abs(index - Math.floor((tileCount - 1) / 2)),
       }));
-
-      setTiles(newTiles);
     }
+    return [];
   }, [minTileWidth, isMobile]);
 
+  const tiles = calculateTiles();
+
+  const animationVariants = {
+    visible: {
+      y: "100%",
+      borderTop: `${isMobile ? "15px" : "30px"} dotted ${
+        resolvedTheme === "dark" ? "white" : "black"
+      }`,
+    },
+    hidden: { y: 0 },
+  };
+
+  const tileAnimationDelay = animationDelay + 1.6;
+
   useEffect(() => {
-    calculateTiles();
+    if (isInView && !hasAnimated) {
+      const totalAnimationTime =
+        tileAnimationDelay +
+        (tiles.length - 1) * stagger +
+        animationDuration +
+        (isMobile ? 0.7 : 0);        
 
-    setTimeout(
-      () => {
-        setIsAnimating(false);
-      },
-      (animationDelay + 3.5) * 1000,
-    );
+      const letterShootExitTime = totalAnimationTime - 2.2;
 
-    setTimeout(
-      () => {
-        setShowLetters(false); // This will remove the LetterShoot component from the DOM
-      },
-      animationDelay + 1.6 * 1000,
-    ); // Delay in milliseconds
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      const letterShootTimeout = setTimeout(() => {
+        setLetterShootExiting(true);
+      }, letterShootExitTime * 1000);
+
+      const mainTimeout = setTimeout(() => {
+        setHasAnimated(true);
+      }, totalAnimationTime * 1000);
+
+      return () => {
+        clearTimeout(mainTimeout);
+        clearTimeout(letterShootTimeout);
+      };
+    }
+  }, [isInView, hasAnimated, tiles, tileAnimationDelay, stagger, animationDuration, isMobile]);
+
+
+  if (hasAnimated) {
+    return null; // Don't render anything if the animation has completed
+  }
 
   return (
     <div
       ref={containerRef}
-      className={cn(
-        "absolute top-0 overflow-hidden",
-        isAnimating ? "h-[200vh] w-screen" : "",
-      )}
+      className="fixed top-0 overflow-hidden h-[200vh] w-screen z-[999999]"
     >
-      {isAnimating ? (
-        <div className="absolute inset-0 flex">
-          <AnimatePresence mode="wait">
-            {showLetters && (
-              <LetterShoot
-                wrapperClassName="flex h-screen w-full items-center justify-center"
-                className="pointer-events-none z-[55] whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ed2323] to-[#8c1eff] bg-clip-text text-center font-bold uppercase leading-[5rem] tracking-wider text-transparent dark:text-transparent"
-                words={"Mysteryverse"}
-                delay={0.05}
-                animationDelay={animationDelay}
-              />
+      <div className="absolute inset-0 flex">
+        <AnimatePresence mode="wait">
+          {!letterShootExiting &&
+        <LetterShoot
+          wrapperClassName="flex h-screen w-full items-center justify-center"
+          className="pointer-events-none z-[55] whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ed2323] to-[#8c1eff] bg-clip-text text-center font-bold uppercase leading-[5rem] tracking-wider text-transparent dark:text-transparent"
+          words={"Mysteryverse"}
+          delay={0.05}
+          animationDelay={animationDelay}
+        />}
+        </AnimatePresence>
+        {tiles.map((tile) => (
+          <motion.div
+            key={tile.id}
+            className={cn(
+              "relative border-0 bg-[rgb(255,255,255)]/[1] dark:bg-[rgb(0,0,0)]/[1]",
+              tileClassName,
             )}
-          </AnimatePresence>
-          {tiles.map((tile) => (
-            <motion.div
-              key={tile.id}
-              className={cn(
-                "relative border-0 bg-[rgb(255,255,255)]/[1] dark:bg-[rgb(0,0,0)]/[1]",
-                tileClassName,
-              )}
-              style={{
-                width: tile.width,
-                position: "absolute",
-                left: `${(tile.id * 100) / tiles.length}%`,
-                top: 0,
-                height: "100%",
-              }}
-              initial={{ y: 0 }}
-              animate={
-                isInView
-                  ? {
-                      y: "100%",
-                      borderTop: `${isMobile ? "20px" : "30px"} dotted ${resolvedTheme === "dark" ? "white" : "black"}`,
-                    }
-                  : { y: 0 }
-              }
-              transition={{
-                duration: animationDuration + (isMobile ? 0.7 : 0),
-                delay: animationDelay + 1.6 + tile.order * stagger,
-                ease: [0.45, 0, 0.55, 1],
-              }}
-            />
-          ))}
-        </div>
-      ) : null}
+            style={{
+              width: tile.width,
+              position: "absolute",
+              left: `${(tile.id * 100) / tiles.length}%`,
+              top: 0,
+              height: "100%",
+              willChange: "transform",
+            }}
+            variants={animationVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            transition={{
+              duration: animationDuration + (isMobile ? 0.7 : 0),
+              delay: tileAnimationDelay + tile.order * stagger,
+              ease: [0.45, 0, 0.55, 1],
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 });
