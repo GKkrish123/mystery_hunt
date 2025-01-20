@@ -17,8 +17,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { navData } from "./nav-data";
 import { api } from "@/trpc/react";
 import AppLoader from "./ui/app-loader";
-
 import dynamic from "next/dynamic";
+import LetterPullup from "./ui/letter-pullup";
 
 const RetroGrid = dynamic(
   () => import("./ui/retro-grid").then((mod) => mod.default),
@@ -26,10 +26,6 @@ const RetroGrid = dynamic(
 );
 const Meteors = dynamic(
   () => import("./ui/meteors").then((mod) => mod.default),
-  { ssr: false },
-);
-const LetterPullup = dynamic(
-  () => import("./ui/letter-pullup").then((mod) => mod.default),
   { ssr: false },
 );
 

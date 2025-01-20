@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import LetterPullup from "../ui/letter-pullup";
 
 const Meteors = dynamic(() => import("@/components/ui/meteors"), {
   ssr: false,
@@ -9,10 +10,6 @@ const RetroGrid = dynamic(() => import("@/components/ui/retro-grid"), {
   ssr: false,
 });
 const Ripple = dynamic(() => import("@/components/ui/ripple"), {
-  ssr: false,
-});
-
-const LetterPullup = dynamic(() => import("@/components/ui/letter-pullup"), {
   ssr: false,
 });
 

@@ -3,7 +3,7 @@
 import { mysteryFont } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { span as MotionSpan } from "motion/react-m";
-import { domAnimation, LazyMotion } from "motion/react";
+import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 
 interface BouncingTextProps {
   text?: string;
@@ -69,27 +69,29 @@ export function BounceText({
             features={domAnimation}
             strict
           >
-            <MotionSpan
-              className={cn(
-                "text-4xl font-bold text-black dark:text-white",
-                "transition-colors duration-200",
-                "hover:text-purple-500 dark:hover:text-purple-400",
-                className,
-                mysteryFont.className,
-              )}
-              variants={letterAnimation}
-              initial="initial"
-              animate="animate"
-              transition={{
-                delay: index * delay,
-              }}
-              whileHover={{
-                scale: 1.2,
-                transition: { duration: 0.2 },
-              }}
-            >
-              {letter}
-            </MotionSpan>
+            <AnimatePresence propagate>
+              <MotionSpan
+                className={cn(
+                  "text-4xl font-bold text-black dark:text-white",
+                  "transition-colors duration-200",
+                  "hover:text-purple-500 dark:hover:text-purple-400",
+                  className,
+                  mysteryFont.className,
+                )}
+                variants={letterAnimation}
+                initial="initial"
+                animate="animate"
+                transition={{
+                  delay: index * delay,
+                }}
+                whileHover={{
+                  scale: 1.2,
+                  transition: { duration: 0.2 },
+                }}
+              >
+                {letter}
+              </MotionSpan>
+            </AnimatePresence>
           </LazyMotion>
         ) : (
           <span

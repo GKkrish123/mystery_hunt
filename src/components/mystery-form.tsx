@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { LazyMotion, domAnimation } from "motion/react";
+import { AnimatePresence, LazyMotion, domAnimation } from "motion/react";
 import { div as MotionDiv } from "motion/react-m";
 import { twMerge } from "tailwind-merge";
 import { useGesture } from "@use-gesture/react";
@@ -193,6 +193,7 @@ const Card = ({
 
   return (
     <LazyMotion features={domAnimation} strict>
+      <AnimatePresence propagate>
       <MotionDiv
         className="drag-elements absolute rounded bg-zinc-700 p-0.5 pb-3 dark:bg-slate-300"
         ref={target}
@@ -229,6 +230,7 @@ const Card = ({
           alt={alt}
         />
       </MotionDiv>
+      </AnimatePresence>
     </LazyMotion>
   );
 };

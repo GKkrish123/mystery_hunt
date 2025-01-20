@@ -7,7 +7,7 @@ import NextBundleAnalyzer from "@next/bundle-analyzer";
 
 /** @type {import("next").NextConfig} */
 const config = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   webpack(config) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     config.module.rules.push({
@@ -26,6 +26,7 @@ const config = {
       },
     ],
   },
+  // serverExternalPackages: ["three", "@react-three/drei", "@react-three/rapier", "@react-three/fiber"],
   experimental: {
     optimizePackageImports: ["lucide-react", "cobe", "motion"],
     turbo: {

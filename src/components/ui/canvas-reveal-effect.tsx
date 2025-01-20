@@ -6,7 +6,7 @@
 import { cn } from "@/lib/utils";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { div as MotionDiv } from "motion/react-m";
-import { domAnimation, LazyMotion } from "motion/react";
+import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 import { type FC, type ReactNode, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Lottie from "lottie-react";
@@ -375,13 +375,15 @@ export const RevealCard = ({
       >
         {hovered && (
           <LazyMotion features={domAnimation} strict>
-            <MotionDiv
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="absolute inset-0 h-full w-full"
-            >
-              {children}
-            </MotionDiv>
+            <AnimatePresence propagate>
+              <MotionDiv
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="absolute inset-0 h-full w-full"
+              >
+                {children}
+              </MotionDiv>
+            </AnimatePresence>
           </LazyMotion>
         )}
         <Image

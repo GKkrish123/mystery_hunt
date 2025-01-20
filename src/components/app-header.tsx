@@ -11,10 +11,14 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import ThemeToggle from "./ui/theme-toggle";
-import LetterPullup from "./ui/letter-pullup";
 import { AnimatePresence } from "motion/react";
 import { getBreadcrumb } from "./nav-data";
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const LetterPullup = dynamic(() =>
+  import("./ui/letter-pullup").then((mod) => mod.default),
+)
 
 export function AppHeader() {
   const { open, openMobile, isMobile } = useSidebar();

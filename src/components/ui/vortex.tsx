@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { memo, useEffect, useRef } from "react";
 import { createNoise3D } from "simplex-noise";
 import { div as MotionDiv } from "motion/react-m";
-import { domAnimation, LazyMotion } from "motion/react";
+import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 
 interface VortexProps {
   children?: any;
@@ -233,7 +233,8 @@ const Vortex = memo((props: VortexProps) => {
   return (
     <div className={cn("relative h-full w-full", props.containerClassName)}>
       <LazyMotion features={domAnimation} strict>
-        <MotionDiv
+      <AnimatePresence propagate>
+      <MotionDiv
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           ref={containerRef}
@@ -241,6 +242,7 @@ const Vortex = memo((props: VortexProps) => {
         >
           <canvas ref={canvasRef}></canvas>
         </MotionDiv>
+        </AnimatePresence>
       </LazyMotion>
     </div>
   );

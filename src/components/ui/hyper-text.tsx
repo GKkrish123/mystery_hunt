@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { type Variants, domAnimation, LazyMotion } from "motion/react";
+import {
+  type Variants,
+  AnimatePresence,
+  domAnimation,
+  LazyMotion,
+} from "motion/react";
 import { span as MotionSpan } from "motion/react-m";
 import { cn } from "@/lib/utils";
 
@@ -77,13 +82,15 @@ export default function HyperText({
     >
       <LazyMotion features={domAnimation} strict>
         {displayText.map((word, i) => (
-          <MotionSpan
-            key={i}
-            className={cn("font-mono", "inline-block", className)}
-            {...framerProps}
-          >
-            {word.toUpperCase() + (i < splittedText.length - 1 ? "\u00A0" : "")}
-          </MotionSpan>
+          <AnimatePresence key={i} propagate>
+            <MotionSpan
+              className={cn("font-mono", "inline-block", className)}
+              {...framerProps}
+            >
+              {word.toUpperCase() +
+                (i < splittedText.length - 1 ? "\u00A0" : "")}
+            </MotionSpan>
+          </AnimatePresence>
         ))}
       </LazyMotion>
     </div>

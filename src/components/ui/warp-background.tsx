@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { div as MotionDiv } from "motion/react-m";
-import { domAnimation, LazyMotion } from "motion/react";
+import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 import {
   type CSSProperties,
   type FC,
@@ -37,6 +37,7 @@ const Beam = ({
 
   return (
     <LazyMotion features={domAnimation} strict>
+      <AnimatePresence propagate>
       <MotionDiv
         style={
           {
@@ -56,6 +57,7 @@ const Beam = ({
           ease: "linear",
         }}
       />
+      </AnimatePresence>
     </LazyMotion>
   );
 };

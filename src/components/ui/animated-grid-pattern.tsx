@@ -3,7 +3,7 @@
 import { memo, useEffect, useId, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { rect as MotionRect } from "motion/react-m";
-import { domAnimation, LazyMotion } from "motion/react";
+import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 
 interface GridPatternProps {
   width?: number;
@@ -115,7 +115,8 @@ export const GridPattern = memo(function GridPattern({
       <svg x={x} y={y} className="overflow-visible">
         {squares.map(({ pos: [x, y], id }, index) => (
           <LazyMotion key={id} features={domAnimation} strict>
-            <MotionRect
+      <AnimatePresence propagate>
+      <MotionRect
               initial={{ opacity: 0 }}
               animate={{ opacity: maxOpacity }}
               transition={{
@@ -132,6 +133,7 @@ export const GridPattern = memo(function GridPattern({
               fill="currentColor"
               strokeWidth="0"
             />
+            </AnimatePresence>
           </LazyMotion>
         ))}
       </svg>

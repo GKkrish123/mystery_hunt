@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { h1 as MotionH1 } from "motion/react-m";
-import { domAnimation, LazyMotion } from "motion/react";
+import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 
 interface BlurIntProps {
   word: string;
@@ -22,6 +22,7 @@ const BlurIn = ({ word, className, variant, duration = 1 }: BlurIntProps) => {
 
   return (
     <LazyMotion features={domAnimation} strict>
+      <AnimatePresence propagate>
       <MotionH1
         initial="hidden"
         animate="visible"
@@ -34,6 +35,7 @@ const BlurIn = ({ word, className, variant, duration = 1 }: BlurIntProps) => {
       >
         {word}
       </MotionH1>
+      </AnimatePresence>
     </LazyMotion>
   );
 };

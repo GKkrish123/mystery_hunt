@@ -1,6 +1,6 @@
 "use client";
 
-import { useAnimationControls, domAnimation, LazyMotion } from "motion/react";
+import { useAnimationControls, domAnimation, LazyMotion, AnimatePresence } from "motion/react";
 import { span as MotionSpan } from "motion/react-m";
 import { useEffect, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
@@ -45,6 +45,7 @@ export const TextShine: React.FC<TextShineProps> = ({
 
   return (
     <LazyMotion features={domAnimation} strict>
+      <AnimatePresence propagate>
       <MotionSpan
         ref={textRef}
         className={cn(
@@ -59,6 +60,7 @@ export const TextShine: React.FC<TextShineProps> = ({
       >
         {text}
       </MotionSpan>
+      </AnimatePresence>
     </LazyMotion>
   );
 };

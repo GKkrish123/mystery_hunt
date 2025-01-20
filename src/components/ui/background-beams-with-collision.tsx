@@ -4,7 +4,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { useRef, useState, useEffect, memo, forwardRef } from "react";
 import { div as MotionDiv, span as MotionSpan } from "motion/react-m";
-import { domAnimation, LazyMotion } from "motion/react";
+import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 
 interface Beam {
   initialX: number; // Starting position (in pixels or percentage)
@@ -219,6 +219,7 @@ const CollisionMechanism = forwardRef<
 
   return (
     <LazyMotion features={domAnimation} strict>
+      <AnimatePresence propagate>
       <MotionDiv
         key={beamKey}
         ref={beamRef}
@@ -249,6 +250,7 @@ const CollisionMechanism = forwardRef<
           beamOptions.className,
         )}
       />
+      </AnimatePresence>
       {collision.detected && collision.coordinates && (
         <Explosion
           key={`${collision.coordinates.x}-${collision.coordinates.y}`}
@@ -278,17 +280,20 @@ const Explosion = ({ ...props }: React.HTMLProps<HTMLDivElement>) => {
   return (
     <div {...props} className={cn("absolute z-50 h-2 w-2", props.className)}>
       <LazyMotion features={domAnimation} strict>
-        <MotionDiv
+      <AnimatePresence propagate>
+      <MotionDiv
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
           className="absolute -inset-x-10 top-0 m-auto h-2 w-10 rounded-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent blur-sm"
-        ></MotionDiv>
+        />
+        </AnimatePresence>
       </LazyMotion>
       {spans.map((span) => (
         <LazyMotion key={span.id} features={domAnimation} strict>
-          <MotionSpan
+      <AnimatePresence propagate>
+      <MotionSpan
             initial={{ x: span.initialX, y: span.initialY, opacity: 1 }}
             animate={{
               x: span.directionX,
@@ -301,6 +306,7 @@ const Explosion = ({ ...props }: React.HTMLProps<HTMLDivElement>) => {
             }}
             className="absolute h-1 w-1 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500"
           />
+          </AnimatePresence>
         </LazyMotion>
       ))}
     </div>

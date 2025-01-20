@@ -168,7 +168,6 @@ const applyParticleEffect = (
         "style",
         [
           "position:absolute",
-          "will-change:transform",
           `top:${p.top}px`,
           `left:${p.left}px`,
           `transform:rotate(${p.spinVal}deg)`,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useScroll, useTransform, domAnimation, LazyMotion } from "motion/react";
+import { useScroll, useTransform, domAnimation, LazyMotion, AnimatePresence } from "motion/react";
 import { div as MotionDiv } from "motion/react-m";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
@@ -66,18 +66,22 @@ export const ParallaxScroll = ({
         <div className="grid gap-3 md:gap-5">
           {firstPart.map((item, idx) => (
             <LazyMotion key={"grid-1" + idx} features={domAnimation} strict>
-              <MotionDiv style={{ y: translateFirst as unknown as number }}>
+      <AnimatePresence propagate>
+      <MotionDiv style={{ y: translateFirst as unknown as number }}>
                 <RenderComponent forCategory={forCategory} item={item} />
               </MotionDiv>
+              </AnimatePresence>
             </LazyMotion>
           ))}
         </div>
         <div className="grid gap-3 md:gap-5">
           {secondPart.map((item, idx) => (
             <LazyMotion key={"grid-2" + idx} features={domAnimation} strict>
-              <MotionDiv style={{ y: translateSecond as unknown as number }}>
+      <AnimatePresence propagate>
+      <MotionDiv style={{ y: translateSecond as unknown as number }}>
                 <RenderComponent forCategory={forCategory} item={item} />
               </MotionDiv>
+              </AnimatePresence>
             </LazyMotion>
           ))}
         </div>
@@ -85,9 +89,11 @@ export const ParallaxScroll = ({
           <div className="grid gap-3 md:gap-5">
             {thirdPart.map((item, idx) => (
               <LazyMotion key={"grid-3" + idx} features={domAnimation} strict>
-                <MotionDiv style={{ y: translateThird as unknown as number }}>
+      <AnimatePresence propagate>
+      <MotionDiv style={{ y: translateThird as unknown as number }}>
                   <RenderComponent forCategory={forCategory} item={item} />
                 </MotionDiv>
+                </AnimatePresence>
               </LazyMotion>
             ))}
           </div>

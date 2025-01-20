@@ -2,7 +2,7 @@
 
 import { type Dispatch, type SetStateAction, useState } from "react";
 import { div as MotionDiv } from "motion/react-m";
-import { domAnimation, LazyMotion } from "motion/react";
+import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 import { useViewportSize } from "@mantine/hooks";
 import { type LucideIcon } from "lucide-react";
 import { Bell, ChartArea, DollarSign, Play } from "lucide-react";
@@ -129,31 +129,35 @@ const Panel = ({
 
       {isOpen && (
         <LazyMotion features={domAnimation} strict>
-          <MotionDiv
-            key={`panel-${id}`}
-            variants={width && width > 1024 ? panelVariants : panelVariantsSm}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            style={{
-              backgroundImage: `url(${imgSrc})`,
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-            }}
-            className="relative flex h-full w-full items-end overflow-hidden bg-black"
-          >
-            <LazyMotion features={domAnimation} strict>
-              <MotionDiv
-                variants={descriptionVariants}
-                initial="closed"
-                animate="open"
-                exit="closed"
-                className="bg-black/40 px-4 py-2 text-white backdrop-blur-sm"
-              >
-                <p>{description}</p>
-              </MotionDiv>
-            </LazyMotion>
-          </MotionDiv>
+          <AnimatePresence propagate>
+            <MotionDiv
+              key={`panel-${id}`}
+              variants={width && width > 1024 ? panelVariants : panelVariantsSm}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              style={{
+                backgroundImage: `url(${imgSrc})`,
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+              }}
+              className="relative flex h-full w-full items-end overflow-hidden bg-black"
+            >
+              <LazyMotion features={domAnimation} strict>
+                <AnimatePresence propagate>
+                  <MotionDiv
+                    variants={descriptionVariants}
+                    initial="closed"
+                    animate="open"
+                    exit="closed"
+                    className="bg-black/40 px-4 py-2 text-white backdrop-blur-sm"
+                  >
+                    <p>{description}</p>
+                  </MotionDiv>
+                </AnimatePresence>
+              </LazyMotion>
+            </MotionDiv>
+          </AnimatePresence>
         </LazyMotion>
       )}
     </>

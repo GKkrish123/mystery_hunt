@@ -5,7 +5,7 @@ import {
   path as MotionPath,
   linearGradient as MotionLinearGradient,
 } from "motion/react-m";
-import { domAnimation, LazyMotion } from "motion/react";
+import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 import { memo } from "react";
 
 export const BackgroundBeams = memo(({ className }: { className?: string }) => {
@@ -78,12 +78,14 @@ export const BackgroundBeams = memo(({ className }: { className?: string }) => {
       >
         {paths.map((path, index) => (
           <LazyMotion key={`path-` + index} features={domAnimation} strict>
-            <MotionPath
-              className="stroke-2 md:stroke-[0.5]"
-              d={path}
-              stroke={`url(#linearGradient-${index})`}
-              strokeOpacity="0.4"
-            />
+            <AnimatePresence propagate>
+              <MotionPath
+                className="stroke-2 md:stroke-[0.5]"
+                d={path}
+                stroke={`url(#linearGradient-${index})`}
+                strokeOpacity="0.4"
+              />
+            </AnimatePresence>
           </LazyMotion>
         ))}
         <defs>
@@ -93,32 +95,38 @@ export const BackgroundBeams = memo(({ className }: { className?: string }) => {
               features={domAnimation}
               strict
             >
-              <MotionLinearGradient
-                id={`linearGradient-${index}`}
-                initial={{
-                  x1: "0%",
-                  x2: "0%",
-                  y1: "0%",
-                  y2: "0%",
-                }}
-                animate={{
-                  x1: ["0%", "100%"],
-                  x2: ["0%", "95%"],
-                  y1: ["0%", "100%"],
-                  y2: ["0%", `${93 + Math.random() * 8}%`],
-                }}
-                transition={{
-                  duration: Math.random() * 10 + 10,
-                  ease: "easeInOut",
-                  repeat: Infinity,
-                  delay: Math.random() * 10,
-                }}
-              >
-                <stop stopColor="#18CCFC" stopOpacity="0"></stop>
-                <stop stopColor="#18CCFC"></stop>
-                <stop offset="32.5%" stopColor="#6344F5"></stop>
-                <stop offset="100%" stopColor="#AE48FF" stopOpacity="0"></stop>
-              </MotionLinearGradient>
+              <AnimatePresence propagate>
+                <MotionLinearGradient
+                  id={`linearGradient-${index}`}
+                  initial={{
+                    x1: "0%",
+                    x2: "0%",
+                    y1: "0%",
+                    y2: "0%",
+                  }}
+                  animate={{
+                    x1: ["0%", "100%"],
+                    x2: ["0%", "95%"],
+                    y1: ["0%", "100%"],
+                    y2: ["0%", `${93 + Math.random() * 8}%`],
+                  }}
+                  transition={{
+                    duration: Math.random() * 10 + 10,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    delay: Math.random() * 10,
+                  }}
+                >
+                  <stop stopColor="#18CCFC" stopOpacity="0"></stop>
+                  <stop stopColor="#18CCFC"></stop>
+                  <stop offset="32.5%" stopColor="#6344F5"></stop>
+                  <stop
+                    offset="100%"
+                    stopColor="#AE48FF"
+                    stopOpacity="0"
+                  ></stop>
+                </MotionLinearGradient>
+              </AnimatePresence>
             </LazyMotion>
           ))}
 

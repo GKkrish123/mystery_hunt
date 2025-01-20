@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { div as MotionDiv } from "motion/react-m";
-import { domAnimation, LazyMotion } from "motion/react";
+import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 
 interface SparklingGridProps {
   gridSize?: number;
@@ -123,13 +123,15 @@ export const SparklingGrid: React.FC<SparklingGridProps> = ({
 
   return (
     <LazyMotion features={domAnimation} strict>
-      <MotionDiv
-        ref={containerRef}
-        className="absolute inset-0 top-0 -z-50 overflow-hidden"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2 }}
-      />
+      <AnimatePresence propagate>
+        <MotionDiv
+          ref={containerRef}
+          className="absolute inset-0 top-0 -z-50 overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2 }}
+        />
+      </AnimatePresence>
     </LazyMotion>
   );
 };

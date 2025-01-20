@@ -6,6 +6,7 @@ import {
   useMotionValueEvent,
   LazyMotion,
   domAnimation,
+  AnimatePresence,
 } from "motion/react";
 import { div as MotionDiv } from "motion/react-m";
 import { cn } from "@/lib/utils";
@@ -37,6 +38,7 @@ export const FloatingNav = ({ className }: { className?: string }) => {
 
   return (
     <LazyMotion features={domAnimation} strict>
+      <AnimatePresence propagate>
       <MotionDiv
         initial={{
           opacity: 1,
@@ -73,6 +75,7 @@ export const FloatingNav = ({ className }: { className?: string }) => {
 
         <ThemeToggle />
       </MotionDiv>
+      </AnimatePresence>
     </LazyMotion>
   );
 };

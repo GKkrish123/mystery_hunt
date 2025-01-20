@@ -19,7 +19,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { type TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
-import { type HTMLMotionProps } from "motion/react";
+import { AnimatePresence, type HTMLMotionProps } from "motion/react";
 import { main as MotionMain } from "motion/react-m";
 import { domAnimation, LazyMotion } from "motion/react";
 
@@ -343,28 +343,30 @@ const SidebarInset = React.forwardRef<HTMLDivElement, HTMLMotionProps<"main">>(
   ({ className, children }, ref) => {
     return (
       <LazyMotion features={domAnimation} strict>
-        <MotionMain
-          ref={ref}
-          className={cn(
-            "relative z-10 flex min-h-svh flex-1 flex-col overflow-hidden bg-background",
-            "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
-            className,
-          )}
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0, filter: `blur(6px)` },
-            visible: { opacity: 1, filter: `blur(0px)` },
-          }}
-          transition={{
-            delay: 2.5,
-            duration: 0.4,
-            ease: "easeInOut",
-          }}
-          // {...props}
-        >
-          {children as React.ReactNode}
-        </MotionMain>
+        <AnimatePresence propagate>
+          <MotionMain
+            ref={ref}
+            className={cn(
+              "relative z-10 flex min-h-svh flex-1 flex-col overflow-hidden bg-background",
+              "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
+              className,
+            )}
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0, filter: `blur(6px)` },
+              visible: { opacity: 1, filter: `blur(0px)` },
+            }}
+            transition={{
+              delay: 2.5,
+              duration: 0.4,
+              ease: "easeInOut",
+            }}
+            // {...props}
+          >
+            {children as React.ReactNode}
+          </MotionMain>
+        </AnimatePresence>
       </LazyMotion>
     );
   },

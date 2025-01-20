@@ -49,7 +49,7 @@ export default function BlurFade({
   const combinedVariants = variant ?? defaultVariants;
   return (
     <LazyMotion features={domAnimation} strict>
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" propagate>
         <MotionDiv
           ref={ref}
           initial="hidden"

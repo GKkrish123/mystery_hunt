@@ -1,10 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-const ProductFeatures = dynamic(() => import("@/components/ui/feature-card"), {
-  ssr: false,
-});
+import ProductFeatures from "@/components/ui/feature-card"
 
 export default function HomeHeader() {
   return (

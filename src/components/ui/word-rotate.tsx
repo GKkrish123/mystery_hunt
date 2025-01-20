@@ -36,7 +36,7 @@ export function WordRotate({
   return (
     <div className={cn("py-2", wrapperClassName)}>
       <LazyMotion features={domAnimation} strict>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" propagate>
           <MotionH1
             key={words[index]}
             className={cn(className, mysteryFont.className)}

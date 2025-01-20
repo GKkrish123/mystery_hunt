@@ -123,6 +123,7 @@ export default memo(function VerticalTiles({
         </AnimatePresence>
         {tiles.map((tile) => (
           <LazyMotion key={tile.id} features={domAnimation} strict>
+            <AnimatePresence propagate>
             <MotionDiv
               className={cn(
                 "relative border-0 bg-[rgb(255,255,255)]/[1] dark:bg-[rgb(0,0,0)]/[1]",
@@ -134,7 +135,6 @@ export default memo(function VerticalTiles({
                 left: `${(tile.id * 100) / tiles.length}%`,
                 top: 0,
                 height: "100%",
-                willChange: "transform",
               }}
               variants={animationVariants}
               initial="hidden"
@@ -145,6 +145,7 @@ export default memo(function VerticalTiles({
                 ease: [0.45, 0, 0.55, 1],
               }}
             />
+            </AnimatePresence>
           </LazyMotion>
         ))}
       </div>

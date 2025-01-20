@@ -1,6 +1,6 @@
 "use client";
 
-import { type AnimationProps, type HTMLMotionProps } from "motion/react";
+import { AnimatePresence, type AnimationProps, type HTMLMotionProps } from "motion/react";
 import { button as MotionButton } from "motion/react-m";
 import { domAnimation, LazyMotion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -36,7 +36,8 @@ const ShinyButton = forwardRef<HTMLButtonElement, ShinyButtonProps>(
   ({ children, className }, ref) => {
     return (
       <LazyMotion features={domAnimation} strict>
-        <MotionButton
+      <AnimatePresence propagate>
+      <MotionButton
           ref={ref}
           {...animationProps}
           // {...props}
@@ -62,6 +63,7 @@ const ShinyButton = forwardRef<HTMLButtonElement, ShinyButtonProps>(
             className="absolute inset-0 z-10 block rounded-[inherit] bg-[linear-gradient(-75deg,hsl(var(--primary)/10%)_calc(var(--x)+20%),hsl(var(--primary)/50%)_calc(var(--x)+25%),hsl(var(--primary)/10%)_calc(var(--x)+100%))] p-px"
           ></span>
         </MotionButton>
+        </AnimatePresence>
       </LazyMotion>
     );
   },

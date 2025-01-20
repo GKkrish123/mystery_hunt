@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { button as MotionButton, span as MotionSpan } from "motion/react-m";
-import { domAnimation, LazyMotion } from "motion/react";
+import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 import { Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -63,6 +63,7 @@ const SecretButton = ({
 
   return (
     <LazyMotion features={domAnimation} strict>
+      <AnimatePresence propagate>
       <MotionButton
         disabled={disabled}
         whileHover={{
@@ -83,7 +84,8 @@ const SecretButton = ({
           {disabled ? <Lock /> : <span>{text}</span>}
         </div>
         <LazyMotion features={domAnimation} strict>
-          <MotionSpan
+      <AnimatePresence propagate>
+      <MotionSpan
             initial={{
               y: "100%",
             }}
@@ -105,8 +107,10 @@ const SecretButton = ({
               loading && "opacity-100",
             )}
           />
+          </AnimatePresence>
         </LazyMotion>
       </MotionButton>
+      </AnimatePresence>
     </LazyMotion>
   );
 };
