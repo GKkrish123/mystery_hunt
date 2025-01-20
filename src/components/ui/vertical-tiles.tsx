@@ -1,13 +1,17 @@
 "use client";
 
 import { memo, useCallback, useRef, useState, useEffect } from "react";
-import { AnimatePresence, motion, useInView } from "framer-motion";
+import {
+  AnimatePresence,
+  domAnimation,
+  LazyMotion,
+  useInView,
+} from "motion/react";
+import { div as MotionDiv } from "motion/react-m";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTheme } from "next-themes";
-import dynamic from "next/dynamic";
-
-const LetterShoot = dynamic(() => import("./letter-shoot"), { ssr: false });
+import LetterShoot from "./letter-shoot";
 
 interface VerticalTilesProps {
   tileClassName?: string;
@@ -69,7 +73,7 @@ export default memo(function VerticalTiles({
         tileAnimationDelay +
         (tiles.length - 1) * stagger +
         animationDuration +
-        (isMobile ? 0.7 : 0);        
+        (isMobile ? 0.7 : 0);
 
       const letterShootExitTime = totalAnimationTime - 2.2;
 
@@ -86,8 +90,15 @@ export default memo(function VerticalTiles({
         clearTimeout(letterShootTimeout);
       };
     }
-  }, [isInView, hasAnimated, tiles, tileAnimationDelay, stagger, animationDuration, isMobile]);
-
+  }, [
+    isInView,
+    hasAnimated,
+    tiles,
+    tileAnimationDelay,
+    stagger,
+    animationDuration,
+    isMobile,
+  ]);
 
   if (hasAnimated) {
     return null; // Don't render anything if the animation has completed
@@ -96,43 +107,45 @@ export default memo(function VerticalTiles({
   return (
     <div
       ref={containerRef}
-      className="fixed top-0 overflow-hidden h-[200vh] w-screen z-[999999]"
+      className="fixed top-0 z-[999999] h-[200vh] w-screen overflow-hidden"
     >
       <div className="absolute inset-0 flex">
         <AnimatePresence mode="wait">
-          {!letterShootExiting &&
-        <LetterShoot
-          wrapperClassName="flex h-screen w-full items-center justify-center"
-          className="pointer-events-none z-[55] whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ed2323] to-[#8c1eff] bg-clip-text text-center font-bold uppercase leading-[5rem] tracking-wider text-transparent dark:text-transparent"
-          words={"Mysteryverse"}
-          delay={0.05}
-          animationDelay={animationDelay}
-        />}
+          {!letterShootExiting && (
+            <LetterShoot
+              wrapperClassName="flex h-screen w-full items-center justify-center"
+              className="pointer-events-none z-[55] whitespace-pre-wrap bg-gradient-to-b from-[#ffd319] via-[#ed2323] to-[#8c1eff] bg-clip-text text-center font-bold uppercase leading-[5rem] tracking-wider text-transparent dark:text-transparent"
+              words={"Mysteryverse"}
+              delay={0.05}
+              animationDelay={animationDelay}
+            />
+          )}
         </AnimatePresence>
         {tiles.map((tile) => (
-          <motion.div
-            key={tile.id}
-            className={cn(
-              "relative border-0 bg-[rgb(255,255,255)]/[1] dark:bg-[rgb(0,0,0)]/[1]",
-              tileClassName,
-            )}
-            style={{
-              width: tile.width,
-              position: "absolute",
-              left: `${(tile.id * 100) / tiles.length}%`,
-              top: 0,
-              height: "100%",
-              willChange: "transform",
-            }}
-            variants={animationVariants}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            transition={{
-              duration: animationDuration + (isMobile ? 0.7 : 0),
-              delay: tileAnimationDelay + tile.order * stagger,
-              ease: [0.45, 0, 0.55, 1],
-            }}
-          />
+          <LazyMotion key={tile.id} features={domAnimation} strict>
+            <MotionDiv
+              className={cn(
+                "relative border-0 bg-[rgb(255,255,255)]/[1] dark:bg-[rgb(0,0,0)]/[1]",
+                tileClassName,
+              )}
+              style={{
+                width: tile.width,
+                position: "absolute",
+                left: `${(tile.id * 100) / tiles.length}%`,
+                top: 0,
+                height: "100%",
+                willChange: "transform",
+              }}
+              variants={animationVariants}
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
+              transition={{
+                duration: animationDuration + (isMobile ? 0.7 : 0),
+                delay: tileAnimationDelay + tile.order * stagger,
+                ease: [0.45, 0, 0.55, 1],
+              }}
+            />
+          </LazyMotion>
         ))}
       </div>
     </div>

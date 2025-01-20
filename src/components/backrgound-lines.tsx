@@ -2,17 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import { memo } from "react";
-
-import dynamic from "next/dynamic";
-
-const MotionPath = dynamic(
-  () => import("framer-motion").then((mod) => mod.motion.path),
-  { ssr: false },
-);
-const MotionSvg = dynamic(
-  () => import("framer-motion").then((mod) => mod.motion.svg),
-  { ssr: false },
-);
+import { path as MotionPath, svg as MotionSvg } from "motion/react-m";
+import { domAnimation, LazyMotion } from "motion/react";
 
 export const BackgroundLines = memo(
   ({
@@ -105,57 +96,61 @@ const SVG = ({
     "#604483",
   ];
   return (
-    <MotionSvg
-      viewBox="0 0 1440 900"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-      className="absolute inset-0 h-80 w-full md:h-screen"
-    >
-      {paths.map((path, idx) => (
-        <MotionPath
-          d={path}
-          stroke={colors[idx]}
-          strokeWidth="2.3"
-          strokeLinecap="round"
-          variants={pathVariants}
-          initial="initial"
-          animate="animate"
-          transition={{
-            duration: svgOptions?.duration ?? 10,
-            ease: "linear",
-            repeat: Infinity,
-            repeatType: "loop",
-            delay: Math.floor(Math.random() * 10),
-            repeatDelay: Math.floor(Math.random() * 10 + 2),
-          }}
-          key={`path-first-${idx}`}
-        />
-      ))}
+    <LazyMotion features={domAnimation} strict>
+      <MotionSvg
+        viewBox="0 0 1440 900"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="absolute inset-0 h-80 w-full md:h-screen"
+      >
+        {paths.map((path, idx) => (
+          <LazyMotion key={`path-first-${idx}`} features={domAnimation} strict>
+            <MotionPath
+              d={path}
+              stroke={colors[idx]}
+              strokeWidth="2.3"
+              strokeLinecap="round"
+              variants={pathVariants}
+              initial="initial"
+              animate="animate"
+              transition={{
+                duration: svgOptions?.duration ?? 10,
+                ease: "linear",
+                repeat: Infinity,
+                repeatType: "loop",
+                delay: Math.floor(Math.random() * 10),
+                repeatDelay: Math.floor(Math.random() * 10 + 2),
+              }}
+            />
+          </LazyMotion>
+        ))}
 
-      {/* duplicate for more paths */}
-      {paths.map((path, idx) => (
-        <MotionPath
-          d={path}
-          stroke={colors[idx]}
-          strokeWidth="2.3"
-          strokeLinecap="round"
-          variants={pathVariants}
-          initial="initial"
-          animate="animate"
-          transition={{
-            duration: svgOptions?.duration ?? 10,
-            ease: "linear",
-            repeat: Infinity,
-            repeatType: "loop",
-            delay: Math.floor(Math.random() * 10),
-            repeatDelay: Math.floor(Math.random() * 10 + 2),
-          }}
-          key={`path-second-${idx}`}
-        />
-      ))}
-    </MotionSvg>
+        {/* duplicate for more paths */}
+        {paths.map((path, idx) => (
+          <LazyMotion key={`path-second-${idx}`} features={domAnimation} strict>
+            <MotionPath
+              d={path}
+              stroke={colors[idx]}
+              strokeWidth="2.3"
+              strokeLinecap="round"
+              variants={pathVariants}
+              initial="initial"
+              animate="animate"
+              transition={{
+                duration: svgOptions?.duration ?? 10,
+                ease: "linear",
+                repeat: Infinity,
+                repeatType: "loop",
+                delay: Math.floor(Math.random() * 10),
+                repeatDelay: Math.floor(Math.random() * 10 + 2),
+              }}
+            />
+          </LazyMotion>
+        ))}
+      </MotionSvg>
+    </LazyMotion>
   );
 };

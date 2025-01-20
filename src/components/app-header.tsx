@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import ThemeToggle from "./ui/theme-toggle";
 import LetterPullup from "./ui/letter-pullup";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "motion/react";
 import { getBreadcrumb } from "./nav-data";
 import { usePathname } from "next/navigation";
 

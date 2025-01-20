@@ -1,6 +1,7 @@
 "use client";
 
-import { useScroll, useTransform, motion } from "framer-motion";
+import { useScroll, useTransform, domAnimation, LazyMotion } from "motion/react";
+import { div as MotionDiv } from "motion/react-m";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -64,24 +65,30 @@ export const ParallaxScroll = ({
       >
         <div className="grid gap-3 md:gap-5">
           {firstPart.map((item, idx) => (
-            <motion.div key={"grid-1" + idx} style={{ y: translateFirst }}>
-              <RenderComponent forCategory={forCategory} item={item} />
-            </motion.div>
+            <LazyMotion key={"grid-1" + idx} features={domAnimation} strict>
+              <MotionDiv style={{ y: translateFirst as unknown as number }}>
+                <RenderComponent forCategory={forCategory} item={item} />
+              </MotionDiv>
+            </LazyMotion>
           ))}
         </div>
         <div className="grid gap-3 md:gap-5">
           {secondPart.map((item, idx) => (
-            <motion.div key={"grid-2" + idx} style={{ y: translateSecond }}>
-              <RenderComponent forCategory={forCategory} item={item} />
-            </motion.div>
+            <LazyMotion key={"grid-2" + idx} features={domAnimation} strict>
+              <MotionDiv style={{ y: translateSecond as unknown as number }}>
+                <RenderComponent forCategory={forCategory} item={item} />
+              </MotionDiv>
+            </LazyMotion>
           ))}
         </div>
         {!isMobile ? (
           <div className="grid gap-3 md:gap-5">
             {thirdPart.map((item, idx) => (
-              <motion.div key={"grid-3" + idx} style={{ y: translateThird }}>
-                <RenderComponent forCategory={forCategory} item={item} />
-              </motion.div>
+              <LazyMotion key={"grid-3" + idx} features={domAnimation} strict>
+                <MotionDiv style={{ y: translateThird as unknown as number }}>
+                  <RenderComponent forCategory={forCategory} item={item} />
+                </MotionDiv>
+              </LazyMotion>
             ))}
           </div>
         ) : null}

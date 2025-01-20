@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, type HTMLMotionProps, motion } from "framer-motion";
+import { AnimatePresence, type HTMLMotionProps } from "motion/react";
+import { h1 as MotionH1 } from "motion/react-m";
+import { domAnimation, LazyMotion } from "motion/react";
+
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
 
@@ -16,12 +19,6 @@ interface WordRotateProps {
 export function WordRotate({
   words,
   duration = 2500,
-  framerProps = {
-    initial: { opacity: 0, y: -30 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 30 },
-    transition: { duration: 0.25, ease: "easeOut" },
-  },
   className,
   wrapperClassName,
 }: WordRotateProps) {
@@ -38,15 +35,20 @@ export function WordRotate({
 
   return (
     <div className={cn("py-2", wrapperClassName)}>
-      <AnimatePresence mode="wait">
-        <motion.h1
-          key={words[index]}
-          className={cn(className, mysteryFont.className)}
-          {...framerProps}
-        >
-          {words[index]}
-        </motion.h1>
-      </AnimatePresence>
+      <LazyMotion features={domAnimation} strict>
+        <AnimatePresence mode="wait">
+          <MotionH1
+            key={words[index]}
+            className={cn(className, mysteryFont.className)}
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            {words[index]}
+          </MotionH1>
+        </AnimatePresence>
+      </LazyMotion>
     </div>
   );
 }

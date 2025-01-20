@@ -1,11 +1,12 @@
 "use client";
 
 import {
-  AnimatePresence,
-  motion,
   useInView,
   type Variants,
-} from "framer-motion";
+  domAnimation,
+  LazyMotion,
+} from "motion/react";
+import { h1 as MotionH1 } from "motion/react-m";
 import { cn } from "@/lib/utils";
 import { useRef } from "react";
 
@@ -32,11 +33,10 @@ export function GradualSpacing({
 
   return (
     <div className="flex flex-wrap justify-center space-x-[0.15rem]">
-      <AnimatePresence>
-        {text.split("").map((char, i) => (
-          <motion.h1
+      {text.split("").map((char, i) => (
+        <LazyMotion key={i} features={domAnimation} strict>
+          <MotionH1
             ref={ref}
-            key={i}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             exit="hidden"
@@ -45,9 +45,9 @@ export function GradualSpacing({
             className={cn("drop-shadow-sm", className)}
           >
             {char === " " ? <span>&nbsp;</span> : char}
-          </motion.h1>
-        ))}
-      </AnimatePresence>
+          </MotionH1>
+        </LazyMotion>
+      ))}
     </div>
   );
 }

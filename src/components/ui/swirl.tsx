@@ -4,13 +4,8 @@ import { memo, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import { useIsMobile } from "@/hooks/use-mobile";
-
-import dynamic from "next/dynamic";
-
-const MotionDiv = dynamic(
-  () => import("framer-motion").then((mod) => mod.motion.div),
-  { ssr: false },
-);
+import { div as MotionDiv } from "motion/react-m";
+import { domAnimation, LazyMotion } from "motion/react";
 
 interface SwirlProps {
   children?: React.ReactNode;
@@ -235,18 +230,20 @@ const Swirl: React.FC<SwirlProps> = memo((props) => {
   }, [resolvedTheme]);
 
   return (
-    <MotionDiv
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      ref={containerRef}
-      className={cn(
-        "absolute inset-0 z-[-1] flex h-screen w-full items-center justify-center",
-        props.className,
-      )}
-    >
-      <canvas ref={canvasRef} className="z-[-1] size-full" />
-      {props.children}
-    </MotionDiv>
+    <LazyMotion features={domAnimation} strict>
+      <MotionDiv
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        ref={containerRef}
+        className={cn(
+          "absolute inset-0 z-[-1] flex h-screen w-full items-center justify-center",
+          props.className,
+        )}
+      >
+        <canvas ref={canvasRef} className="z-[-1] size-full" />
+        {props.children}
+      </MotionDiv>
+    </LazyMotion>
   );
 });
 

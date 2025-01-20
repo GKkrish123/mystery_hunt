@@ -3,21 +3,8 @@
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { useRef, useState, useEffect, memo, forwardRef } from "react";
-
-import dynamic from "next/dynamic";
-
-const MotionDiv = dynamic(
-  () => import("framer-motion").then((mod) => mod.motion.div),
-  { ssr: false },
-);
-const MotionSpan = dynamic(
-  () => import("framer-motion").then((mod) => mod.motion.span),
-  { ssr: false },
-);
-const AnimatePresence = dynamic(
-  () => import("framer-motion").then((mod) => mod.AnimatePresence),
-  { ssr: false },
-);
+import { div as MotionDiv, span as MotionSpan } from "motion/react-m";
+import { domAnimation, LazyMotion } from "motion/react";
 
 interface Beam {
   initialX: number; // Starting position (in pixels or percentage)
@@ -231,7 +218,7 @@ const CollisionMechanism = forwardRef<
   }, [collision]);
 
   return (
-    <>
+    <LazyMotion features={domAnimation} strict>
       <MotionDiv
         key={beamKey}
         ref={beamRef}
@@ -262,20 +249,18 @@ const CollisionMechanism = forwardRef<
           beamOptions.className,
         )}
       />
-      <AnimatePresence>
-        {collision.detected && collision.coordinates && (
-          <Explosion
-            key={`${collision.coordinates.x}-${collision.coordinates.y}`}
-            className=""
-            style={{
-              left: `${collision.coordinates.x}px`,
-              top: `${collision.coordinates.y}px`,
-              transform: "translate(-50%, -50%)",
-            }}
-          />
-        )}
-      </AnimatePresence>
-    </>
+      {collision.detected && collision.coordinates && (
+        <Explosion
+          key={`${collision.coordinates.x}-${collision.coordinates.y}`}
+          className=""
+          style={{
+            left: `${collision.coordinates.x}px`,
+            top: `${collision.coordinates.y}px`,
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+      )}
+    </LazyMotion>
   );
 });
 
@@ -292,25 +277,31 @@ const Explosion = ({ ...props }: React.HTMLProps<HTMLDivElement>) => {
 
   return (
     <div {...props} className={cn("absolute z-50 h-2 w-2", props.className)}>
-      <MotionDiv
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        className="absolute -inset-x-10 top-0 m-auto h-2 w-10 rounded-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent blur-sm"
-      ></MotionDiv>
+      <LazyMotion features={domAnimation} strict>
+        <MotionDiv
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="absolute -inset-x-10 top-0 m-auto h-2 w-10 rounded-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent blur-sm"
+        ></MotionDiv>
+      </LazyMotion>
       {spans.map((span) => (
-        <MotionSpan
-          key={span.id}
-          initial={{ x: span.initialX, y: span.initialY, opacity: 1 }}
-          animate={{
-            x: span.directionX,
-            y: span.directionY,
-            opacity: 0,
-          }}
-          transition={{ duration: Math.random() * 1.5 + 0.5, ease: "easeOut" }}
-          className="absolute h-1 w-1 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500"
-        />
+        <LazyMotion key={span.id} features={domAnimation} strict>
+          <MotionSpan
+            initial={{ x: span.initialX, y: span.initialY, opacity: 1 }}
+            animate={{
+              x: span.directionX,
+              y: span.directionY,
+              opacity: 0,
+            }}
+            transition={{
+              duration: Math.random() * 1.5 + 0.5,
+              ease: "easeOut",
+            }}
+            className="absolute h-1 w-1 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500"
+          />
+        </LazyMotion>
       ))}
     </div>
   );

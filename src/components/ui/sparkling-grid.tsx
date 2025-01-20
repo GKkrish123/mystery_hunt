@@ -1,12 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
-
-const MotionDiv = dynamic(
-  () => import("framer-motion").then((mod) => mod.motion.div),
-  { ssr: false },
-);
+import { div as MotionDiv } from "motion/react-m";
+import { domAnimation, LazyMotion } from "motion/react";
 
 interface SparklingGridProps {
   gridSize?: number;
@@ -126,12 +122,14 @@ export const SparklingGrid: React.FC<SparklingGridProps> = ({
   }, [gridSize, sparkleFrequency, sparkleColor, dotColor]);
 
   return (
-    <MotionDiv
-      ref={containerRef}
-      className="absolute inset-0 top-0 -z-50 overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 2 }}
-    />
+    <LazyMotion features={domAnimation} strict>
+      <MotionDiv
+        ref={containerRef}
+        className="absolute inset-0 top-0 -z-50 overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+      />
+    </LazyMotion>
   );
 };

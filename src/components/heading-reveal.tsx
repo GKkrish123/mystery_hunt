@@ -10,6 +10,7 @@ interface HeadingRevealProps {
   description: string;
   className?: string;
   headerClassName?: string;
+  descriptionClassName?: string;
   moreLink?: string;
 }
 
@@ -18,6 +19,7 @@ export function HeadingReveal({
   description,
   className,
   headerClassName,
+  descriptionClassName,
   moreLink,
 }: HeadingRevealProps) {
   return (
@@ -39,7 +41,12 @@ export function HeadingReveal({
           </h2>
         </BoxReveal>
         <BoxReveal duration={0.5} width="100%">
-          <p className="text-center text-sm text-muted-foreground">
+          <p
+            className={cn(
+              "text-center text-sm text-muted-foreground",
+              descriptionClassName,
+            )}
+          >
             {description}
           </p>
         </BoxReveal>

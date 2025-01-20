@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useAnimationControls } from "framer-motion";
+import { useAnimationControls, domAnimation, LazyMotion } from "motion/react";
+import { span as MotionSpan } from "motion/react-m";
 import { useEffect, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
@@ -39,27 +40,25 @@ export const TextShine: React.FC<TextShineProps> = ({
 
   useEffect(() => {
     updateAnimation();
-    window.addEventListener("resize", updateAnimation);
-
-    return () => {
-      window.removeEventListener("resize", updateAnimation);
-    };
-  }, [updateAnimation]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <motion.span
-      ref={textRef}
-      className={cn(
-        "relative w-fit bg-clip-text px-3 text-3xl font-bold text-[rgb(0,0,0)]/[.10] dark:text-[rgb(255,255,255)]/[.70] md:text-4xl",
-        mysteryFont.className,
-      )}
-      style={{
-        backgroundImage: `linear-gradient(to right, #222 0%, ${shineColor} 10%, #222 20%)`,
-        backgroundSize: "200%",
-      }}
-      animate={controls}
-    >
-      {text}
-    </motion.span>
+    <LazyMotion features={domAnimation} strict>
+      <MotionSpan
+        ref={textRef}
+        className={cn(
+          "relative w-fit bg-clip-text px-3 text-3xl font-bold text-[rgb(0,0,0)]/[.10] dark:text-[rgb(255,255,255)]/[.70] md:text-4xl",
+          mysteryFont.className,
+        )}
+        style={{
+          backgroundImage: `linear-gradient(to right, #222 0%, ${shineColor} 10%, #222 20%)`,
+          backgroundSize: "200%",
+        }}
+        animate={controls}
+      >
+        {text}
+      </MotionSpan>
+    </LazyMotion>
   );
 };

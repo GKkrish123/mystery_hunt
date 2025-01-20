@@ -3,11 +3,13 @@
 import { useRef } from "react";
 import {
   AnimatePresence,
-  motion,
   useInView,
   type UseInViewOptions,
   type Variants,
-} from "framer-motion";
+  domAnimation,
+  LazyMotion,
+} from "motion/react";
+import { div as MotionDiv } from "motion/react-m";
 
 type MarginType = UseInViewOptions["margin"];
 
@@ -46,22 +48,24 @@ export default function BlurFade({
   };
   const combinedVariants = variant ?? defaultVariants;
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        ref={ref}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        exit="hidden"
-        variants={combinedVariants}
-        transition={{
-          delay: 0.04 + delay,
-          duration,
-          ease: "easeInOut",
-        }}
-        className={className}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <LazyMotion features={domAnimation} strict>
+      <AnimatePresence mode="wait">
+        <MotionDiv
+          ref={ref}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          exit="hidden"
+          variants={combinedVariants}
+          transition={{
+            delay: 0.04 + delay,
+            duration,
+            ease: "easeInOut",
+          }}
+          className={className}
+        >
+          {children}
+        </MotionDiv>
+      </AnimatePresence>
+    </LazyMotion>
   );
 }

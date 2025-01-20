@@ -7,7 +7,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { motion } from "framer-motion";
+import { LazyMotion, domAnimation } from "motion/react";
+import { div as MotionDiv } from "motion/react-m";
 import { twMerge } from "tailwind-merge";
 import { useGesture } from "@use-gesture/react";
 import { type Mystery } from "@/server/model/mysteries";
@@ -191,42 +192,44 @@ const Card = ({
   );
 
   return (
-    <motion.div
-      className="drag-elements absolute rounded bg-zinc-700 p-0.5 pb-3 dark:bg-slate-300"
-      ref={target}
-      style={{
-        top,
-        left,
-        rotate: `${rotate}deg`, // Apply rotation dynamically
-        zIndex,
-      }}
-      drag={!forRotation}
-      dragConstraints={containerRef}
-      dragElastic={0.65}
-      onPointerOut={() => {
-        setForRotation(false);
-      }}
-      onPointerUp={() => {
-        setForRotation(false);
-      }}
-      onPointerMove={handleMouseRotation} // Track mouse movement for rotation
-      onPointerDown={(e) => {
-        e.preventDefault();
-        updateZIndex(e);
-        if (e.pointerType === "mouse" && e.shiftKey) {
-          setForRotation(true);
-        }
-      }}
-    >
-      <Image
-        width={300}
-        height={500}
-        priority
-        className={twMerge("w-48", className)}
-        src={src}
-        alt={alt}
-      />
-    </motion.div>
+    <LazyMotion features={domAnimation} strict>
+      <MotionDiv
+        className="drag-elements absolute rounded bg-zinc-700 p-0.5 pb-3 dark:bg-slate-300"
+        ref={target}
+        style={{
+          top,
+          left,
+          rotate: `${rotate}deg`, // Apply rotation dynamically
+          zIndex,
+        }}
+        drag={!forRotation}
+        dragConstraints={containerRef}
+        dragElastic={0.65}
+        onPointerOut={() => {
+          setForRotation(false);
+        }}
+        onPointerUp={() => {
+          setForRotation(false);
+        }}
+        onPointerMove={handleMouseRotation} // Track mouse movement for rotation
+        onPointerDown={(e) => {
+          e.preventDefault();
+          updateZIndex(e);
+          if (e.pointerType === "mouse" && e.shiftKey) {
+            setForRotation(true);
+          }
+        }}
+      >
+        <Image
+          width={300}
+          height={500}
+          priority
+          className={twMerge("w-48", className)}
+          src={src}
+          alt={alt}
+        />
+      </MotionDiv>
+    </LazyMotion>
   );
 };
 

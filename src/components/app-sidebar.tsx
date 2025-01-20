@@ -12,7 +12,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useEffect, useRef } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "motion/react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { navData } from "./nav-data";
 import { api } from "@/trpc/react";

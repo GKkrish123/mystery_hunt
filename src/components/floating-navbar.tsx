@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import {
-  motion,
-  AnimatePresence,
   useScroll,
   useMotionValueEvent,
-} from "framer-motion";
+  LazyMotion,
+  domAnimation,
+} from "motion/react";
+import { div as MotionDiv } from "motion/react-m";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "./ui/sidebar";
 import { Button } from "./ui/button";
@@ -19,7 +20,6 @@ export const FloatingNav = ({ className }: { className?: string }) => {
   const [visible, setVisible] = useState(false);
 
   useMotionValueEvent(scrollYProgress, "change", (current) => {
-    // Check if current is not undefined and is a number
     if (typeof current === "number") {
       const direction = current - scrollYProgress.getPrevious()!;
 
@@ -36,8 +36,8 @@ export const FloatingNav = ({ className }: { className?: string }) => {
   });
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
+    <LazyMotion features={domAnimation} strict>
+      <MotionDiv
         initial={{
           opacity: 1,
           y: -100,
@@ -72,7 +72,7 @@ export const FloatingNav = ({ className }: { className?: string }) => {
         </Button>
 
         <ThemeToggle />
-      </motion.div>
-    </AnimatePresence>
+      </MotionDiv>
+    </LazyMotion>
   );
 };

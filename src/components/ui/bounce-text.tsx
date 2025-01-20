@@ -2,13 +2,8 @@
 
 import { mysteryFont } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
-
-import dynamic from "next/dynamic";
-
-const MotionSpan = dynamic(
-  () => import("framer-motion").then((mod) => mod.motion.span),
-  { ssr: false },
-);
+import { span as MotionSpan } from "motion/react-m";
+import { domAnimation, LazyMotion } from "motion/react";
 
 interface BouncingTextProps {
   text?: string;
@@ -69,28 +64,33 @@ export function BounceText({
     >
       {text.split("").map((letter, index) =>
         bouncingIndices.includes(index) ? (
-          <MotionSpan
+          <LazyMotion
             key={`text-05-${letter}-${index}`}
-            className={cn(
-              "text-4xl font-bold text-black dark:text-white",
-              "transition-colors duration-200",
-              "hover:text-purple-500 dark:hover:text-purple-400",
-              className,
-              mysteryFont.className,
-            )}
-            variants={letterAnimation}
-            initial="initial"
-            animate="animate"
-            transition={{
-              delay: index * delay,
-            }}
-            whileHover={{
-              scale: 1.2,
-              transition: { duration: 0.2 },
-            }}
+            features={domAnimation}
+            strict
           >
-            {letter}
-          </MotionSpan>
+            <MotionSpan
+              className={cn(
+                "text-4xl font-bold text-black dark:text-white",
+                "transition-colors duration-200",
+                "hover:text-purple-500 dark:hover:text-purple-400",
+                className,
+                mysteryFont.className,
+              )}
+              variants={letterAnimation}
+              initial="initial"
+              animate="animate"
+              transition={{
+                delay: index * delay,
+              }}
+              whileHover={{
+                scale: 1.2,
+                transition: { duration: 0.2 },
+              }}
+            >
+              {letter}
+            </MotionSpan>
+          </LazyMotion>
         ) : (
           <span
             key={`text-05-1-${letter}-${index}`}

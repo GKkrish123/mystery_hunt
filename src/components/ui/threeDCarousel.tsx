@@ -2,11 +2,13 @@
 
 import { memo, useEffect, useMemo } from "react";
 import {
-  motion,
   useAnimation,
   useMotionValue,
   useTransform,
-} from "framer-motion";
+  domAnimation,
+  LazyMotion,
+} from "motion/react";
+import { div as MotionDiv } from "motion/react-m";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ShineBorder from "./shine-border";
 import { CardContainer, CardItem } from "./three-d-card";
@@ -77,76 +79,83 @@ const Carousel = memo(function CarouselComponent({
         willChange: "transform",
       }}
     >
-      <motion.div
-        drag={isCarouselActive ? "x" : false}
-        className="relative flex h-full origin-center cursor-grab justify-center active:cursor-grabbing"
-        style={{
-          transform,
-          rotateY: rotation,
-          width: cylinderWidth,
-          transformStyle: "preserve-3d",
-        }}
-        onClick={async () => {
-          controls.stop();
-          await startSlowRotation();
-        }}
-        onDrag={(_, info) => {
-          controls.stop();
-          if (isCarouselActive) {
-            rotation.set(rotation.get() + info.offset.x * 0.007);
-          }
-        }}
-        onDragEnd={async (_, info) => {
-          if (isCarouselActive) {
-            await controls.start({
-              rotateY: rotation.get() + info.velocity.x * 0.007,
-              transition: {
-                type: "spring",
-                stiffness: 100,
-                damping: 30,
-                mass: 0.5,
-              },
-            });
-          }
-          controls.stop();
-          await startSlowRotation();
-        }}
-        animate={controls}
-      >
-        {cards.map((imgUrl, index) => (
-          <motion.div
-            key={`key-${imgUrl}-${index}`}
-            className="bg-mauve-dark-2 absolute flex h-full origin-center items-center justify-center rounded-xl p-2"
-            style={{
-              width: `${faceWidth}px`,
-              transform: `rotateY(${
-                index * (360 / faceCount)
-              }deg) translateZ(${radius}px)`,
-            }}
-            onPointerDown={() => handleClick(imgUrl, index)}
-          >
-            <CardContainer className="w-full">
-              <CardItem translateZ="100" className="w-full">
-                <ShineBorder
-                  className="w-full min-w-0 p-0"
-                  borderRadius={10}
-                  borderWidth={1.5}
-                  duration={7}
-                  color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
-                >
-                  <Image
-                    src={imgUrl}
-                    height={300}
-                    width={300}
-                    className="pointer-events-none h-36 w-full rounded-xl object-cover group-hover/card:shadow-xl md:h-64"
-                    alt="thumbnail"
-                  />
-                </ShineBorder>
-              </CardItem>
-            </CardContainer>
-          </motion.div>
-        ))}
-      </motion.div>
+      <LazyMotion features={domAnimation} strict>
+        <MotionDiv
+          drag={isCarouselActive ? "x" : false}
+          className="relative flex h-full origin-center cursor-grab justify-center active:cursor-grabbing"
+          style={{
+            transform: transform as unknown as string,
+            rotateY: rotation as unknown as string,
+            width: cylinderWidth,
+            transformStyle: "preserve-3d",
+          }}
+          onClick={async () => {
+            controls.stop();
+            await startSlowRotation();
+          }}
+          onDrag={(_, info) => {
+            controls.stop();
+            if (isCarouselActive) {
+              rotation.set(rotation.get() + info.offset.x * 0.007);
+            }
+          }}
+          onDragEnd={async (_, info) => {
+            if (isCarouselActive) {
+              await controls.start({
+                rotateY: rotation.get() + info.velocity.x * 0.007,
+                transition: {
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 30,
+                  mass: 0.5,
+                },
+              });
+            }
+            controls.stop();
+            await startSlowRotation();
+          }}
+          animate={controls}
+        >
+          {cards.map((imgUrl, index) => (
+            <LazyMotion
+              key={`key-${imgUrl}-${index}`}
+              features={domAnimation}
+              strict
+            >
+              <MotionDiv
+                className="bg-mauve-dark-2 absolute flex h-full origin-center items-center justify-center rounded-xl p-2"
+                style={{
+                  width: `${faceWidth}px`,
+                  transform: `rotateY(${
+                    index * (360 / faceCount)
+                  }deg) translateZ(${radius}px)`,
+                }}
+                onPointerDown={() => handleClick(imgUrl, index)}
+              >
+                <CardContainer className="w-full">
+                  <CardItem translateZ="100" className="w-full">
+                    <ShineBorder
+                      className="w-full min-w-0 p-0"
+                      borderRadius={10}
+                      borderWidth={1.5}
+                      duration={7}
+                      color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+                    >
+                      <Image
+                        src={imgUrl}
+                        height={300}
+                        width={300}
+                        className="pointer-events-none h-36 w-full rounded-xl object-cover group-hover/card:shadow-xl md:h-64"
+                        alt="thumbnail"
+                      />
+                    </ShineBorder>
+                  </CardItem>
+                </CardContainer>
+              </MotionDiv>
+            </LazyMotion>
+          ))}
+        </MotionDiv>
+      </LazyMotion>
     </div>
   );
 });
@@ -164,16 +173,18 @@ const ThreeDPhotoCarousel = () => {
   };
 
   return (
-    <motion.div layout className="relative -mt-2 md:-mt-20">
-      <div className="relative h-[350px] w-full">
-        <Carousel
-          handleClick={handleClick}
-          controls={controls}
-          cards={cards}
-          isCarouselActive={isCarouselActive}
-        />
-      </div>
-    </motion.div>
+    <LazyMotion features={domAnimation} strict>
+      <MotionDiv layout className="relative -mt-2 md:-mt-20">
+        <div className="relative h-[350px] w-full">
+          <Carousel
+            handleClick={handleClick}
+            controls={controls}
+            cards={cards}
+            isCarouselActive={isCarouselActive}
+          />
+        </div>
+      </MotionDiv>
+    </LazyMotion>
   );
 };
 

@@ -2,13 +2,8 @@
 
 import { memo, useEffect, useId, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-
-import dynamic from "next/dynamic";
-
-const MotionRect = dynamic(
-  () => import("framer-motion").then((mod) => mod.motion.rect),
-  { ssr: false },
-);
+import { rect as MotionRect } from "motion/react-m";
+import { domAnimation, LazyMotion } from "motion/react";
 
 interface GridPatternProps {
   width?: number;
@@ -119,24 +114,25 @@ export const GridPattern = memo(function GridPattern({
       <rect width="100%" height="100%" fill={`url(#${id})`} />
       <svg x={x} y={y} className="overflow-visible">
         {squares.map(({ pos: [x, y], id }, index) => (
-          <MotionRect
-            key={id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: maxOpacity }}
-            transition={{
-              duration,
-              repeat: Infinity, // Infinite loop
-              repeatType: "reverse", // Reverse the animation
-              delay: index * 0.1, // Stagger the animations for a cascading effect
-            }}
-            onAnimationComplete={() => handleAnimationComplete(id)}
-            width={width - 1}
-            height={height - 1}
-            x={(x ?? 0) * width + 1}
-            y={(y ?? 0) * height + 1}
-            fill="currentColor"
-            strokeWidth="0"
-          />
+          <LazyMotion key={id} features={domAnimation} strict>
+            <MotionRect
+              initial={{ opacity: 0 }}
+              animate={{ opacity: maxOpacity }}
+              transition={{
+                duration,
+                repeat: Infinity, // Infinite loop
+                repeatType: "reverse", // Reverse the animation
+                delay: index * 0.1, // Stagger the animations for a cascading effect
+              }}
+              onAnimationComplete={() => handleAnimationComplete(id)}
+              width={width - 1}
+              height={height - 1}
+              x={(x ?? 0) * width + 1}
+              y={(y ?? 0) * height + 1}
+              fill="currentColor"
+              strokeWidth="0"
+            />
+          </LazyMotion>
         ))}
       </svg>
     </svg>

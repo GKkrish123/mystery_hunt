@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import {
+  useMotionValue,
+  useTransform,
+  domAnimation,
+  LazyMotion,
+} from "motion/react";
+import { div as MotionDiv } from "motion/react-m";
 import { cn } from "@/lib/utils";
 import TinderCard from "react-tinder-card";
 import { MysteryCard } from "../mystery-card";
@@ -86,30 +92,34 @@ const Card = ({
   const isFront = index === 0;
 
   return (
-    <motion.div
-      className={cn(
-        "rounded-lg bg-slate-100 object-cover outline outline-zinc-600 dark:bg-zinc-900 dark:outline-slate-300",
-        type === "mystery" ? "p-2 pt-3" : "p-1 pt-2",
-      )}
-      style={{
-        zIndex: zIndex,
-        gridRow: 1,
-        gridColumn: 1,
-        x,
-        opacity,
-        rotate: isFront ? rotateRaw : `${(index + 1) % 2 ? 6 : -6}deg`,
-        boxShadow: isFront
-          ? "0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5)"
-          : undefined,
-      }}
-      animate={{
-        scale: isFront ? 1 : 0.98,
-      }}
-      drag={"x"}
-      dragConstraints={{ left: 0, right: 0 }}
-    >
-      <RenderDragComponent forCategory={type === "category"} item={card} />
-    </motion.div>
+    <LazyMotion features={domAnimation} strict>
+      <MotionDiv
+        className={cn(
+          "rounded-lg bg-slate-100 object-cover outline outline-zinc-600 dark:bg-zinc-900 dark:outline-slate-300",
+          type === "mystery" ? "p-2 pt-3" : "p-1 pt-2",
+        )}
+        style={{
+          zIndex: zIndex,
+          gridRow: 1,
+          gridColumn: 1,
+          x: x as unknown as number,
+          opacity: opacity as unknown as number,
+          rotate: isFront
+            ? (rotateRaw as unknown as number)
+            : (`${(index + 1) % 2 ? 6 : -6}deg` as unknown as number),
+          boxShadow: isFront
+            ? "0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5)"
+            : undefined,
+        }}
+        animate={{
+          scale: isFront ? 1 : 0.98,
+        }}
+        drag={"x"}
+        dragConstraints={{ left: 0, right: 0 }}
+      >
+        <RenderDragComponent forCategory={type === "category"} item={card} />
+      </MotionDiv>
+    </LazyMotion>
   );
 };
 

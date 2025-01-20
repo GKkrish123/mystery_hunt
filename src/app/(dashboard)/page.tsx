@@ -117,7 +117,6 @@ export default async function DashboardPage() {
         {dashboardContents.map(({ title, description, type, id }, index) => (
           <div id={id} key={id} className="z-10 col-span-full">
             <HeadingReveal title={title} description={description} />
-            <Separator className="mt-3" />
             {type === "mysteries" ? (
               <HorizontalMysteries
                 mysteries={dashboardData[index] as Mystery[]}
@@ -129,7 +128,8 @@ export default async function DashboardPage() {
                 />
               </div>
             )}
-          </div>
+            <Separator className="mt-3" />
+            </div>
         ))}
         <Link className="col-span-1 h-10 sm:col-start-2" href="/explore">
           <RainbowButton className="size-full">Explore More</RainbowButton>

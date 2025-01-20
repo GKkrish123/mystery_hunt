@@ -3,12 +3,13 @@
 import Image from "next/image";
 import React, { memo, useState, type MouseEvent } from "react";
 import {
-  motion,
   useTransform,
-  AnimatePresence,
   useMotionValue,
   useSpring,
-} from "framer-motion";
+  domAnimation,
+  LazyMotion,
+} from "motion/react";
+import { div as MotionDiv } from "motion/react-m";
 import { type HunterRank } from "@/server/model/hunters";
 
 export const AnimatedTooltip = memo(({ items }: { items: HunterRank[] }) => {
@@ -42,9 +43,9 @@ export const AnimatedTooltip = memo(({ items }: { items: HunterRank[] }) => {
             onMouseEnter={() => setHoveredIndex(tooltipKey)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
-            <AnimatePresence>
+            <LazyMotion features={domAnimation} strict>
               {isHovered && (
-                <motion.div
+                <MotionDiv
                   initial={{ opacity: 0, y: 20, scale: 0.8 }}
                   animate={{
                     opacity: 1,
@@ -59,8 +60,8 @@ export const AnimatedTooltip = memo(({ items }: { items: HunterRank[] }) => {
                     transition: { duration: 0.2 },
                   }}
                   style={{
-                    translateX: translateX,
-                    rotate: rotate,
+                    translateX: translateX as unknown as number,
+                    rotate: rotate as unknown as number,
                   }}
                   className="absolute -top-4 right-10 z-50 flex max-h-36 min-h-16 w-36 translate-x-1/2 flex-col items-center justify-center rounded-md border border-black bg-white px-4 py-2 text-xs shadow-xl dark:border-white dark:bg-black"
                 >
@@ -73,9 +74,9 @@ export const AnimatedTooltip = memo(({ items }: { items: HunterRank[] }) => {
                   <div className="text-xs text-black dark:text-white">
                     {item.state}
                   </div>
-                </motion.div>
+                </MotionDiv>
               )}
-            </AnimatePresence>
+            </LazyMotion>
 
             <Image
               onMouseMove={handleMouseMove}

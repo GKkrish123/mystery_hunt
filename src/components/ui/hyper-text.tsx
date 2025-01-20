@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, type Variants } from "framer-motion";
+import { type Variants, domAnimation, LazyMotion } from "motion/react";
+import { span as MotionSpan } from "motion/react-m";
 import { cn } from "@/lib/utils";
 
 interface HyperTextProps {
@@ -73,19 +74,18 @@ export default function HyperText({
         "flex scale-100 cursor-default flex-wrap overflow-hidden py-2",
         wrapperClassName,
       )}
-      // onMouseEnter={triggerAnimation}
     >
-      <AnimatePresence>
+      <LazyMotion features={domAnimation} strict>
         {displayText.map((word, i) => (
-          <motion.span
+          <MotionSpan
             key={i}
             className={cn("font-mono", "inline-block", className)}
             {...framerProps}
           >
             {word.toUpperCase() + (i < splittedText.length - 1 ? "\u00A0" : "")}
-          </motion.span>
+          </MotionSpan>
         ))}
-      </AnimatePresence>
+      </LazyMotion>
     </div>
   );
 }

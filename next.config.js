@@ -27,7 +27,7 @@ const config = {
     ],
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "cobe"],
+    optimizePackageImports: ["lucide-react", "cobe", "motion"],
     turbo: {
       rules: {
         "*.svg": {

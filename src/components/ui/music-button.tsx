@@ -12,13 +12,8 @@ import { Button } from "./button";
 import { useTheme } from "next-themes";
 import TypingAnimation from "./typing-animation";
 import { PlayerState, useYoutube } from "@/hooks/use-youtube";
-
-import dynamic from "next/dynamic";
-
-const MotionDiv = dynamic(
-  () => import("framer-motion").then((mod) => mod.motion.div),
-  { ssr: false },
-);
+import { div as MotionDiv } from "motion/react-m";
+import { domAnimation, LazyMotion } from "motion/react";
 
 const CONTAINER_SIZE = 200;
 
@@ -94,81 +89,83 @@ export const MusicButton: React.FC<FamilyButtonProps> = memo(() => {
                 playerDetails={playerDetails}
               >
                 {isExpanded ? (
-                  <MotionDiv
-                    initial={{ opacity: 0 }}
-                    animate={{
-                      opacity: 1,
-                      transition: {
-                        delay: 0.3,
-                        duration: 0.4,
-                        ease: "easeOut",
-                      },
-                    }}
-                    className="relative flex size-full flex-col items-center p-2 pb-1"
-                  >
-                    <Lottie
-                      className="h-14 w-14"
-                      animationData={
-                        resolvedTheme === "dark"
-                          ? YoutubeColorDark
-                          : YoutubeColor
-                      }
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.open(YTLINK, "_blank");
+                  <LazyMotion features={domAnimation} strict>
+                    <MotionDiv
+                      initial={{ opacity: 0 }}
+                      animate={{
+                        opacity: 1,
+                        transition: {
+                          delay: 0.3,
+                          duration: 0.4,
+                          ease: "easeOut",
+                        },
                       }}
-                      autoplay={playerDetails.state === PlayerState.PLAYING}
-                      loop={playerDetails.state === PlayerState.PLAYING}
-                    />
-                    <TypingAnimation
-                      className="flex-1 content-center text-center font-mono text-sm font-normal tracking-[-0.02em] text-black drop-shadow-sm dark:text-white"
-                      text={title}
-                    />
-                    <div className="mt-auto flex gap-2 pt-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="rounded-full bg-secondary-foreground/90 p-1 hover:bg-secondary-foreground"
+                      className="relative flex size-full flex-col items-center p-2 pb-1"
+                    >
+                      <Lottie
+                        className="h-14 w-14"
+                        animationData={
+                          resolvedTheme === "dark"
+                            ? YoutubeColorDark
+                            : YoutubeColor
+                        }
                         onClick={(e) => {
                           e.preventDefault();
-                          actions.stopVideo();
-                          actions.playVideo();
+                          window.open(YTLINK, "_blank");
                         }}
-                      >
-                        <SkipBack className="h-4 w-4 text-white dark:text-black" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="rounded-full bg-secondary-foreground/90 p-1 hover:bg-secondary-foreground"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          if (playerDetails.state === PlayerState.PLAYING) {
-                            actions.pauseVideo();
-                          } else {
+                        autoplay={playerDetails.state === PlayerState.PLAYING}
+                        loop={playerDetails.state === PlayerState.PLAYING}
+                      />
+                      <TypingAnimation
+                        className="flex-1 content-center text-center font-mono text-sm font-normal tracking-[-0.02em] text-black drop-shadow-sm dark:text-white"
+                        text={title}
+                      />
+                      <div className="mt-auto flex gap-2 pt-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="rounded-full bg-secondary-foreground/90 p-1 hover:bg-secondary-foreground"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            actions.stopVideo();
                             actions.playVideo();
-                          }
-                        }}
-                      >
-                        {playerDetails.state === PlayerState.PLAYING ? (
-                          <Pause className="h-4 w-4 text-white dark:text-black" />
-                        ) : (
-                          <Play className="h-4 w-4 text-white dark:text-black" />
-                        )}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="rounded-full bg-secondary-foreground/90 p-1 hover:bg-secondary-foreground"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          actions.playVideoAt(randomSongNumber());
-                        }}
-                      >
-                        <SkipForward className="h-4 w-4 text-white dark:text-black" />
-                      </Button>
-                    </div>
-                  </MotionDiv>
+                          }}
+                        >
+                          <SkipBack className="h-4 w-4 text-white dark:text-black" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="rounded-full bg-secondary-foreground/90 p-1 hover:bg-secondary-foreground"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (playerDetails.state === PlayerState.PLAYING) {
+                              actions.pauseVideo();
+                            } else {
+                              actions.playVideo();
+                            }
+                          }}
+                        >
+                          {playerDetails.state === PlayerState.PLAYING ? (
+                            <Pause className="h-4 w-4 text-white dark:text-black" />
+                          ) : (
+                            <Play className="h-4 w-4 text-white dark:text-black" />
+                          )}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="rounded-full bg-secondary-foreground/90 p-1 hover:bg-secondary-foreground"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            actions.playVideoAt(randomSongNumber());
+                          }}
+                        >
+                          <SkipForward className="h-4 w-4 text-white dark:text-black" />
+                        </Button>
+                      </div>
+                    </MotionDiv>
+                  </LazyMotion>
                 ) : null}
               </FamilyButtonContainer>
             </div>
@@ -198,95 +195,103 @@ const FamilyButtonContainer: FC<FamilyButtonContainerProps> = ({
   theme,
 }) => {
   return (
-    <MotionDiv
-      className={cn(
-        "relative z-10 flex cursor-pointer flex-col items-center justify-center space-y-1 border border-white/10 bg-transparent text-white shadow-lg",
-        !isExpanded ? "" : "",
-      )}
-      layoutRoot
-      layout
-      initial={{ borderRadius: 21, width: "2rem", height: "2rem" }}
-      animate={
-        isExpanded
-          ? {
-              borderRadius: 20,
-              width: CONTAINER_SIZE,
-              height: CONTAINER_SIZE + 50,
-
-              transition: {
-                type: "spring",
-                damping: 25,
-                stiffness: 400,
-                when: "beforeChildren",
-              },
-            }
-          : {
-              borderRadius: 21,
-              width: "2rem",
-              height: "2rem",
-            }
-      }
-    >
-      {children}
+    <LazyMotion features={domAnimation} strict>
       <MotionDiv
-        animate={{
-          transition: {
-            type: "tween",
-            ease: "easeOut",
-            duration: 0.2,
-          },
-        }}
-        style={{
-          left: isExpanded ? "" : "50%",
-          bottom: 0.5,
-        }}
-      >
-        {isExpanded ? (
-          <MotionDiv
-            className="group rounded-full border bg-neutral-800/50 p-[10px] text-orange-50 shadow-2xl transition-colors duration-300 hover:border-neutral-200 dark:bg-black/50"
-            onClick={toggleExpand}
-            layoutId="expand-toggle"
-            initial={false}
-            animate={{
-              rotate: -360,
-              transition: {
-                duration: 0.4,
-              },
-            }}
-          >
-            <XIcon
-              className={cn(
-                "h-4 w-4 text-black transition-colors duration-200 group-hover:text-neutral-500 dark:text-white",
-              )}
-            />
-          </MotionDiv>
-        ) : (
-          <MotionDiv
-            className={cn(
-              "flex items-center justify-center rounded-full",
-              // "group border border-cyan-100/10 bg-neutral-200 p-[10px] text-cyan-50 shadow-2xl transition-colors duration-200 dark:bg-cyan-500/90",
-            )}
-            style={{ borderRadius: 24 }}
-            onClick={toggleExpand}
-            layoutId="expand-toggle"
-            initial={{ rotate: 0 }}
-            animate={{
-              rotate: 360,
-              transition: {
-                duration: 0.4,
-              },
-            }}
-          >
-            {/* <Music className="h-4 w-4 text-black" /> */}
-            <Lottie
-              className="h-12 w-12"
-              animationData={theme === "dark" ? MusicWhite : MusicBlack}
-              autoplay={playerDetails?.state === PlayerState.PLAYING}
-              loop={playerDetails?.state === PlayerState.PLAYING}
-            />
-          </MotionDiv>
+        className={cn(
+          "relative z-10 flex cursor-pointer flex-col items-center justify-center space-y-1 border border-white/10 bg-transparent text-white shadow-lg",
+          !isExpanded ? "" : "",
         )}
+        layoutRoot
+        layout
+        initial={{ borderRadius: 21, width: "2rem", height: "2rem" }}
+        animate={
+          isExpanded
+            ? {
+                borderRadius: 20,
+                width: CONTAINER_SIZE,
+                height: CONTAINER_SIZE + 50,
+
+                transition: {
+                  type: "spring",
+                  damping: 25,
+                  stiffness: 400,
+                  when: "beforeChildren",
+                },
+              }
+            : {
+                borderRadius: 21,
+                width: "2rem",
+                height: "2rem",
+              }
+        }
+      >
+        {children}
+        <LazyMotion features={domAnimation} strict>
+          <MotionDiv
+            animate={{
+              transition: {
+                type: "tween",
+                ease: "easeOut",
+                duration: 0.2,
+              },
+            }}
+            style={{
+              left: isExpanded ? "" : "50%",
+              bottom: 0.5,
+            }}
+          >
+            {isExpanded ? (
+              <LazyMotion features={domAnimation} strict>
+                <MotionDiv
+                  className="group rounded-full border bg-neutral-800/50 p-[10px] text-orange-50 shadow-2xl transition-colors duration-300 hover:border-neutral-200 dark:bg-black/50"
+                  onClick={toggleExpand}
+                  layoutId="expand-toggle"
+                  initial={false}
+                  animate={{
+                    rotate: -360,
+                    transition: {
+                      duration: 0.4,
+                    },
+                  }}
+                >
+                  <XIcon
+                    className={cn(
+                      "h-4 w-4 text-black transition-colors duration-200 group-hover:text-neutral-500 dark:text-white",
+                    )}
+                  />
+                </MotionDiv>
+              </LazyMotion>
+            ) : (
+              <LazyMotion features={domAnimation} strict>
+                <MotionDiv
+                  className={cn(
+                    "flex items-center justify-center rounded-full",
+                    // "group border border-cyan-100/10 bg-neutral-200 p-[10px] text-cyan-50 shadow-2xl transition-colors duration-200 dark:bg-cyan-500/90",
+                  )}
+                  style={{ borderRadius: 24 }}
+                  onClick={toggleExpand}
+                  layoutId="expand-toggle"
+                  initial={{ rotate: 0 }}
+                  animate={{
+                    rotate: 360,
+                    transition: {
+                      duration: 0.4,
+                    },
+                  }}
+                >
+                  {/* <Music className="h-4 w-4 text-black" /> */}
+                  <Lottie
+                    className="h-12 w-12"
+                    animationData={theme === "dark" ? MusicWhite : MusicBlack}
+                    autoplay={playerDetails?.state === PlayerState.PLAYING}
+                    loop={playerDetails?.state === PlayerState.PLAYING}
+                  />
+                </MotionDiv>
+              </LazyMotion>
+            )}
+          </MotionDiv>
+        </LazyMotion>
       </MotionDiv>
-    </MotionDiv>
+    </LazyMotion>
   );
 };

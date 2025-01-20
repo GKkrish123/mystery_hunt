@@ -54,7 +54,7 @@ export function ImageCarousel({
       </div>
       {visibleItems.map((item, index) => (
         <div
-          key={item.id}
+          key={`${item.id}-${index}`}
           className={
             "animate-fadeIn absolute left-[50%] top-[10%] z-10 w-[220px] rounded-xl bg-transparent"
           }
@@ -63,8 +63,8 @@ export function ImageCarousel({
               index === 1
                 ? "translateX(-50%)"
                 : index === 0
-                  ? "translateX(-150%) rotate(-20deg)"
-                  : "translateX(50%) rotate(20deg)",
+                  ? "translateX(-130%) rotate(-10deg)"
+                  : "translateX(30%) rotate(10deg)",
             transition: "transform 0.5s ease, filter 0.5s ease",
             filter: index === 1 ? "none" : "blur(4px)",
             zIndex: index === 1 ? 3 : 1,

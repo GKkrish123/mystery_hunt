@@ -3,13 +3,8 @@
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
 import { memo } from "react";
-
-import dynamic from "next/dynamic";
-
-const MotionSpan = dynamic(
-  () => import("framer-motion").then((mod) => mod.motion.span),
-  { ssr: false },
-);
+import { span as MotionSpan } from "motion/react-m";
+import { domAnimation, LazyMotion } from "motion/react";
 
 interface LetterShootProps {
   className?: string;
@@ -86,25 +81,27 @@ export default memo(function LetterShoot({
             letter === "M" ? "w-[2.5em]" : "",
           )}
         >
-          <MotionSpan
-            key={`letter-${i}`}
-            custom={i}
-            variants={scaleVariant}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className={cn(
-              "font-display inline-block text-center text-4xl font-bold tracking-wide text-black drop-shadow-sm dark:text-white md:text-6xl md:leading-[7rem]",
-              className,
-              letter === "e" ? "absolute -left-[0.1em] indent-2" : "",
-              letter === "M"
-                ? "absolute -right-[0.08em] top-0 leading-[5rem] tracking-[0.14em] md:top-0"
-                : "",
-              "drop-shadow-[-0.02em_-0.02em_#000000] dark:drop-shadow-[-0.02em_-0.02em_#ffffff]",
-            )}
-          >
-            {letter === " " ? <span>&nbsp;</span> : letter}
-          </MotionSpan>
+          <LazyMotion features={domAnimation} strict>
+            <MotionSpan
+              key={`letter-${i}`}
+              custom={i}
+              variants={scaleVariant}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className={cn(
+                "font-display inline-block text-center text-4xl font-bold tracking-wide text-black drop-shadow-sm dark:text-white md:text-6xl md:leading-[7rem]",
+                className,
+                letter === "e" ? "absolute -left-[0.1em] indent-2" : "",
+                letter === "M"
+                  ? "absolute -right-[0.08em] top-0 leading-[5rem] tracking-[0.14em] md:top-0"
+                  : "",
+                "drop-shadow-[-0.02em_-0.02em_#000000] dark:drop-shadow-[-0.02em_-0.02em_#ffffff]",
+              )}
+            >
+              {letter === " " ? <span>&nbsp;</span> : letter}
+            </MotionSpan>
+          </LazyMotion>
         </div>
       ))}
     </div>

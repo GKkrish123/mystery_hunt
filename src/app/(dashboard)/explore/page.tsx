@@ -78,14 +78,14 @@ export default async function ExplorerPage() {
               "Featured categories that are on the rise. Check them out now!"
             }
           />
-          <Separator className="mt-3" />
           <Expandable
             className="col-span-full mt-3"
             autoPlay={false}
             list={featuredCategories}
           />
-        </div>
-        {hallOfFameMysteries.map((item, index) => (
+          <Separator className="mt-3" />
+          </div>
+        {[...hallOfFameMysteries, ...hallOfFameMysteries, ...hallOfFameMysteries, ...hallOfFameMysteries].map((item, index) => (
           <div
             key={`hof-${item.category.name}-${index}`}
             className="z-10 col-span-3"
@@ -95,9 +95,9 @@ export default async function ExplorerPage() {
               description={item.category.description}
               moreLink={`/explore/${item.category.tag}`}
             />
-            <Separator className="mt-3" />
             <ImageCarousel className="col-span-full" items={item.mysteries} />
-          </div>
+            <Separator className="mt-3" />
+            </div>
         ))}
         <Link className="col-span-3 h-10 md:col-span-2" href="/mysteries">
           <ShinyButton className="size-full">More Mysteries</ShinyButton>
