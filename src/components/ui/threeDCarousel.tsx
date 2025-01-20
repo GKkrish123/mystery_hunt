@@ -7,6 +7,7 @@ import {
   useTransform,
   domAnimation,
   LazyMotion,
+  domMax,
 } from "motion/react";
 import { div as MotionDiv } from "motion/react-m";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -79,7 +80,7 @@ const Carousel = memo(function CarouselComponent({
         willChange: "transform",
       }}
     >
-      <LazyMotion features={domAnimation} strict>
+      <LazyMotion features={domMax} strict>
         <MotionDiv
           drag={isCarouselActive ? "x" : false}
           className="relative flex h-full origin-center cursor-grab justify-center active:cursor-grabbing"
