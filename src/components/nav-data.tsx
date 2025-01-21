@@ -22,6 +22,11 @@ export const navData = {
       isActive: true,
       items: [
         {
+          title: "Events",
+          url: "/events",
+          special: true,
+        },
+        {
           title: "Mysteries",
           url: "/mysteries",
         },

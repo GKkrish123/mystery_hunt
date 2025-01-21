@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ShineBorder from "./ui/shine-border";
 
 export function NavMain({
   items,
@@ -30,6 +31,7 @@ export function NavMain({
     icon: LucideIcon;
     isActive?: boolean;
     items?: {
+      special?: boolean;
       title: string;
       url: string;
     }[];
@@ -68,15 +70,43 @@ export function NavMain({
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton
-                            asChild
-                            onClick={() => toggleSidebar()}
-                            isActive={currentPath === subItem.url}
-                          >
-                            <Link className="relative z-10" href={subItem.url}>
-                              <span>{subItem.title}</span>
-                            </Link>
-                          </SidebarMenuSubButton>
+                          {subItem.special ? (
+                            <ShineBorder
+                              className="min-h-0 w-full min-w-0 bg-transparent p-1 dark:bg-transparent"
+                              borderRadius={10}
+                              borderWidth={1.5}
+                              duration={10}
+                              color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+                            >
+                              <SidebarMenuSubButton
+                                asChild
+                                className="w-full"
+                                onClick={() => toggleSidebar()}
+                                isActive={currentPath === subItem.url}
+                              >
+                                <Link
+                                  className="relative z-10"
+                                  href={subItem.url}
+                                >
+                                  <span>{subItem.title}</span>
+                                </Link>
+                              </SidebarMenuSubButton>
+                            </ShineBorder>
+                          ) : (
+                            <SidebarMenuSubButton
+                              asChild
+                              className="w-full"
+                              onClick={() => toggleSidebar()}
+                              isActive={currentPath === subItem.url}
+                            >
+                              <Link
+                                className="relative z-10"
+                                href={subItem.url}
+                              >
+                                <span>{subItem.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          )}
                         </SidebarMenuSubItem>
                       ))}
                     </SidebarMenuSub>
