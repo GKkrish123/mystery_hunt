@@ -115,24 +115,25 @@ export const GridPattern = memo(function GridPattern({
       <svg x={x} y={y} className="overflow-visible">
         {squares.map(({ pos: [x, y], id }, index) => (
           <LazyMotion key={id} features={domAnimation} strict>
-      <AnimatePresence propagate>
-      <MotionRect
-              initial={{ opacity: 0 }}
-              animate={{ opacity: maxOpacity }}
-              transition={{
-                duration,
-                repeat: Infinity, // Infinite loop
-                repeatType: "reverse", // Reverse the animation
-                delay: index * 0.1, // Stagger the animations for a cascading effect
-              }}
-              onAnimationComplete={() => handleAnimationComplete(id)}
-              width={width - 1}
-              height={height - 1}
-              x={(x ?? 0) * width + 1}
-              y={(y ?? 0) * height + 1}
-              fill="currentColor"
-              strokeWidth="0"
-            />
+            <AnimatePresence propagate>
+              <MotionRect
+                className="will-change-[transform,opacity]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: maxOpacity }}
+                transition={{
+                  duration,
+                  repeat: Infinity, // Infinite loop
+                  repeatType: "reverse", // Reverse the animation
+                  delay: index * 0.1, // Stagger the animations for a cascading effect
+                }}
+                onAnimationComplete={() => handleAnimationComplete(id)}
+                width={width - 1}
+                height={height - 1}
+                x={(x ?? 0) * width + 1}
+                y={(y ?? 0) * height + 1}
+                fill="currentColor"
+                strokeWidth="0"
+              />
             </AnimatePresence>
           </LazyMotion>
         ))}

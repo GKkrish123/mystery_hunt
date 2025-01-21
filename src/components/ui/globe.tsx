@@ -4,24 +4,24 @@
 
 import createGlobe from "cobe";
 import { memo, useEffect, useRef } from "react";
-import { useSpring } from "react-spring";
+// import { useSpring } from "react-spring";
 
 export const Cobe = memo(function Cobe() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const pointerInteracting: React.MutableRefObject<number | null> =
-    useRef<number>(null);
-  const pointerInteractionMovement = useRef(0);
-  const [{ r }, api] = useSpring(() => ({
-    r: 0,
-    config: {
-      mass: 1,
-      tension: 280,
-      friction: 40,
-      precision: 0.001,
-    },
-  }));
+  // const pointerInteracting: React.MutableRefObject<number | null> =
+  //   useRef<number>(null);
+  // const pointerInteractionMovement = useRef(0);
+  // const [{ r }, api] = useSpring(() => ({
+  //   r: 0,
+  //   config: {
+  //     mass: 1,
+  //     tension: 280,
+  //     friction: 40,
+  //     precision: 0.001,
+  //   },
+  // }));
   useEffect(() => {
-    let phi = 0;
+    const phi = 0;
     let width = 0;
     const onResize = () =>
       canvasRef.current && (width = canvasRef.current.offsetWidth);
@@ -43,12 +43,12 @@ export const Cobe = memo(function Cobe() {
       markers: [],
       onRender: (state) => {
         // This prevents rotation while dragging
-        if (!pointerInteracting.current) {
+        // if (!pointerInteracting.current) {
           // Called on every animation frame.
           // `state` will be an empty object, return updated params.
-          phi += 0.005;
-        }
-        state.phi = phi + r.get();
+        //   phi += 0.005;
+        // }
+        state.phi = phi;
         state.width = width * 2;
         state.height = width * 2;
       },
@@ -77,42 +77,42 @@ export const Cobe = memo(function Cobe() {
     >
       <canvas
         ref={canvasRef}
-        onPointerDown={(e) => {
-          pointerInteracting.current =
-            e.clientX - pointerInteractionMovement.current;
-          canvasRef.current!.style.cursor = "grabbing";
-        }}
-        onPointerUp={() => {
-          pointerInteracting.current = null;
-          canvasRef.current!.style.cursor = "grab";
-        }}
-        onPointerOut={() => {
-          pointerInteracting.current = null;
-          canvasRef.current!.style.cursor = "grab";
-        }}
-        onMouseMove={(e) => {
-          if (pointerInteracting.current !== null) {
-            const delta = e.clientX - pointerInteracting.current;
-            pointerInteractionMovement.current = delta;
-            void api.start({
-              r: delta / 200,
-            });
-          }
-        }}
-        onTouchMove={(e) => {
-          if (pointerInteracting.current !== null && e.touches[0]) {
-            const delta = e.touches[0].clientX - pointerInteracting.current;
-            pointerInteractionMovement.current = delta;
-            void api.start({
-              r: delta / 100,
-            });
-          }
-        }}
+        // onPointerDown={(e) => {
+        //   pointerInteracting.current =
+        //     e.clientX - pointerInteractionMovement.current;
+        //   canvasRef.current!.style.cursor = "grabbing";
+        // }}
+        // onPointerUp={() => {
+        //   pointerInteracting.current = null;
+        //   canvasRef.current!.style.cursor = "grab";
+        // }}
+        // onPointerOut={() => {
+        //   pointerInteracting.current = null;
+        //   canvasRef.current!.style.cursor = "grab";
+        // }}
+        // onMouseMove={(e) => {
+        //   if (pointerInteracting.current !== null) {
+        //     const delta = e.clientX - pointerInteracting.current;
+        //     pointerInteractionMovement.current = delta;
+        //     void api.start({
+        //       r: delta / 200,
+        //     });
+        //   }
+        // }}
+        // onTouchMove={(e) => {
+        //   if (pointerInteracting.current !== null && e.touches[0]) {
+        //     const delta = e.touches[0].clientX - pointerInteracting.current;
+        //     pointerInteractionMovement.current = delta;
+        //     void api.start({
+        //       r: delta / 100,
+        //     });
+        //   }
+        // }}
         style={{
           touchAction: "none",
           width: "100%",
           height: "100%",
-          cursor: "grab",
+          // cursor: "grab",
           contain: "layout paint size",
           opacity: 0,
           transition: "opacity 1s ease",
