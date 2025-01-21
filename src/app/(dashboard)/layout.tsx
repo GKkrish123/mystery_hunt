@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { DelayedSuspense } from "@/components/ui/delayed-suspense";
 
@@ -32,7 +31,7 @@ export default async function DashboardLayout({
         <AppSidebar />
         <SidebarInset>
           <AppHeader />
-          <DelayedSuspense delay={3200}>{children}</DelayedSuspense>
+          <DelayedSuspense delay={3000}>{children}</DelayedSuspense>
         </SidebarInset>
         <FloatingNav />
       </SidebarProvider>

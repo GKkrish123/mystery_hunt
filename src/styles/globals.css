@@ -147,7 +147,7 @@
 
 
 *, ::before, ::after{
-  animation: none !important;
+  /* animation: none !important; */
   transition: none !important;
   opacity: none !important;
 }

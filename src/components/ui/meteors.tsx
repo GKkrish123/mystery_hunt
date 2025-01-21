@@ -8,19 +8,20 @@ import { cn } from "@/lib/utils";
 
 interface MeteorsProps {
   number?: number;
+  sidebar?: boolean
 }
-export const Meteors = memo(({ number = 20 }: MeteorsProps) => {
+export const Meteors = memo(({ number = 20, sidebar }: MeteorsProps) => {
   const [meteorStyles, setMeteorStyles] = useState<Array<React.CSSProperties>>(
     [],
   );
   const isMobile = useIsMobile();
 
   const { width } = useViewportSize();
-  const [debouncedWidth] = useDebouncedValue(isMobile ? 120 : width, 500);
+  const [debouncedWidth] = useDebouncedValue((isMobile || sidebar) ? 120 : width, 500);
 
   useEffect(() => {
     const styles = [
-      ...new Array(isMobile ? Math.floor(number / 3) : number),
+      ...new Array((isMobile || sidebar) ? Math.floor(number / 3) : number),
     ].map(() => ({
       top: -5,
       left: Math.floor(Math.random() * debouncedWidth) + "px",

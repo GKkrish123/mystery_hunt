@@ -83,7 +83,7 @@ export default memo(function VerticalTiles({
 
       const mainTimeout = setTimeout(() => {
         setHasAnimated(true);
-      }, totalAnimationTime * 1000);
+      }, totalAnimationTime * 500);
 
       return () => {
         clearTimeout(mainTimeout);
