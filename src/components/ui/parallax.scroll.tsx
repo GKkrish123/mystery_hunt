@@ -46,10 +46,10 @@ export const ParallaxScroll = ({
   const translateThird = useTransform(scrollYProgress, [0, 1], [0, -200]);
   const divideInto = isMobile ? 2 : 3;
   const parts = Math.ceil(items.length / divideInto);
-
-  const firstPart = items.slice(0, parts - 1);
-  const secondPart = items.slice(parts - 1, 2 * parts - 1);
-  const thirdPart = items.slice(2 * parts - 1);
+  
+  const firstPart = items.slice(0, parts);
+  const secondPart = items.slice(parts, 2 * parts);
+  const thirdPart = items.slice(2 * parts);
 
   return (
     <div
