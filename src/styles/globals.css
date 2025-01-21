@@ -149,5 +149,4 @@
 *, ::before, ::after{
   /* animation: none !important; */
   transition: none !important;
-  opacity: none !important;
 }

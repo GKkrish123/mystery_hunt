@@ -16,6 +16,7 @@ export interface Hunter {
   scoreBoard: {
     totalScore: number;
     lastScoredAt: Timestamp;
+    eventScores: Record<string, number>
   };
   userId: string;
   disabled: boolean;
@@ -48,5 +49,6 @@ export interface HunterEssentials {
   scoreBoard: {
     totalScore: number;
     lastScoredAt: Timestamp;
+    eventScores: Record<string, number>
   };
 }

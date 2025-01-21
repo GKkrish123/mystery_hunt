@@ -17,9 +17,10 @@ import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
 import confetti from "canvas-confetti";
-
 import { default as dynamicImport } from "next/dynamic";
 import Image from "next/image";
+import { toast } from "sonner";
+import { Timestamp } from "firebase/firestore";
 
 const BlurIn = dynamicImport(
   () => import("@/components/ui/blur-in").then((mod) => mod.default),
@@ -194,42 +195,42 @@ const Card = ({
   return (
     <LazyMotion features={domMax} strict>
       <AnimatePresence propagate>
-      <MotionDiv
-        className="drag-elements absolute rounded bg-zinc-700 p-0.5 pb-3 dark:bg-slate-300"
-        ref={target}
-        style={{
-          top,
-          left,
-          rotate: `${rotate}deg`, // Apply rotation dynamically
-          zIndex,
-        }}
-        drag={!forRotation}
-        dragConstraints={containerRef}
-        dragElastic={0.65}
-        onPointerOut={() => {
-          setForRotation(false);
-        }}
-        onPointerUp={() => {
-          setForRotation(false);
-        }}
-        onPointerMove={handleMouseRotation} // Track mouse movement for rotation
-        onPointerDown={(e) => {
-          e.preventDefault();
-          updateZIndex(e);
-          if (e.pointerType === "mouse" && e.shiftKey) {
-            setForRotation(true);
-          }
-        }}
-      >
-        <Image
-          width={300}
-          height={500}
-          priority
-          className={twMerge("w-48", className)}
-          src={src}
-          alt={alt}
-        />
-      </MotionDiv>
+        <MotionDiv
+          className="drag-elements absolute rounded bg-zinc-700 p-0.5 pb-3 dark:bg-slate-300"
+          ref={target}
+          style={{
+            top,
+            left,
+            rotate: `${rotate}deg`, // Apply rotation dynamically
+            zIndex,
+          }}
+          drag={!forRotation}
+          dragConstraints={containerRef}
+          dragElastic={0.65}
+          onPointerOut={() => {
+            setForRotation(false);
+          }}
+          onPointerUp={() => {
+            setForRotation(false);
+          }}
+          onPointerMove={handleMouseRotation} // Track mouse movement for rotation
+          onPointerDown={(e) => {
+            e.preventDefault();
+            updateZIndex(e);
+            if (e.pointerType === "mouse" && e.shiftKey) {
+              setForRotation(true);
+            }
+          }}
+        >
+          <Image
+            width={300}
+            height={500}
+            priority
+            className={twMerge("w-48", className)}
+            src={src}
+            alt={alt}
+          />
+        </MotionDiv>
       </AnimatePresence>
     </LazyMotion>
   );
@@ -239,120 +240,275 @@ interface MysteryFormProps {
   mystery: Mystery & MysteryFormValues;
 }
 
-export function MysteryForm({ mystery }: MysteryFormProps) {
+const useRetryCountdown = (mystery: Mystery & MysteryFormValues) => {
+  const [countdown, setCountdown] = useState(0);
+
+  useEffect(() => {
+    if (!mystery.lastTriedAt) {
+      setCountdown(0);
+      return;
+    }
+
+    const calculateRemainingTime = () => {
+      const now = Date.now();
+      const elapsed = Math.floor((now - mystery.lastTriedAt!) / 1000);
+      return Math.max(mystery.retryInterval - elapsed, 0);
+    };
+
+    let remainingTime = calculateRemainingTime();
+    setCountdown(remainingTime);
+
+    if (remainingTime === 0) return;
+
+    const intervalId = setInterval(() => {
+      remainingTime -= 1;
+      setCountdown(remainingTime);
+      if (remainingTime === 0) clearInterval(intervalId);
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [mystery.retryInterval, mystery.lastTriedAt]);
+
+  const canRetry = countdown === 0;
+
+  return { canRetry, countdown };
+};
+
+const usePointsCountdown = (mysteryData: Mystery & MysteryFormValues) => {
+  const [countdown, setCountdown] = useState(0);
+  const [points, setPoints] = useState(mysteryData.maxPoints);
+
+  useEffect(() => {
+    const calculatePointsAndCountdown = () => {
+      const now = Date.now();
+      const targetSeconds =
+        mysteryData.solvedCount === 0
+          ? mysteryData.firstViewedAt?.seconds
+          : mysteryData.solvedBy[0]?.solvedAt?.seconds;
+      const firstViewedAtMs = (targetSeconds ?? 0) * 1000 || now;
+      const elapsedTime = (now - firstViewedAtMs) / 1000;
+
+      const cooldown =
+        mysteryData.solvedCount === 0
+          ? mysteryData.preFindCooldown
+          : mysteryData.postFindCooldown;
+      const cooldownCut =
+        mysteryData.solvedCount === 0
+          ? mysteryData.preFindCooldownCut
+          : mysteryData.postFindCooldownCut;
+
+      const cooldownPeriods = Math.floor(elapsedTime / cooldown);
+      const pointsLost = cooldownPeriods * cooldownCut;
+      const currentPoints = Math.max(
+        mysteryData.maxPoints - pointsLost,
+        mysteryData.minPoints,
+      );
+      setPoints(currentPoints);
+
+      // Calculate remaining time for next cooldown cut
+      const timeUntilNextCooldown = cooldown - (elapsedTime % cooldown);
+      setCountdown(Math.ceil(timeUntilNextCooldown));
+
+      return currentPoints;
+    };
+
+    const intervalId = setInterval(() => {
+      const updatedPoints = calculatePointsAndCountdown();
+      if (updatedPoints === mysteryData.minPoints) {
+        clearInterval(intervalId);
+      }
+    }, 1000);
+
+    // Initial calculation
+    calculatePointsAndCountdown();
+
+    return () => clearInterval(intervalId);
+  }, [
+    mysteryData.firstViewedAt,
+    mysteryData.solvedCount,
+    mysteryData.maxPoints,
+    mysteryData.minPoints,
+    mysteryData.preFindCooldown,
+    mysteryData.preFindCooldownCut,
+    mysteryData.postFindCooldown,
+    mysteryData.postFindCooldownCut,
+  ]);
+
+  return { countdown, points };
+};
+
+export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
+  const [mystery, setMystery] = useState<Mystery & MysteryFormValues>(
+    mysteryProp,
+  );
   const [secretInput, setSecretInput] = useState("");
   const [loading, setLoading] = useState(false);
   const { mutateAsync } = api.mystery.recordMysteryView.useMutation();
+  const { mutateAsync: verifyMystery } =
+    api.mystery.verifyMysterySecret.useMutation();
+  const { canRetry, countdown } = useRetryCountdown(mystery);
+  const { points: currentPoints, countdown: pointsCountdown } =
+    usePointsCountdown(mystery);
+
+  useEffect(() => {
+    setMystery(mysteryProp);
+  }, [mysteryProp]);
 
   useEffect(() => {
     void (async () => {
       try {
-        await mutateAsync({ mysteryId: mystery.id });
+        const { viewTime } = await mutateAsync({ mysteryId: mystery.id });
+        if (!mystery.firstViewedAt)
+          setMystery((oldMystery) => ({
+            ...oldMystery,
+            firstViewedAt: new Timestamp(viewTime / 1000, viewTime % 1000),
+          }));
       } catch (error) {
         console.error("Failed to record mystery view", error);
+        toast.success("Something went wrong while watching you!", {
+          description:
+            "Try refreshing to put things in place. God of thunder is looking on this issue.",
+        });
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onSubmit = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      const end = Date.now() + 3 * 1000;
-      const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
+  const celebrate = () => {
+    const end = Date.now() + 3 * 1000;
+    const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
 
+    const defaults = {
+      spread: 360,
+      ticks: 50,
+      gravity: 0,
+      decay: 0.94,
+      startVelocity: 30,
+      colors: ["#FFE400", "#FFBD00", "#E89400", "#FFCA6C", "#FDFFB8"],
+    };
+
+    const shoot = () => {
+      void confetti({
+        ...defaults,
+        particleCount: 40,
+        scalar: 1.2,
+        shapes: ["star"],
+      });
+
+      void confetti({
+        ...defaults,
+        particleCount: 10,
+        scalar: 0.75,
+        shapes: ["circle"],
+      });
+    };
+
+    setTimeout(shoot, 0);
+    setTimeout(shoot, 100);
+    setTimeout(shoot, 200);
+
+    const frame = () => {
+      if (Date.now() > end) return;
+
+      void confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        startVelocity: 60,
+        origin: { x: 0, y: 0.5 },
+        colors: colors,
+      });
+
+      void confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        startVelocity: 60,
+        origin: { x: 1, y: 0.5 },
+        colors: colors,
+      });
+
+      requestAnimationFrame(frame);
+    };
+
+    setTimeout(frame, 700);
+
+    const somePoppers = () => {
+      const duration = 5 * 1000;
+      const animationEnd = Date.now() + duration;
       const defaults = {
-        spread: 360,
-        ticks: 50,
-        gravity: 0,
-        decay: 0.94,
         startVelocity: 30,
-        colors: ["#FFE400", "#FFBD00", "#E89400", "#FFCA6C", "#FDFFB8"],
+        spread: 360,
+        ticks: 60,
+        zIndex: 0,
       };
 
-      const shoot = () => {
+      const randomInRange = (min: number, max: number) =>
+        Math.random() * (max - min) + min;
+
+      const interval = window.setInterval(() => {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
         void confetti({
           ...defaults,
-          particleCount: 40,
-          scalar: 1.2,
-          shapes: ["star"],
+          particleCount,
+          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
         });
-
         void confetti({
           ...defaults,
-          particleCount: 10,
-          scalar: 0.75,
-          shapes: ["circle"],
+          particleCount,
+          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
         });
-      };
+      }, 250);
+    };
+    setTimeout(somePoppers, 1500);
+  };
 
-      setTimeout(shoot, 0);
-      setTimeout(shoot, 100);
-      setTimeout(shoot, 200);
-
-      const frame = () => {
-        if (Date.now() > end) return;
-
-        void confetti({
-          particleCount: 2,
-          angle: 60,
-          spread: 55,
-          startVelocity: 60,
-          origin: { x: 0, y: 0.5 },
-          colors: colors,
-        });
-
-        void confetti({
-          particleCount: 2,
-          angle: 120,
-          spread: 55,
-          startVelocity: 60,
-          origin: { x: 1, y: 0.5 },
-          colors: colors,
-        });
-
-        requestAnimationFrame(frame);
-      };
-
-      setTimeout(frame, 700);
-
-      const somePoppers = () => {
-        const duration = 5 * 1000;
-        const animationEnd = Date.now() + duration;
-        const defaults = {
-          startVelocity: 30,
-          spread: 360,
-          ticks: 60,
-          zIndex: 0,
-        };
-
-        const randomInRange = (min: number, max: number) =>
-          Math.random() * (max - min) + min;
-
-        const interval = window.setInterval(() => {
-          const timeLeft = animationEnd - Date.now();
-
-          if (timeLeft <= 0) {
-            return clearInterval(interval);
-          }
-
-          const particleCount = 50 * (timeLeft / duration);
-          void confetti({
-            ...defaults,
-            particleCount,
-            origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+  const onSubmit = async () => {
+    try {
+      setLoading(true);
+      const status = await verifyMystery({
+        mysteryId: mystery.id,
+        secret: secretInput,
+      });
+      if (status.success) {
+        setTimeout(() => {
+          celebrate();
+          setMystery({
+            ...mystery,
+            ...((status.mysteryUpdate ?? {}) as Mystery & MysteryFormValues),
+            triesLeft: mystery.triesLeft - 1,
           });
-          void confetti({
-            ...defaults,
-            particleCount,
-            origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+          toast.success("You’ve found it – the mystery is solved!", {
+            description:
+              "The stars align for those who seek. Proceed to the next secret.",
           });
-        }, 250);
-      };
-
-      setTimeout(somePoppers, 1500);
-    }, 2000);
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          setLoading(false);
+          setMystery({
+            ...mystery,
+            ...((status.mysteryUpdate ?? {}) as Mystery & MysteryFormValues),
+            triesLeft: mystery.triesLeft - 1,
+          });
+          toast.success("No, You missed the mark.", {
+            description:
+              "Every misstep holds a lesson. Look closer; the chase continues.",
+          });
+        }, 1000);
+      }
+    } catch (error) {
+      console.error("Error in verifying mystery", error);
+      toast.error("Unknown forces of the universe have interrupted", {
+        description: "Something went wrong. Please try again later.",
+      });
+    }
   };
 
   return (
@@ -421,38 +577,80 @@ export function MysteryForm({ mystery }: MysteryFormProps) {
           >
             <SecretInput
               value={secretInput}
-              onChange={(v) => setSecretInput(v.trim())}
+              onChange={(v) => setSecretInput(v.trim().toLowerCase())}
               expectedInput={mystery.expectedSecret}
               className="col-span-full"
             />
           </ShineBorder>
         </div>
       ) : null}
-      <div className="col-span-full flex justify-center">
-        <SecretButton
-          disabled={
-            mystery.triesLeft === 0 ||
-            secretInput.length !==
-              mystery.expectedSecret?.split(" ")?.join("").length
-          }
-          onClick={onSubmit}
-          inputText="Decode Secret"
-          loading={loading}
-        />
-      </div>
-      <div className="col-span-full flex justify-center">
-        <MorphingText
-          texts={[`${mystery.triesLeft > 0 ? mystery.triesLeft : "No"}`]}
-          className="h-6 w-4 text-base lg:h-6 lg:text-base"
-        />
-        <MorphingText
-          texts={["Tries"]}
-          className="mr-1 h-6 w-10 text-base lg:h-6 lg:text-base"
-        />
-        <MorphingText
-          texts={["Left"]}
-          className="mr-1 h-6 w-7 text-base lg:h-6 lg:text-base"
-        />
+      {!mystery.isSolved ? (
+        <div className="col-span-full flex justify-center">
+          <SecretButton
+            disabled={
+              !canRetry ||
+              mystery.triesLeft === 0 ||
+              secretInput.length !==
+                mystery.expectedSecret?.split(" ")?.join("").length
+            }
+            onClick={onSubmit}
+            inputText="Decode Secret"
+            loading={loading}
+          />
+        </div>
+      ) : null}
+      <div className="col-span-full flex w-full flex-col justify-center gap-1">
+        {!mystery.isSolved ? (
+          canRetry ? (
+            <>
+              <span className="h-6 w-full text-center font-mono font-semibold">
+                Solve
+                {currentPoints === mystery.minPoints
+                  ? ""
+                  : ` in ${pointsCountdown} seconds`}{" "}
+                for {currentPoints} points
+              </span>
+              <div className="flex w-full justify-center">
+                <MorphingText
+                  texts={[
+                    `${mystery.triesLeft > 0 ? mystery.triesLeft : "No"}`,
+                  ]}
+                  className={cn(
+                    "h-6 w-5 font-mono text-base lg:h-6 lg:text-base",
+                    mystery.triesLeft === 0 && "w-7",
+                  )}
+                />
+                <MorphingText
+                  texts={[mystery.triesLeft === 1 ? "Try" : "Tries"]}
+                  className={cn(
+                    "mr-1 h-6 w-12 font-mono text-base lg:h-6 lg:text-base",
+                    mystery.triesLeft === 1 && "w-9",
+                  )}
+                />
+                <MorphingText
+                  texts={["Left"]}
+                  className="mr-1 h-6 w-8 font-mono text-base lg:h-6 lg:text-base"
+                />
+              </div>
+            </>
+          ) : (
+            <span className="flex font-mono font-semibold">
+              You can retry in{" "}
+              <MorphingText
+                texts={[`${countdown}`]}
+                className="h-6 w-10 text-center font-mono text-base lg:h-6 lg:text-base"
+                cooldownTime={0.5}
+                morphTime={0.5}
+              />{" "}
+              seconds...
+            </span>
+          )
+        ) : (
+          <MorphingText
+            texts={["You have already found the secret !"]}
+            className="h-6 w-full font-mono text-base lg:h-6 lg:text-base"
+          />
+        )}
       </div>
     </div>
   );

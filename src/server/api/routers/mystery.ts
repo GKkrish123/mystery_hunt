@@ -110,8 +110,20 @@ export const mysteryRouter = createTRPCRouter({
           ?.guessCount ?? 0);
       const isLiked =
         !!hunterTrailsData?.interactions?.mysteries?.[mysteryData.id]?.isLiked;
-      return { ...mysteryData, isLiked, topThree, triesLeft } as Mystery &
-        MysteryFormValues;
+      const isSolved =
+        !!hunterTrailsData?.interactions?.mysteries?.[mysteryData.id]?.isSolved;
+      const lastTriedAt =
+        hunterTrailsData?.interactions?.mysteries?.[
+          mysteryId
+        ]?.lastGuessedAt?.toMillis();
+      return {
+        ...mysteryData,
+        isLiked,
+        topThree,
+        triesLeft,
+        isSolved,
+        lastTriedAt,
+      } as Mystery & MysteryFormValues;
     }),
 
   getTrendingMysteries: privateProcedure.query(async ({ ctx }) => {
@@ -306,7 +318,15 @@ export const mysteryRouter = createTRPCRouter({
       const redis = ctx.redis;
       const hunterTrail = await getHunterTrailById(ctx.user.hunterId);
       if (!hunterTrail.exists()) {
-        return;
+        return { success: false, viewTime: timestamp };
+      }
+      const mysteryViewCount = await redis.get(
+        `mystery:viewCount:${mysteryId}`,
+      );
+      if (!mysteryViewCount) {
+        await updateDoc(doc(db, MysteryCollections.mysteries, mysteryId), {
+          firstViewedAt: new Date(timestamp),
+        });
       }
       const hunterTrailData = hunterTrail.data() as HunterTrail;
       const currentMysteryInteractions =
@@ -317,7 +337,7 @@ export const mysteryRouter = createTRPCRouter({
           {
             [`interactions.mysteries.${mysteryId}`]: {
               ...defaultMysteryInteraction,
-              lastViewedAt: serverTimestamp(),
+              lastViewedAt: new Date(timestamp),
               viewCount: 1,
             },
           },
@@ -326,8 +346,9 @@ export const mysteryRouter = createTRPCRouter({
         await updateDoc(
           doc(db, MysteryCollections.hunterTrails, hunterTrail.id),
           {
-            [`interactions.mysteries.${mysteryId}.lastViewedAt`]:
-              serverTimestamp(),
+            [`interactions.mysteries.${mysteryId}.lastViewedAt`]: new Date(
+              timestamp,
+            ),
             [`interactions.mysteries.${mysteryId}.viewCount`]: increment(1),
           },
         );
@@ -342,7 +363,7 @@ export const mysteryRouter = createTRPCRouter({
       const cutoffTime = timestamp - 24 * 60 * 60 * 1000;
       await redis.zremrangebyscore(redisKeyRecentViews, 0, cutoffTime);
 
-      return { success: true };
+      return { success: true, viewTime: timestamp };
     }),
 
   recordLastView: privateProcedure
@@ -447,6 +468,8 @@ export const mysteryRouter = createTRPCRouter({
       if (!hunterTrailDoc.exists() || !mysteryDoc.exists()) {
         return { success: false, message: "Invalid mystery or hunter." };
       }
+      const now = Date.now();
+      const serverTimestampValue = new Date(now);
       const hunterTrailData = hunterTrailDoc.data() as HunterTrail;
       const mysteryData = mysteryDoc.data() as Mystery;
       const newGuessCount =
@@ -457,7 +480,7 @@ export const mysteryRouter = createTRPCRouter({
         hunterTrailData.interactions.mysteries?.[mysteryId]?.lastGuessedAt;
       if (
         lastTriedAt &&
-        Date.now() - lastTriedAt.toMillis() < mysteryData.retryInterval * 1000
+        now - lastTriedAt.toMillis() < mysteryData.retryInterval * 1000
       ) {
         return { success: false, message: "Please wait before trying again." };
       } else if (
@@ -472,10 +495,30 @@ export const mysteryRouter = createTRPCRouter({
       }
 
       if (secretData.secret === secret) {
+        const cooldown =
+          mysteryData.solvedCount === 0
+            ? mysteryData.preFindCooldown
+            : mysteryData.postFindCooldown;
+        const cooldownCut =
+          mysteryData.solvedCount === 0
+            ? mysteryData.preFindCooldownCut
+            : mysteryData.postFindCooldownCut;
+        const targetTime =
+          mysteryData.solvedCount === 0
+            ? mysteryData.firstViewedAt?.toMillis()
+            : mysteryData.solvedBy?.[0]?.solvedAt?.toMillis();
+        const elapsedTime = (now - (targetTime ?? now)) / 1000;
+        const cooldownPeriods = Math.floor(elapsedTime / cooldown);
+        const pointsLost = cooldownPeriods * cooldownCut;
+        const currentPoints = Math.max(
+          mysteryData.maxPoints - pointsLost,
+          mysteryData.minPoints,
+        );
+
         await runTransaction(db, async (transaction) => {
           transaction.update(mysteryRef, {
-            lastGuessedAt: serverTimestamp(),
-            lastSolvedAt: serverTimestamp(),
+            lastGuessedAt: serverTimestampValue,
+            lastSolvedAt: serverTimestampValue,
             solvedCount: increment(1),
             guessCount: increment(1),
             ...(mysteryData.solvedBy.length < 3
@@ -484,8 +527,9 @@ export const mysteryRouter = createTRPCRouter({
                     ...mysteryData.solvedBy,
                     {
                       hunterId: ctx.user.hunterId,
-                      solvedAt: serverTimestamp(),
+                      solvedAt: serverTimestampValue,
                       guessCount: newGuessCount,
+                      points: currentPoints,
                     },
                   ],
                 }
@@ -493,40 +537,83 @@ export const mysteryRouter = createTRPCRouter({
           });
           transaction.update(hunterTrailRef, {
             [`interactions.mysteries.${mysteryId}.lastGuessedAt`]:
-              serverTimestamp(),
+              serverTimestampValue,
             [`interactions.mysteries.${mysteryId}.guessCount`]: newGuessCount,
             [`interactions.mysteries.${mysteryId}.isSolved`]: true,
-            [`interactions.mysteries.${mysteryId}.trails`]: arrayUnion({
+            trails: arrayUnion({
               guessCount: newGuessCount,
-              guessedAt: serverTimestamp(),
+              guessedAt: serverTimestampValue,
               guessedValue: secret,
               isSolved: true,
+              points: currentPoints,
               mysteryId,
             }),
           });
+          transaction.update(
+            doc(db, MysteryCollections.hunters, ctx.user.hunterId),
+            {
+              "scoreBoard.totalScore": increment(currentPoints),
+              "scoreBoard.lastScoredAt": serverTimestampValue,
+              ...(mysteryData.linkedEvent
+                ? {
+                    [`scoreBoard.eventScores.${mysteryData.linkedEvent}`]:
+                      increment(currentPoints),
+                  }
+                : {}),
+            },
+          );
         });
-        return { success: true, message: "Congratulations! Mystery solved." };
+        return {
+          success: true,
+          message: "Congratulations! Mystery solved.",
+          points: currentPoints,
+          mysteryUpdate: {
+            lastGuessedAt: now,
+            lastTriedAt: now,
+            lastSolvedAt: now,
+            solvedCount: mysteryData.solvedCount + 1,
+            guessCount: mysteryData.guessCount + 1,
+            solvedBy: [
+              ...mysteryData.solvedBy,
+              {
+                hunterId: ctx.user.hunterId,
+                solvedAt: now,
+                guessCount: newGuessCount,
+                points: currentPoints,
+              },
+            ],
+          },
+        };
       } else {
         await runTransaction(db, async (transaction) => {
           transaction.update(mysteryRef, {
-            lastGuessedAt: serverTimestamp(),
+            lastGuessedAt: serverTimestampValue,
             guessCount: increment(1),
           });
           transaction.update(hunterTrailRef, {
             [`interactions.mysteries.${mysteryId}.lastGuessedAt`]:
-              serverTimestamp(),
+              serverTimestampValue,
             [`interactions.mysteries.${mysteryId}.guessCount`]: newGuessCount,
             [`interactions.mysteries.${mysteryId}.isSolved`]: false,
-            [`interactions.mysteries.${mysteryId}.trails`]: arrayUnion({
+            trails: arrayUnion({
               guessCount: newGuessCount,
-              guessedAt: serverTimestamp(),
+              guessedAt: serverTimestampValue,
               guessedValue: secret,
               isSolved: false,
               mysteryId,
             }),
           });
         });
-        return { success: false, message: "Incorrect secret." };
+
+        return {
+          success: false,
+          message: "Incorrect secret.",
+          mysteryUpdate: {
+            lastGuessedAt: now,
+            lastTriedAt: now,
+            guessCount: mysteryData.guessCount + 1,
+          },
+        };
       }
     }),
 });

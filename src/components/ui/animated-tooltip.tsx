@@ -68,11 +68,14 @@ export const AnimatedTooltip = memo(({ items }: { items: HunterRank[] }) => {
                   <div className="absolute inset-x-10 -bottom-px z-30 h-px w-[20%] bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
                   <div className="absolute -bottom-px left-10 z-30 h-px w-[40%] bg-gradient-to-r from-transparent via-sky-500 to-transparent" />
 
-                  <div className="relative z-30 text-sm font-bold text-black dark:text-white md:text-base">
+                  <div className="relative z-30 text-sm text-ellipsis text-center font-bold text-black dark:text-white">
                     {item.name}
                   </div>
-                  <div className="text-xs text-black dark:text-white">
+                  <div className="text-xs font-semibold text-black dark:text-white">
                     {item.state}
+                  </div>
+                  <div className="text-xs text-black dark:text-white">
+                    {item.city}
                   </div>
                 </MotionDiv>
               )}

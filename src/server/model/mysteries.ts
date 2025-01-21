@@ -20,9 +20,18 @@ export interface Mystery {
     hunterId: string;
     solvedAt: Timestamp;
     guessCount: number;
+    points: number;
   }[];
   lastSolvedAt: Timestamp;
   solvedCount: number;
+  firstViewedAt: Timestamp | null;
+  linkedEvent?: string;
+  maxPoints: number;
+  minPoints: number;
+  preFindCooldown: number;
+  preFindCooldownCut: number;
+  postFindCooldown: number;
+  postFindCooldownCut: number;
   likesCount: number;
   viewsCount: number;
   viewsInLast24Hours: number;

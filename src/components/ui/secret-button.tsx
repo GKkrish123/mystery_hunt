@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { button as MotionButton, span as MotionSpan } from "motion/react-m";
 import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 import { Lock } from "lucide-react";
@@ -28,6 +28,12 @@ const SecretButton = ({
 
   const [text, setText] = useState(inputText);
 
+  useEffect(() => {
+    if(loading) scramble();
+    else stopScramble();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading])
+
   const scramble = () => {
     let pos = 0;
 
@@ -50,14 +56,13 @@ const SecretButton = ({
       pos++;
 
       if (pos >= inputText.length * CYCLES_PER_LETTER) {
-        stopScramble();
+        pos = 0;
       }
     }, SHUFFLE_TIME);
   };
 
   const stopScramble = () => {
     clearInterval(intervalRef.current ?? undefined);
-
     setText(inputText);
   };
 
@@ -72,9 +77,11 @@ const SecretButton = ({
         whileTap={{
           scale: disabled ? 1 : 0.975,
         }}
-        onTapStart={() => !disabled && scramble()}
-        onTap={() => !disabled && onClick()}
-        onMouseDownCapture={() => !disabled && scramble()}
+        onTap={() => {
+          if (!disabled && !loading) {
+            onClick();
+          }
+        }}
         className={cn(
           "group relative overflow-hidden rounded-lg border-[1px] border-neutral-500 bg-neutral-700 px-4 py-2 font-mono font-medium uppercase text-neutral-300 transition-colors",
           !disabled && "cursor-pointer hover:text-indigo-300",

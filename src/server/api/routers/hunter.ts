@@ -337,6 +337,7 @@ export const userRouter = createTRPCRouter({
               scoreBoard: {
                 totalScore: 0,
                 lastScoredAt: serverTimestamp(),
+                eventScores: {}
               },
               proPicUrl: "",
               userId: "",
@@ -364,6 +365,7 @@ export const userRouter = createTRPCRouter({
               scoreBoard: {
                 totalScore: 0,
                 lastScoredAt: serverTimestamp(),
+                eventScores: {}
               },
               proPicUrl: "",
               userId: "",

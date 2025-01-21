@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { default as dynamicImport } from "next/dynamic";
 import { HorizontalMysteries } from "@/components/horizontal-mysteries";
+import { ColourfulText } from "@/components/ui/colourful-text";
 
 const HeadingReveal = dynamicImport(() =>
   import("@/components/heading-reveal").then((mod) => mod.HeadingReveal),
@@ -15,9 +16,6 @@ const Separator = dynamicImport(() =>
 );
 const ShinyButton = dynamicImport(() =>
   import("@/components/ui/shiny-button").then((mod) => mod.ShinyButton),
-);
-const TextShine = dynamicImport(() =>
-  import("@/components/ui/shiny-text").then((mod) => mod.TextShine),
 );
 const EventsEffects = dynamicImport(() =>
   import("@/components/effects/events").then((mod) => mod.default),
@@ -35,11 +33,66 @@ export default async function EventsPage() {
     <>
       <div className="relative grid h-full w-full auto-rows-min grid-cols-3 gap-3 px-3 pb-3 pt-0 md:grid-cols-6 md:px-4 md:pb-4">
         <BlurFade className="col-span-full flex items-center justify-center">
-          <TextShine text="Events" shineColor="#FFD700" duration={5} />
+          <ColourfulText text="Events" className="text-4xl" />
         </BlurFade>
         <div className="col-span-full">
-          <HeadingReveal title={"February"} description={"summaa"}/>
-          <HorizontalMysteries mysteries={[...eventMysteries, ...eventMysteries, ...eventMysteries, ...eventMysteries, ...eventMysteries, ...eventMysteries, ...eventMysteries]} />
+          <HeadingReveal title={"February"} description={"summaa"} />
+          <HorizontalMysteries
+            mysteries={[
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+            ]}
+          />
+          <Separator className="mt-3" />
+        </div>
+        <div className="col-span-full">
+          <HeadingReveal title={"March"} description={"summaa"} />
+          <HorizontalMysteries
+            mysteries={[
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+            ]}
+          />
+          <Separator className="mt-3" />
+        </div>
+        <div className="col-span-full">
+          <HeadingReveal title={"April"} description={"summaa"} />
+          <HorizontalMysteries
+            mysteries={[
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+            ]}
+          />
+          <Separator className="mt-3" />
+        </div>
+        <div className="col-span-full">
+          <HeadingReveal title={"May"} description={"summaa"} />
+          <HorizontalMysteries
+            mysteries={[
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+              ...eventMysteries,
+            ]}
+          />
           <Separator className="mt-3" />
         </div>
         <Link className="col-span-3 h-10 md:col-span-2" href="/mysteries">
@@ -60,6 +113,6 @@ export default async function EventsPage() {
 export const dynamic = "force-dynamic";
 export const revalidate = 60;
 export const metadata = {
-  title: "Mysteryverse Explore",
-  description: "This is a explore page of Mysteryverse",
+  title: "Mysteryverse Events",
+  description: "This is an events page of Mysteryverse",
 };

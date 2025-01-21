@@ -21,6 +21,8 @@ export interface State {
 export interface MysteryFormValues {
   topThree: HunterRank[];
   triesLeft: number;
+  isSolved: boolean;
+  lastTriedAt?: number;
 }
 
 export const defaultMysteryInteraction: MysteryInteraction = {
