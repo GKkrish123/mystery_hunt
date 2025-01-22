@@ -112,8 +112,8 @@ function formatDateTime(datetime: number) {
   const period = hours >= 12 ? "PM" : "AM";
   const formattedHours = hours % 12 || 12;
 
-  const formattedDate = `${day} ${month}`;
-  const formattedTime = `${formattedHours}:${minutes} ${period}`;
+  // const formattedDate = `${day} ${month}`;
+  // const formattedTime = `${formattedHours}:${minutes} ${period}`;
 
   return { day, month, time: `${formattedHours}:${minutes}`, period };
 }

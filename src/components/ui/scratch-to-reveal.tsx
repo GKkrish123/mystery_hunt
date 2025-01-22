@@ -9,9 +9,9 @@ import {
 } from "motion/react";
 import { div as MotionDiv } from "motion/react-m";
 import {
-  FC,
+  type FC,
   type MouseEventHandler,
-  ReactNode,
+  type ReactNode,
   type TouchEventHandler,
   useEffect,
   useRef,
@@ -102,6 +102,7 @@ export const ScratchToReveal: FC<ScratchToRevealProps> = ({
       document.removeEventListener("touchend", handleDocumentTouchEnd);
       document.removeEventListener("touchcancel", handleDocumentTouchEnd);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isScratching]);
 
   const handleMouseDown = (e: MouseEvent) => {
@@ -161,7 +162,7 @@ export const ScratchToReveal: FC<ScratchToRevealProps> = ({
       if (percentage >= minScratchPercentage) {
         setIsComplete(true);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        startAnimation();
+        void startAnimation();
       }
     }
   };

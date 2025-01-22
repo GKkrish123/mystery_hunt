@@ -70,7 +70,7 @@ export const WarpBackground: FC<WarpBackgroundProps> = ({
   beamDelayMax = 3,
   beamDelayMin = 0,
   beamDuration = 3,
-  gridColor = "hsl(var(--border))",
+  // gridColor = "hsl(var(--border))",
   ...props
 }) => {
   const generateBeams = useCallback(() => {

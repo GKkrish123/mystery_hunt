@@ -329,6 +329,7 @@ const usePointsCountdown = (mysteryData: Mystery & MysteryFormValues) => {
     calculatePointsAndCountdown();
 
     return () => clearInterval(intervalId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     mysteryData.firstViewedAt,
     mysteryData.solvedCount,
