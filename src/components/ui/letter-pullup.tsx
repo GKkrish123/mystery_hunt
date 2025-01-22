@@ -97,7 +97,7 @@ export default memo(function LetterPullup({
                   forHeader && letter === "e"
                     ? "-left-[0.4em] md:-left-[0.2em]"
                     : "",
-                  "drop-shadow-[-0.02em_-0.02em_#000000] dark:drop-shadow-[-0.02em_-0.02em_#cbd5e1]",
+                  "drop-shadow-[-0.02em_-0.02em_0.7px_#000000] dark:drop-shadow-[-0.02em_-0.02em_0.7px_#cbd5e1]",
                 )}
               >
                 {letter === " " ? <span>&nbsp;</span> : letter}

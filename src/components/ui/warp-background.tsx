@@ -98,8 +98,8 @@ export const WarpBackground: FC<WarpBackgroundProps> = ({
         style={
           {
             "--perspective": `${perspective}px`,
-            "--grid-color": gridColor,
-            "--beam-size": `${beamSize}%`,
+            // "--grid-color": gridColor,
+            // "--beam-size": `${beamSize}%`,
           } as CSSProperties
         }
         className={

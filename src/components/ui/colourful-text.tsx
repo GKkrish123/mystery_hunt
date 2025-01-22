@@ -50,7 +50,7 @@ export function ColourfulText({ text, className }: { text: string, className?: s
         duration: 0.5,
         delay: index * 0.05,
       }}
-      className={cn("inline-block drop-shadow-[0.02em_0.02em_#000000] dark:drop-shadow-[0.02em_0.02em_#cbd5e1]", className, mysteryFont.className)}
+      className={cn("inline-block drop-shadow-[0.02em_0.02em_0.7px_#000000] dark:drop-shadow-[0.02em_0.02em_0.7px_#cbd5e1]", className, mysteryFont.className)}
     >
       {char}
     </MotionSpan>

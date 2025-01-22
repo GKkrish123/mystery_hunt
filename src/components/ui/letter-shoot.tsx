@@ -97,7 +97,7 @@ export default memo(function LetterShoot({
                   letter === "M"
                     ? "absolute -right-[0.08em] top-0 leading-[5rem] tracking-[0.14em] md:top-0"
                     : "",
-                  "drop-shadow-[-0.02em_-0.02em_#000000] dark:drop-shadow-[-0.02em_-0.02em_#ffffff]",
+                  "drop-shadow-[-0.02em_-0.02em_0.7px_#000000] dark:drop-shadow-[-0.02em_-0.02em_0.7px_#ffffff]",
                 )}
               >
                 {letter === " " ? <span>&nbsp;</span> : letter}
