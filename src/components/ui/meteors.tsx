@@ -17,10 +17,7 @@ export const Meteors = memo(({ number = 20, sidebar }: MeteorsProps) => {
   const isMobile = useIsMobile();
 
   const { width } = useViewportSize();
-  const [debouncedWidth] = useDebouncedValue(
-    isMobile || sidebar ? 120 : width,
-    500,
-  );
+  const [debouncedWidth] = useDebouncedValue(sidebar ? 120 : width, 500);
 
   useEffect(() => {
     const styles = [
@@ -41,15 +38,17 @@ export const Meteors = memo(({ number = 20, sidebar }: MeteorsProps) => {
         // Meteor Head
         <span
           key={idx}
-          className={cn(
-            "pointer-events-none absolute left-1/2 top-1/2 size-0.5 rotate-[215deg] rounded-full bg-slate-500 shadow-[0_0_0_1px_#ffffff10]",
-            isMobile
-              ? !sidebar
-                ? "!animate-meteor-mobile"
-                : ""
-              : "animate-meteor",
-          )}
+          className="pointer-events-none absolute left-1/2 top-1/2 size-0.5 rotate-[215deg] animate-meteor rounded-full bg-slate-500 shadow-[0_0_0_1px_#ffffff10]"
           style={style}
+          ref={(el) => {
+            if (!sidebar && isMobile && el) {
+              el.style.setProperty(
+                "animation",
+                `meteor ${style.animationDuration} linear ${style.animationDelay} infinite`,
+                "important",
+              );
+            }
+          }}
         >
           {/* Meteor Tail */}
           <div className="pointer-events-none absolute top-1/2 -z-10 h-px w-[50px] -translate-y-1/2 bg-gradient-to-r from-slate-500 to-transparent" />
