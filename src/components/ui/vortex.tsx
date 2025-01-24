@@ -233,15 +233,15 @@ const Vortex = memo((props: VortexProps) => {
   return (
     <div className={cn("relative h-full w-full", props.containerClassName)}>
       <LazyMotion features={domAnimation} strict>
-      <AnimatePresence propagate>
-      <MotionDiv
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          ref={containerRef}
-          className="absolute inset-0 z-0 flex h-full w-full items-center justify-center bg-transparent"
-        >
-          <canvas ref={canvasRef}></canvas>
-        </MotionDiv>
+        <AnimatePresence propagate>
+          <MotionDiv
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            ref={containerRef}
+            className="absolute inset-0 z-0 flex h-full w-full items-center justify-center bg-transparent"
+          >
+            <canvas ref={canvasRef}></canvas>
+          </MotionDiv>
         </AnimatePresence>
       </LazyMotion>
     </div>

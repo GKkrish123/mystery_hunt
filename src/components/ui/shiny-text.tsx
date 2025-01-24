@@ -1,6 +1,11 @@
 "use client";
 
-import { useAnimationControls, domAnimation, LazyMotion, AnimatePresence } from "motion/react";
+import {
+  useAnimationControls,
+  domAnimation,
+  LazyMotion,
+  AnimatePresence,
+} from "motion/react";
 import { span as MotionSpan } from "motion/react-m";
 import { useEffect, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
@@ -40,26 +45,26 @@ export const TextShine: React.FC<TextShineProps> = ({
 
   useEffect(() => {
     updateAnimation();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <LazyMotion features={domAnimation} strict>
       <AnimatePresence propagate>
-      <MotionSpan
-        ref={textRef}
-        className={cn(
-          "relative w-fit bg-clip-text px-3 text-3xl font-bold text-[rgb(0,0,0)]/[.10] dark:text-[rgb(255,255,255)]/[.70] md:text-4xl",
-          mysteryFont.className,
-        )}
-        style={{
-          backgroundImage: `linear-gradient(to right, #222 0%, ${shineColor} 10%, #222 20%)`,
-          backgroundSize: "200%",
-        }}
-        animate={controls}
-      >
-        {text}
-      </MotionSpan>
+        <MotionSpan
+          ref={textRef}
+          className={cn(
+            "relative w-fit bg-clip-text px-3 text-3xl font-bold text-[rgb(0,0,0)]/[.10] dark:text-[rgb(255,255,255)]/[.70] md:text-4xl",
+            mysteryFont.className,
+          )}
+          style={{
+            backgroundImage: `linear-gradient(to right, #222 0%, ${shineColor} 10%, #222 20%)`,
+            backgroundSize: "200%",
+          }}
+          animate={controls}
+        >
+          {text}
+        </MotionSpan>
       </AnimatePresence>
     </LazyMotion>
   );

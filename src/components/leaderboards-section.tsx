@@ -18,16 +18,19 @@ const BlurFade = dynamicImport(() =>
 interface LeaderboardsSectionProps {
   state?: string;
   city?: string;
+  event?: string;
 }
 
 export async function LeaderboardsSection({
   state,
   city,
+  event,
 }: LeaderboardsSectionProps) {
   const leaderboardsData = await api.user
     .getLeaderboards({
       state: state ?? undefined,
       city: city ?? undefined,
+      event: event ?? undefined,
     })
     .catch((e) => {
       console.error("Failed to fetch leaderboards", e);
@@ -97,6 +100,7 @@ export async function LeaderboardsSection({
             data={leaderboardsData}
             state={state}
             city={city}
+            event={event}
           />
         )}
       </div>

@@ -124,27 +124,27 @@ export default memo(function VerticalTiles({
         {tiles.map((tile) => (
           <LazyMotion key={tile.id} features={domAnimation} strict>
             <AnimatePresence propagate>
-            <MotionDiv
-              className={cn(
-                "relative border-0 bg-[rgb(255,255,255)]/[1] dark:bg-[rgb(0,0,0)]/[1]",
-                tileClassName,
-              )}
-              style={{
-                width: tile.width,
-                position: "absolute",
-                left: `${(tile.id * 100) / tiles.length}%`,
-                top: 0,
-                height: "100%",
-              }}
-              variants={animationVariants}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              transition={{
-                duration: animationDuration + (isMobile ? 0.7 : 0),
-                delay: tileAnimationDelay + tile.order * stagger,
-                ease: [0.45, 0, 0.55, 1],
-              }}
-            />
+              <MotionDiv
+                className={cn(
+                  "relative border-0 bg-[rgb(255,255,255)]/[1] dark:bg-[rgb(0,0,0)]/[1]",
+                  tileClassName,
+                )}
+                style={{
+                  width: tile.width,
+                  position: "absolute",
+                  left: `${(tile.id * 100) / tiles.length}%`,
+                  top: 0,
+                  height: "100%",
+                }}
+                variants={animationVariants}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                transition={{
+                  duration: animationDuration + (isMobile ? 0.7 : 0),
+                  delay: tileAnimationDelay + tile.order * stagger,
+                  ease: [0.45, 0, 0.55, 1],
+                }}
+              />
             </AnimatePresence>
           </LazyMotion>
         ))}

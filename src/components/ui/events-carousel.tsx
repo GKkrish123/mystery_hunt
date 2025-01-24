@@ -13,21 +13,13 @@ import {
   AnimatePresence,
 } from "motion/react";
 import { div as MotionDiv } from "motion/react-m";
-
-const imgs = [
-  "https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-];
+import { ArrowDown } from "lucide-react";
+import { RainbowButton } from "./rainbow-button";
+import { type MysteryEventWithData } from "@/server/model/events";
 
 const ONE_SECOND = 1000;
 const AUTO_DELAY = ONE_SECOND * 10;
-const DRAG_BUFFER = 50;
+const DRAG_BUFFER = 30;
 
 const SPRING_OPTIONS = {
   type: "spring",
@@ -36,7 +28,11 @@ const SPRING_OPTIONS = {
   damping: 50,
 };
 
-export const EventsCarousel = () => {
+interface EventsCarouselProps {
+  mysteryEvents: MysteryEventWithData[];
+}
+
+export const EventsCarousel = ({ mysteryEvents }: EventsCarouselProps) => {
   const [imgIndex, setImgIndex] = useState(0);
 
   const dragX = useMotionValue(0);
@@ -47,7 +43,7 @@ export const EventsCarousel = () => {
 
       if (x === 0) {
         setImgIndex((pv) => {
-          if (pv === imgs.length - 1) {
+          if (pv === mysteryEvents.length - 1) {
             return 0;
           }
           return pv + 1;
@@ -57,12 +53,12 @@ export const EventsCarousel = () => {
 
     return () => clearInterval(intervalRef);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mysteryEvents]);
 
   const onDragEnd = () => {
     const x = dragX.get();
 
-    if (x <= -DRAG_BUFFER && imgIndex < imgs.length - 1) {
+    if (x <= -DRAG_BUFFER && imgIndex < mysteryEvents.length - 1) {
       setImgIndex((pv) => pv + 1);
     } else if (x >= DRAG_BUFFER && imgIndex > 0) {
       setImgIndex((pv) => pv - 1);
@@ -89,12 +85,15 @@ export const EventsCarousel = () => {
             onDragEnd={onDragEnd}
             className="flex cursor-grab items-center active:cursor-grabbing"
           >
-            <Images imgIndex={imgIndex} />
+            <Images imgIndex={imgIndex} events={mysteryEvents} />
           </MotionDiv>
         </AnimatePresence>
       </LazyMotion>
-
-      <Dots imgIndex={imgIndex} setImgIndex={setImgIndex} />
+      <Dots
+        imgIndex={imgIndex}
+        setImgIndex={setImgIndex}
+        size={mysteryEvents.length}
+      />
     </div>
   );
 };
@@ -118,17 +117,26 @@ function formatDateTime(datetime: number) {
   return { day, month, time: `${formattedHours}:${minutes}`, period };
 }
 
-const Images = ({ imgIndex }: { imgIndex: number }) => {
-  const { day, month, time, period } = formatDateTime(Date.now());
+const Images = ({
+  imgIndex,
+  events,
+}: {
+  imgIndex: number;
+  events: MysteryEventWithData[];
+}) => {
+  const now = Date.now();
+
   return (
     <>
-      {imgs.map((imgSrc, idx) => {
+      {events.map((event, idx) => {
+        const eventStart = event.scheduledFrom.seconds * 1000;
+        const { day, month, time, period } = formatDateTime(eventStart);
         return (
           <LazyMotion key={idx} features={domMax} strict>
             <AnimatePresence propagate>
               <MotionDiv
                 style={{
-                  backgroundImage: `url(${imgSrc})`,
+                  backgroundImage: `url(${event.imageUrl})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
@@ -139,22 +147,28 @@ const Images = ({ imgIndex }: { imgIndex: number }) => {
                 className="flex aspect-video max-h-96 w-full shrink-0 flex-col items-center justify-center gap-3 rounded-xl bg-transparent object-cover 2xl:max-h-[30rem]"
               >
                 <span className="pointer-events-none whitespace-pre-wrap rounded-md bg-gradient-to-b from-black to-zinc-600/80 bg-clip-text text-center text-4xl font-semibold leading-none text-transparent drop-shadow-[0.03em_0.03em_2px_rgba(255,255,255)] dark:from-white dark:to-slate-500/80 dark:drop-shadow-[0.03em_0.03em_2px_rgba(0,0,0)] md:text-5xl lg:text-7xl">
-                  Mystery Shuffle
+                  {event.name}
                 </span>
-                <div className="grid auto-cols-max grid-flow-col gap-2 text-center font-mono font-bold">
-                  <div className="text-neutral-content flex gap-1 rounded-md bg-neutral-300 p-1 text-sm drop-shadow-[3px_3px_2px_rgba(255,255,255)] dark:bg-zinc-700 dark:from-white dark:to-slate-500/80 dark:drop-shadow-[3px_3px_2px_rgba(0,0,0)] lg:text-base">
-                    <span className="!transition-[all_1s_cubic-bezier(1,0,0,1)]">
-                      {day}
-                    </span>
-                    {month}
+                {now > eventStart ? (
+                  <RainbowButton
+                    scrollTo={`event-${event.id}`}
+                    className="z-10"
+                    modeShift
+                  >
+                    Enter <ArrowDown className="ml-2" />
+                  </RainbowButton>
+                ) : (
+                  <div className="grid auto-cols-max grid-flow-col gap-2 text-center font-mono font-bold">
+                    <div className="text-neutral-content flex gap-1 rounded-md bg-neutral-300 p-1 text-sm drop-shadow-[3px_3px_2px_rgba(255,255,255)] dark:bg-zinc-700 dark:from-white dark:to-slate-500/80 dark:drop-shadow-[3px_3px_2px_rgba(0,0,0)] lg:text-base">
+                      <span>{day}</span>
+                      {month}
+                    </div>
+                    <div className="text-neutral-content flex gap-1 rounded-md bg-neutral-300 p-1 text-sm drop-shadow-[3px_3px_2px_rgba(255,255,255)] dark:bg-zinc-700 dark:from-white dark:to-slate-500/80 dark:drop-shadow-[3px_3px_2px_rgba(0,0,0)] lg:text-base">
+                      <span>{time}</span>
+                      {period}
+                    </div>
                   </div>
-                  <div className="text-neutral-content flex gap-1 rounded-md bg-neutral-300 p-1 text-sm drop-shadow-[3px_3px_2px_rgba(255,255,255)] dark:bg-zinc-700 dark:from-white dark:to-slate-500/80 dark:drop-shadow-[3px_3px_2px_rgba(0,0,0)] lg:text-base">
-                    <span className="!transition-[all_1s_cubic-bezier(1,0,0,1)]">
-                      {time}
-                    </span>
-                    {period}
-                  </div>
-                </div>
+                )}
               </MotionDiv>
             </AnimatePresence>
           </LazyMotion>
@@ -167,13 +181,15 @@ const Images = ({ imgIndex }: { imgIndex: number }) => {
 const Dots = ({
   imgIndex,
   setImgIndex,
+  size,
 }: {
   imgIndex: number;
   setImgIndex: Dispatch<SetStateAction<number>>;
+  size: number;
 }) => {
   return (
     <div className="mt-4 flex w-full justify-center gap-2">
-      {imgs.map((_, idx) => {
+      {Array(size).map((_, idx) => {
         return (
           <button
             key={idx}

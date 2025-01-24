@@ -6,6 +6,7 @@ import { HorizontalMysteries } from "@/components/horizontal-mysteries";
 import { ColourfulText } from "@/components/ui/colourful-text";
 import { EventsCarousel } from "@/components/ui/events-carousel";
 import BlurFade from "@/components/ui/blur-fade";
+import { notFound } from "next/navigation";
 
 const HeadingReveal = dynamicImport(() =>
   import("@/components/heading-reveal").then((mod) => mod.HeadingReveal),
@@ -24,56 +25,60 @@ const EventsEffects = dynamicImport(() =>
 );
 
 export default async function EventsPage() {
-  const [eventMysteries] = await Promise.all([
-    api.mystery.getTrendingMysteries().catch(() => []),
-  ]);
+  const eventMysteries = await api.events.getEvents().catch(() => []);
+
+  if (eventMysteries.length === 0) {
+    notFound();
+  }
 
   return (
     <>
       <div className="relative grid h-full w-full auto-rows-min grid-cols-3 gap-3 px-3 pb-3 pt-0 md:grid-cols-6 md:px-4 md:pb-4">
         <BlurFade className="col-span-full flex flex-col items-center justify-center">
           <div className="flex py-2">
-            <ColourfulText text="Events" className="text-4xl" />
+            <ColourfulText text="Events" className="text-4xl !font-extrabold" />
           </div>
           <div className="flex w-full justify-center md:px-[10%] lg:px-[15%] xl:px-[20%] 2xl:px-[25%]">
-            <EventsCarousel />
+            <EventsCarousel
+              mysteryEvents={[
+                ...eventMysteries,
+                ...eventMysteries,
+                ...eventMysteries,
+                ...eventMysteries,
+                ...eventMysteries,
+              ]}
+            />
           </div>
         </BlurFade>
         <Separator className="col-span-full" />
-        <div className="col-span-full">
-          <HeadingReveal
-            title={"February"}
-            description={"summaa"}
-            coundown={Date.now() + 60 * 1000}
-          />
-          <HorizontalMysteries
-            mysteries={[
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-            ]}
-          />
-          <Separator className="mt-3" />
-        </div>
+        {eventMysteries.map((event) => (
+          <div
+            id={`event-${event.id}`}
+            key={`event-${event.id}`}
+            className="col-span-full"
+          >
+            <HeadingReveal
+              title={event.name}
+              coundown={Date.now() + 60 * 1000}
+            />
+            <HorizontalMysteries mysteries={event.mysteries} />
+            <Separator className="mt-3" />
+          </div>
+        ))}
         <div className="col-span-full">
           <HeadingReveal
             title={"March"}
-            description={"summaa"}
             coundown={Date.now() + 2 * 60 * 60 * 1000}
           />
           <HorizontalMysteries
             mysteries={[
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
             ]}
           />
           <Separator className="mt-3" />
@@ -81,18 +86,17 @@ export default async function EventsPage() {
         <div className="col-span-full">
           <HeadingReveal
             title={"April"}
-            description={"summaa"}
             coundown={Date.now() + 60 * 600 * 1000}
           />
           <HorizontalMysteries
             mysteries={[
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
             ]}
           />
           <Separator className="mt-3" />
@@ -100,30 +104,29 @@ export default async function EventsPage() {
         <div className="col-span-full">
           <HeadingReveal
             title={"May"}
-            description={"summaa"}
             coundown={Date.now() + 60 * 60 * 600 * 1000}
           />
           <HorizontalMysteries
             mysteries={[
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
-              ...eventMysteries,
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
+              ...(eventMysteries[0]?.mysteries ?? []),
             ]}
           />
           <Separator className="mt-3" />
         </div>
-        <Link className="col-span-3 h-10 md:col-span-2" href="/mysteries">
-          <ShinyButton className="size-full">More Mysteries</ShinyButton>
+        <Link className="col-span-3 h-10 md:col-span-2" href="/explore">
+          <ShinyButton className="size-full">Explore More</ShinyButton>
         </Link>
         <Link className="col-span-3 h-10 md:col-span-2" href="/">
-          <RainbowButton className="size-full">Colosseum</RainbowButton>
+          <RainbowButton className="size-full">Leaderboard</RainbowButton>
         </Link>
         <Link className="col-span-3 h-10 md:col-span-2" href="/categories">
-          <ShinyButton className="size-full">More Categories</ShinyButton>
+          <ShinyButton className="size-full">Colosseum</ShinyButton>
         </Link>
       </div>
       <EventsEffects />

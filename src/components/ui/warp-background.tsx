@@ -38,25 +38,25 @@ const Beam = ({
   return (
     <LazyMotion features={domAnimation} strict>
       <AnimatePresence propagate>
-      <MotionDiv
-        style={
-          {
-            "--x": `${x}`,
-            "--width": `${width}`,
-            "--aspect-ratio": `${ar}`,
-            "--background": `linear-gradient(hsl(${hue} 80% 60%), transparent)`,
-          } as CSSProperties
-        }
-        className={`absolute left-[var(--x)] top-0 [aspect-ratio:1/var(--aspect-ratio)] [background:var(--background)] [width:var(--width)]`}
-        initial={{ y: "100cqmax", x: "-50%" }}
-        animate={{ y: "-100%", x: "-50%" }}
-        transition={{
-          duration,
-          delay,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      />
+        <MotionDiv
+          style={
+            {
+              "--x": `${x}`,
+              "--width": `${width}`,
+              "--aspect-ratio": `${ar}`,
+              "--background": `linear-gradient(hsl(${hue} 80% 60%), transparent)`,
+            } as CSSProperties
+          }
+          className={`absolute left-[var(--x)] top-0 [aspect-ratio:1/var(--aspect-ratio)] [background:var(--background)] [width:var(--width)]`}
+          initial={{ y: "100cqmax", x: "-50%" }}
+          animate={{ y: "-100%", x: "-50%" }}
+          transition={{
+            duration,
+            delay,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
       </AnimatePresence>
     </LazyMotion>
   );

@@ -220,36 +220,37 @@ const CollisionMechanism = forwardRef<
   return (
     <LazyMotion features={domAnimation} strict>
       <AnimatePresence propagate>
-      <MotionDiv
-        key={beamKey}
-        ref={beamRef}
-        animate="animate"
-        initial={{
-          translateY: beamOptions.initialY ?? "-200px",
-          translateX: beamOptions.initialX ?? "0px",
-          rotate: beamOptions.rotate ?? 0,
-        }}
-        variants={{
-          animate: {
-            translateY:
-              beamOptions.translateY ?? `${(containerRect?.offset ?? 0) - 5}px`,
-            translateX: beamOptions.translateX ?? "0px",
+        <MotionDiv
+          key={beamKey}
+          ref={beamRef}
+          animate="animate"
+          initial={{
+            translateY: beamOptions.initialY ?? "-200px",
+            translateX: beamOptions.initialX ?? "0px",
             rotate: beamOptions.rotate ?? 0,
-          },
-        }}
-        transition={{
-          duration: beamOptions.duration ?? 8,
-          repeat: Infinity,
-          repeatType: "loop",
-          ease: "linear",
-          delay: beamOptions.delay ?? 0,
-          repeatDelay: beamOptions.repeatDelay ?? 0,
-        }}
-        className={cn(
-          "absolute left-0 top-20 m-auto h-14 w-px rounded-full bg-gradient-to-t from-indigo-500 via-purple-500 to-transparent",
-          beamOptions.className,
-        )}
-      />
+          }}
+          variants={{
+            animate: {
+              translateY:
+                beamOptions.translateY ??
+                `${(containerRect?.offset ?? 0) - 5}px`,
+              translateX: beamOptions.translateX ?? "0px",
+              rotate: beamOptions.rotate ?? 0,
+            },
+          }}
+          transition={{
+            duration: beamOptions.duration ?? 8,
+            repeat: Infinity,
+            repeatType: "loop",
+            ease: "linear",
+            delay: beamOptions.delay ?? 0,
+            repeatDelay: beamOptions.repeatDelay ?? 0,
+          }}
+          className={cn(
+            "absolute left-0 top-20 m-auto h-14 w-px rounded-full bg-gradient-to-t from-indigo-500 via-purple-500 to-transparent",
+            beamOptions.className,
+          )}
+        />
       </AnimatePresence>
       {collision.detected && collision.coordinates && (
         <Explosion
@@ -280,32 +281,32 @@ const Explosion = ({ ...props }: React.HTMLProps<HTMLDivElement>) => {
   return (
     <div {...props} className={cn("absolute z-50 h-2 w-2", props.className)}>
       <LazyMotion features={domAnimation} strict>
-      <AnimatePresence propagate>
-      <MotionDiv
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="absolute -inset-x-10 top-0 m-auto h-2 w-10 rounded-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent blur-sm"
-        />
+        <AnimatePresence propagate>
+          <MotionDiv
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="absolute -inset-x-10 top-0 m-auto h-2 w-10 rounded-full bg-gradient-to-r from-transparent via-indigo-500 to-transparent blur-sm"
+          />
         </AnimatePresence>
       </LazyMotion>
       {spans.map((span) => (
         <LazyMotion key={span.id} features={domAnimation} strict>
-      <AnimatePresence propagate>
-      <MotionSpan
-            initial={{ x: span.initialX, y: span.initialY, opacity: 1 }}
-            animate={{
-              x: span.directionX,
-              y: span.directionY,
-              opacity: 0,
-            }}
-            transition={{
-              duration: Math.random() * 1.5 + 0.5,
-              ease: "easeOut",
-            }}
-            className="absolute h-1 w-1 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500"
-          />
+          <AnimatePresence propagate>
+            <MotionSpan
+              initial={{ x: span.initialX, y: span.initialY, opacity: 1 }}
+              animate={{
+                x: span.directionX,
+                y: span.directionY,
+                opacity: 0,
+              }}
+              transition={{
+                duration: Math.random() * 1.5 + 0.5,
+                ease: "easeOut",
+              }}
+              className="absolute h-1 w-1 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500"
+            />
           </AnimatePresence>
         </LazyMotion>
       ))}

@@ -13,39 +13,32 @@ import { cn } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Loader from "./ui/loader";
 
-export function CitiesSelect({
+export function EventsSelect({
   wrapperClassName,
-  state,
   value,
   ...props
-}: ComponentProps<typeof Select> & {
-  state?: string;
-  wrapperClassName?: string;
-}) {
-  const { data, isLoading } = api.user.getStateCities.useQuery(
-    { state: state ?? "", country: "India" },
-    { enabled: !!state },
-  );
-
-  const [cityValue, setCityValue] = useState<string | undefined>(value);
+}: ComponentProps<typeof Select> & { wrapperClassName?: string }) {
+  const { data, isLoading } = api.events.getCompletedEvents.useQuery();
+  const [eventValue, setEventValue] = useState<string | undefined>(value);
 
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    setCityValue(value);
+    setEventValue(value);
   }, [value]);
 
   const onSelectValueChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (value && value !== "all") {
-      setCityValue(value);
-      params.set("city", value);
-      params.delete("event");
-    } else {
-      setCityValue("");
+      setEventValue(value);
+      params.set("event", value);
+      params.delete("state");
       params.delete("city");
+    } else {
+      setEventValue("");
+      params.delete("event");
     }
     router.replace(`${pathname}?${params.toString()}`);
   };
@@ -54,7 +47,7 @@ export function CitiesSelect({
     <div className={cn("flex", wrapperClassName)}>
       <Select
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        value={cityValue || "all"}
+        value={eventValue || "all"}
         onValueChange={onSelectValueChange}
         defaultValue="all"
         disabled={isLoading}
@@ -62,16 +55,16 @@ export function CitiesSelect({
       >
         <SelectTrigger>
           {!isLoading ? (
-            <SelectValue placeholder="All Cities" />
+            <SelectValue placeholder="Mysteryverse" />
           ) : (
             <Loader className="mx-auto my-0 h-7 w-7" />
           )}
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">All Cities</SelectItem>
-          {data?.map((city) => (
-            <SelectItem key={`select-${city}`} value={city}>
-              {city}
+          <SelectItem value="all">Mysteryverse</SelectItem>
+          {data?.map((event) => (
+            <SelectItem key={`select-${event.id}`} value={event.id}>
+              {event.name}
             </SelectItem>
           ))}
         </SelectContent>

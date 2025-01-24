@@ -9,11 +9,6 @@ import {
 } from "lucide-react";
 
 export const navData = {
-  user: {
-    name: "GK",
-    email: "123456789010101",
-    avatar: "",
-  },
   navMain: [
     {
       title: "Colosseum",
@@ -50,38 +45,12 @@ export const navData = {
       icon: Map,
       items: [
         {
-          title: "Space",
-          url: "/explore/space", // Area where users find new mysteries
-        },
-        {
-          title: "Internet",
-          url: "/explore/internet", // For viewing clues or hints
-        },
-        {
-          title: "Nature",
-          url: "/explore/nature", // Archive of past mysteries
+          title: "Extension",
+          url: "/explore/extension",
+          special: true,
         },
       ],
     },
-    // {
-    //   title: "Community",
-    //   url: "#",
-    //   icon: Users2, // For social engagement
-    //   items: [
-    //     {
-    //       title: "Discussions",
-    //       url: "#", // Forum or chat for users
-    //     },
-    //     {
-    //       title: "Collaborations",
-    //       url: "#", // Users working together to solve mysteries
-    //     },
-    //     {
-    //       title: "Events",
-    //       url: "#", // Live events or competitions
-    //     },
-    //   ],
-    // },
   ],
   navSecondary: [
     {

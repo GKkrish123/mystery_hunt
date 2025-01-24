@@ -18,7 +18,7 @@ import dynamic from "next/dynamic";
 
 const LetterPullup = dynamic(() =>
   import("./ui/letter-pullup").then((mod) => mod.default),
-)
+);
 
 export function AppHeader() {
   const { open, openMobile, isMobile } = useSidebar();

@@ -211,12 +211,19 @@ export const userRouter = createTRPCRouter({
 
   getLeaderboards: privateProcedure
     .input(
-      z.object({ state: z.string().optional(), city: z.string().optional() }),
+      z.object({
+        state: z.string().optional(),
+        city: z.string().optional(),
+        event: z.string().optional(),
+      }),
     )
     .query(async ({ input }) => {
-      const { state, city } = input;
+      const { state, city, event } = input;
+      const scoreAlias = event
+        ? `scoreBoard.eventScores.${event}`
+        : "scoreBoard.totalScore";
       let queryRef = queryHunters();
-      queryRef = query(queryRef, where("scoreBoard.totalScore", ">", 0));
+      queryRef = query(queryRef, where(scoreAlias, ">", 0));
       if (state) {
         queryRef = query(queryRef, where("state", "==", state));
       }
@@ -225,12 +232,12 @@ export const userRouter = createTRPCRouter({
       }
       queryRef = query(
         queryRef,
-        orderBy("scoreBoard.totalScore", "desc"),
+        orderBy(scoreAlias, "desc"),
         orderBy("scoreBoard.lastScoredAt", "asc"),
       );
-      queryRef = query(queryRef, limit(state || city ? 50 : 100));
+      queryRef = query(queryRef, limit(state || city || event ? 50 : 100));
       const querySnapshot = await getDocs(queryRef);
-      const hunters = getHuntersRankList(querySnapshot);
+      const hunters = getHuntersRankList(querySnapshot, event);
       return hunters;
     }),
 
@@ -337,7 +344,7 @@ export const userRouter = createTRPCRouter({
               scoreBoard: {
                 totalScore: 0,
                 lastScoredAt: serverTimestamp(),
-                eventScores: {}
+                eventScores: {},
               },
               proPicUrl: "",
               userId: "",
@@ -365,7 +372,7 @@ export const userRouter = createTRPCRouter({
               scoreBoard: {
                 totalScore: 0,
                 lastScoredAt: serverTimestamp(),
-                eventScores: {}
+                eventScores: {},
               },
               proPicUrl: "",
               userId: "",

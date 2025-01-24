@@ -137,10 +137,10 @@ const createAnimatedNodes = (
     "inline-block opacity-0 transition-all ease-in-out fill-mode-forwards",
     {
       // Determine the animation direction
-      ["animate-[reveal-down]"]: !isUp && !blur,
-      ["animate-[reveal-up]"]: isUp && !blur,
-      ["animate-[reveal-down,content-blur]"]: !isUp && blur,
-      ["animate-[reveal-up,content-blur]"]: isUp && blur,
+      ["!animate-[reveal-down]"]: !isUp && !blur,
+      ["!animate-[reveal-up]"]: isUp && !blur,
+      ["!animate-[reveal-down,content-blur]"]: !isUp && blur,
+      ["!animate-[reveal-up,content-blur]"]: isUp && blur,
     },
     args.className,
   );

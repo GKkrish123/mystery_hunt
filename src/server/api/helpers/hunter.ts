@@ -29,6 +29,7 @@ export async function findDuplicateHunter(email: string, phoneNo: string) {
 
 export function getHuntersRankList(
   huntersSnapshot: QuerySnapshot<DocumentData, DocumentData>,
+  event?: string,
 ) {
   return huntersSnapshot.docs.map((doc, index) => {
     const data = parseSnapshotDoc(doc.data()) as Hunter;
@@ -38,7 +39,9 @@ export function getHuntersRankList(
       name: data.name,
       proPicUrl: data.proPicUrl,
       rank: index + 1,
-      score: data.scoreBoard.totalScore,
+      score: event
+        ? (data.scoreBoard.eventScores?.[event] ?? 0)
+        : data.scoreBoard.totalScore,
       state: data.state,
     } as HunterRank;
   });

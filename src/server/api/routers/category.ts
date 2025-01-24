@@ -60,7 +60,7 @@ export const categoryRouter = createTRPCRouter({
         MysteryCollections.categories,
       );
 
-      let queryRef = query(categoriesCollection, orderBy("createdAt", "desc"));
+      let queryRef = query(categoriesCollection, orderBy("updatedAt", "desc"));
       if (search) {
         queryRef = query(
           queryRef,

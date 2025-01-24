@@ -42,8 +42,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     enabled: false,
   });
 
+  const {
+    data: categoriesData,
+    isLoading: isCategoriesLoading,
+    refetch: categoriesFetch,
+  } = api.category.getCategories.useQuery(
+    {},
+    {
+      enabled: false,
+    },
+  );
+
   useEffect(() => {
-    void (async () => await refetch())();
+    void (async () => {
+      await refetch();
+      await categoriesFetch();
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -74,7 +88,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       ) : (
         <>
           <SidebarContent>
-            <NavMain items={navData.navMain} />
+            <NavMain
+              items={navData.navMain}
+              categoriesData={categoriesData}
+              isCategoriesLoading={isCategoriesLoading}
+            />
             <NavProjects projects={navData.projects} />
             <NavSecondary items={navData.navSecondary} className="mt-auto" />
           </SidebarContent>

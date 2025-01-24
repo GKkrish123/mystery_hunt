@@ -12,11 +12,6 @@
     --popover-foreground: 240 10% 3.9%;
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
-      --color-1: 0 100% 63%;
-      --color-2: 270 100% 63%;
-      --color-3: 210 100% 63%;
-      --color-4: 195 100% 63%;
-      --color-5: 90 100% 63%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
@@ -46,7 +41,8 @@
     --color-2: 270 100% 63%;
     --color-3: 210 100% 63%;
     --color-4: 195 100% 63%;
-    --color-5: 90 100% 63%}
+    --color-5: 90 100% 63%;
+  }
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -71,8 +67,7 @@
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
-  ;
+    --chart-5: 340 75% 55%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -85,7 +80,8 @@
     --color-2: 270 100% 63%;
     --color-3: 210 100% 63%;
     --color-4: 195 100% 63%;
-    --color-5: 90 100% 63%}
+    --color-5: 90 100% 63%;
+  }
 }
 
 @layer base {
@@ -97,56 +93,51 @@
   }
 }
 
-@keyframes meteor-mobile {
-  0% {
-    transform: rotate(215deg) translateX(0);
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0;
-  }
-
-  100% {
-    transform: rotate(215deg) translateX(-500px);
-    opacity: 0;
-  }
-}
-
-.animate-meteor-mobile {
-  animation: meteor-mobile 5s linear infinite;
-}
-
 .flag-custom > svg {
   width: 1.5rem !important;
   height: 1rem !important;
 }
 
 .scrollbar-shadow > [data-radix-scroll-area-viewport] {
-  --rad:radial-gradient(50% 14px, rgba(0, 0, 0, .2), transparent);  
-  background: 
-    linear-gradient(white 12px, transparent 40px calc(100% - 40px),white calc(100% - 12px)) local, 
-    var(--rad) top   /100% 200%,    
+  --rad: radial-gradient(50% 14px, rgba(0, 0, 0, 0.2), transparent);
+  background:
+    linear-gradient(
+        white 12px,
+        transparent 40px calc(100% - 40px),
+        white calc(100% - 12px)
+      )
+      local,
+    var(--rad) top / 100% 200%,
     var(--rad) bottom/100% 200%;
 }
 
 .dark .scrollbar-shadow > [data-radix-scroll-area-viewport] {
-  --rad: radial-gradient(50% 14px, rgba(255, 255, 255, .2), transparent);
-  background: 
-    linear-gradient(hsl(var(--card)) 12px, transparent 40px calc(100% - 40px), hsl(var(--card)) calc(100% - 12px)) local,
-    var(--rad) top   /100% 200%, 
-    var(--rad) bottom /100% 200%;
+  --rad: radial-gradient(50% 14px, rgba(255, 255, 255, 0.2), transparent);
+  background:
+    linear-gradient(
+        hsl(var(--card)) 12px,
+        transparent 40px calc(100% - 40px),
+        hsl(var(--card)) calc(100% - 12px)
+      )
+      local,
+    var(--rad) top / 100% 200%,
+    var(--rad) bottom / 100% 200%;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
+  *,
+  ::before,
+  ::after {
     animation: none !important;
     transition: none !important;
   }
 }
 
-
-*, ::before, ::after{
-  /* animation: none !important; */
-  transition: none !important;
+@media (max-width: 1024px) {
+  *,
+  ::before,
+  ::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

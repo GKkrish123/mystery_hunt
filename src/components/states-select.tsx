@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ComponentProps } from "react";
+import { useEffect, useState, type ComponentProps } from "react";
 import {
   Select,
   SelectContent,
@@ -27,12 +27,17 @@ export function StatesSelect({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  useEffect(() => {
+    setStateValue(value);
+  }, [value]);
+
   const onSelectValueChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (value && value !== "all") {
       setStateValue(value);
       params.set("state", value);
       params.delete("city");
+      params.delete("event");
     } else {
       setStateValue("");
       params.delete("state");
@@ -44,7 +49,8 @@ export function StatesSelect({
   return (
     <div className={cn("flex", wrapperClassName)}>
       <Select
-        value={stateValue ?? "all"}
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        value={stateValue || "all"}
         onValueChange={onSelectValueChange}
         defaultValue="all"
         disabled={isLoading}

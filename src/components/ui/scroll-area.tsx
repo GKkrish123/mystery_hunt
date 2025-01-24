@@ -5,7 +5,7 @@ import {
   ScrollAreaScrollbar,
   Viewport,
   Corner,
-  ScrollAreaThumb
+  ScrollAreaThumb,
 } from "@radix-ui/react-scroll-area";
 import { cn } from "@/lib/utils";
 import {

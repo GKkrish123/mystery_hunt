@@ -486,7 +486,7 @@ const LightBoard = memo(function LightBoard({
             touchAction: "none",
             userSelect: "none",
             width: "100%",
-            willChange: "contents"
+            willChange: "contents",
           }}
         />
       )}

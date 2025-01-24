@@ -5,7 +5,13 @@ import { cn } from "@/lib/utils";
 import { span as MotionSpan } from "motion/react-m";
 import { useEffect, useState } from "react";
 
-export function ColourfulText({ text, className }: { text: string, className?: string }) {
+export function ColourfulText({
+  text,
+  className,
+}: {
+  text: string;
+  className?: string;
+}) {
   const colors = [
     "rgb(131, 179, 32)",
     "rgb(47, 195, 106)",
@@ -30,7 +36,7 @@ export function ColourfulText({ text, className }: { text: string, className?: s
     }, 3000);
 
     return () => clearInterval(interval);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return text.split("").map((char, index) => (
@@ -50,7 +56,11 @@ export function ColourfulText({ text, className }: { text: string, className?: s
         duration: 0.5,
         delay: index * 0.05,
       }}
-      className={cn("inline-block drop-shadow-[0.02em_0.02em_0.7px_#000000] dark:drop-shadow-[0.02em_0.02em_0.7px_#cbd5e1]", className, mysteryFont.className)}
+      className={cn(
+        "inline-block drop-shadow-[0.02em_0.02em_0.7px_#000000] dark:drop-shadow-[0.02em_0.02em_0.7px_#cbd5e1]",
+        mysteryFont.className,
+        className,
+      )}
     >
       {char}
     </MotionSpan>

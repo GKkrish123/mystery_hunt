@@ -1,6 +1,10 @@
 "use client";
 
-import { Root, CollapsibleTrigger, CollapsibleContent } from "@radix-ui/react-collapsible";
+import {
+  Root,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from "@radix-ui/react-collapsible";
 
 const Collapsible = Root;
 

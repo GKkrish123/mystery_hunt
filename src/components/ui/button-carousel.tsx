@@ -56,7 +56,7 @@ export function ImageCarousel({
         <div
           key={`${item.id}-${index}`}
           className={
-            "animate-fadeIn absolute left-[50%] top-[10%] z-10 w-[220px] rounded-xl bg-transparent"
+            "!animate-fadeIn absolute left-[50%] top-[10%] z-10 w-[220px] rounded-xl bg-transparent"
           }
           style={{
             transform:

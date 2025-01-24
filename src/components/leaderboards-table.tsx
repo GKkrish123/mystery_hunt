@@ -147,12 +147,14 @@ interface LeaderboardsTableProps {
   data: HunterRank[];
   state?: string;
   city?: string;
+  event?: string;
 }
 
 export function LeaderboardsTable({
   data,
   state = "",
   city = "",
+  event = "",
 }: LeaderboardsTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -182,7 +184,7 @@ export function LeaderboardsTable({
     <div className="flex h-full w-full flex-col">
       <div className="flex items-center justify-center gap-2 pb-2 pt-1">
         <Input
-          placeholder={`Filter Top ${state || city ? 50 : 100} Hunters`}
+          placeholder={`Filter Top ${state || city || event ? 50 : 100} Hunters`}
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)

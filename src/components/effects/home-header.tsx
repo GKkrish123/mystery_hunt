@@ -1,6 +1,6 @@
 "use client";
 
-import ProductFeatures from "@/components/ui/feature-card"
+import ProductFeatures from "@/components/ui/feature-card";
 
 export default function HomeHeader() {
   return (

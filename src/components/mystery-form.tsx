@@ -21,8 +21,9 @@ import { default as dynamicImport } from "next/dynamic";
 import Image from "next/image";
 import { toast } from "sonner";
 import { Timestamp } from "firebase/firestore";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Pencil } from "lucide-react";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
 
 const BlurIn = dynamicImport(
   () => import("@/components/ui/blur-in").then((mod) => mod.default),
@@ -37,7 +38,22 @@ const SecretInput = dynamicImport(
   { ssr: false },
 );
 const ScratchToReveal = dynamicImport(
-  () => import("@/components/ui/scratch-to-reveal").then((mod) => mod.ScratchToReveal),
+  () =>
+    import("@/components/ui/scratch-to-reveal").then(
+      (mod) => mod.ScratchToReveal,
+    ),
+  { ssr: false },
+);
+const Dialog = dynamicImport(
+  () => import("@/components/ui/dialog").then((mod) => mod.Dialog),
+  { ssr: false },
+);
+const DialogContent = dynamicImport(
+  () => import("@/components/ui/dialog").then((mod) => mod.DialogContent),
+  { ssr: false },
+);
+const DialogTrigger = dynamicImport(
+  () => import("@/components/ui/dialog").then((mod) => mod.DialogTrigger),
   { ssr: false },
 );
 const Badge = dynamicImport(
@@ -329,7 +345,7 @@ const usePointsCountdown = (mysteryData: Mystery & MysteryFormValues) => {
     calculatePointsAndCountdown();
 
     return () => clearInterval(intervalId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     mysteryData.firstViewedAt,
     mysteryData.solvedCount,
@@ -351,6 +367,7 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
   const [secretInput, setSecretInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [scratchCardOpen, setScratchCardOpen] = useState(false);
+  const [scratchComplete, setScratchComplete] = useState(true);
   const { mutateAsync } = api.mystery.recordMysteryView.useMutation();
   const { mutateAsync: verifyMystery } =
     api.mystery.verifyMysterySecret.useMutation();
@@ -661,67 +678,39 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
         )}
       </div>
       <Dialog
-        open={scratchCardOpen}
-        onOpenChange={(open) => setScratchCardOpen(open)}
+        open={scratchCardOpen || !scratchComplete}
+        // onOpenChange={(open) => setScratchCardOpen(open && scratchComplete)}
       >
-        <DialogTrigger asChild onClick={() => setScratchCardOpen(true)}>
+        <DialogTrigger
+          asChild
+          onClick={() => {
+            setScratchComplete(false);
+            setScratchCardOpen(true);
+          }}
+        >
           <Pencil className="z-[1] ml-2 inline h-3 w-3 cursor-pointer" />
         </DialogTrigger>
         <DialogContent
           hideCloseButton
           className="lg: flex size-full max-w-full items-center justify-center border-0 bg-transparent"
-          onClick={() => setScratchCardOpen(false)}
+          onClick={() => setScratchCardOpen(!scratchComplete)}
         >
-          {/* <DialogHeader>
-            <DialogTitle>Edit Name</DialogTitle>
-            <DialogDescription>
-              Choose wisely, names have power!
-            </DialogDescription>
-          </DialogHeader> */}
-          {/* <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-          </div> */}
+          <VisuallyHidden.Root>
+            <DialogTitle>Scratch Me</DialogTitle>
+          </VisuallyHidden.Root>
+          <VisuallyHidden.Root>
+            <DialogDescription>Do it slow...</DialogDescription>
+          </VisuallyHidden.Root>
           <ScratchToReveal
             width={250}
             height={250}
             minScratchPercentage={70}
             className="flex items-center justify-center overflow-hidden rounded-2xl border-2 bg-gray-100"
-            // onComplete={handleComplete}
+            onComplete={() => setScratchComplete(true)}
             gradientColors={["#A97CF8", "#F38CB8", "#FDCC92"]}
           >
             <p className="text-9xl">😎</p>
           </ScratchToReveal>
-          {/* <DialogFooter>
-            <Button
-              type="submit"
-              disabled={
-                name === userData.name ||
-                !name ||
-                name.length < 3 ||
-                name.length > 50
-              }
-              onClick={onNameChange}
-            >
-              {isLoading ? (
-                <>
-                  <Loader className="text-white dark:text-black" /> Changing
-                  name...
-                </>
-              ) : (
-                "Save"
-              )}
-            </Button>
-          </DialogFooter> */}
         </DialogContent>
       </Dialog>
     </div>

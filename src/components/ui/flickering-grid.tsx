@@ -2,14 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useViewportSize } from "@mantine/hooks";
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface FlickeringGridProps {
   squareSize?: number;

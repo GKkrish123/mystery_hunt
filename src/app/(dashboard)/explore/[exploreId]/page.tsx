@@ -5,9 +5,14 @@ import { Suspense } from "react";
 import { mysteryFont } from "@/lib/fonts";
 
 import { default as dynamicImport } from "next/dynamic";
+import Link from "next/link";
+import { Code } from "lucide-react";
 
 const MysteriesList = dynamicImport(() =>
   import("@/components/mysteries-list").then((mod) => mod.MysteriesList),
+);
+const MacbookScroll = dynamicImport(() =>
+  import("@/components/ui/macbook-scroll").then((mod) => mod.MacbookScroll),
 );
 const AppLoader = dynamicImport(() =>
   import("@/components/ui/app-loader").then((mod) => mod.default),
@@ -29,6 +34,22 @@ export default async function ExploreCategoryPage({
   params,
 }: ExploreCategoryProps) {
   const { exploreId } = await params;
+
+  if (exploreId === "extension") {
+    return (
+      <MacbookScroll
+        title={<span>This is new.</span>}
+        badge={
+          <Link href="https://github.com/gkkrish123">
+            <Code className="h-10 w-10 -rotate-12 transform" />
+          </Link>
+        }
+        src={`https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`}
+        showGradient={false}
+      />
+    );
+  }
+
   const category = await api.category
     .getCategoryByTag({ tag: exploreId })
     .catch(() => null);

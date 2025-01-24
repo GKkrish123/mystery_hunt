@@ -1,7 +1,14 @@
-"use client"
+"use client";
 
 import { CheckIcon, ChevronsUpDown } from "lucide-react";
-import {type Country, type FlagProps, getCountryCallingCode, type Props, default as RPN, type Value} from "react-phone-number-input";
+import {
+  type Country,
+  type FlagProps,
+  getCountryCallingCode,
+  type Props,
+  default as RPN,
+  type Value,
+} from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +27,13 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "./scroll-area";
-import { type ElementRef, forwardRef, type ForwardRefExoticComponent, type InputHTMLAttributes, useCallback } from "react";
+import {
+  type ElementRef,
+  forwardRef,
+  type ForwardRefExoticComponent,
+  type InputHTMLAttributes,
+  useCallback,
+} from "react";
 
 type PhoneInputProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -30,34 +43,34 @@ type PhoneInputProps = Omit<
     onChange?: (value: Value) => void;
   };
 
-const PhoneInput: ForwardRefExoticComponent<PhoneInputProps> =
-  forwardRef<ElementRef<typeof RPN>, PhoneInputProps>(
-    ({ className, onChange, ...props }, ref) => {
-      return (
-        <RPN
-          ref={ref}
-          className={cn("flex", className)}
-          flagComponent={FlagComponent}
-          countrySelectComponent={CountrySelect}
-          inputComponent={InputComponent}
-          smartCaret={false}
-          defaultCountry="IN"
-          international
-          /**
-           * Handles the onChange event.
-           *
-           * react-phone-number-input might trigger the onChange event as undefined
-           * when a valid phone number is not entered. To prevent this,
-           * the value is coerced to an empty string.
-           *
-           * @param {E164Number | undefined} value - The entered value
-           */
-          onChange={(value) => onChange?.((value ?? "") as Value)}
-          {...props}
-        />
-      );
-    },
+const PhoneInput: ForwardRefExoticComponent<PhoneInputProps> = forwardRef<
+  ElementRef<typeof RPN>,
+  PhoneInputProps
+>(({ className, onChange, ...props }, ref) => {
+  return (
+    <RPN
+      ref={ref}
+      className={cn("flex", className)}
+      flagComponent={FlagComponent}
+      countrySelectComponent={CountrySelect}
+      inputComponent={InputComponent}
+      smartCaret={false}
+      defaultCountry="IN"
+      international
+      /**
+       * Handles the onChange event.
+       *
+       * react-phone-number-input might trigger the onChange event as undefined
+       * when a valid phone number is not entered. To prevent this,
+       * the value is coerced to an empty string.
+       *
+       * @param {E164Number | undefined} value - The entered value
+       */
+      onChange={(value) => onChange?.((value ?? "") as Value)}
+      {...props}
+    />
   );
+});
 PhoneInput.displayName = "PhoneInput";
 
 const InputComponent = forwardRef<HTMLInputElement, InputProps>(

@@ -6,6 +6,7 @@ import { type HunterRank } from "./model/hunters";
 
 export enum MysteryCollections {
   mysteries = "mysteries",
+  events = "events",
   hunters = "hunters",
   hunterTrails = "hunter-trails",
   secretChamber = "secret-chamber",

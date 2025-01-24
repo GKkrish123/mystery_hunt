@@ -21,9 +21,13 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ShineBorder from "./ui/shine-border";
+import { type Category } from "@/server/model/categories";
+import Loader from "./ui/loader";
 
 export function NavMain({
   items,
+  categoriesData,
+  isCategoriesLoading,
 }: {
   items: {
     title: string;
@@ -36,6 +40,8 @@ export function NavMain({
       url: string;
     }[];
   }[];
+  categoriesData?: Category[];
+  isCategoriesLoading: boolean;
 }) {
   const { toggleSidebar } = useSidebar();
   const currentPath = usePathname();
@@ -69,14 +75,20 @@ export function NavMain({
                   <CollapsibleContent>
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuSubItem
+                          key={`${item.title}-${subItem.title}`}
+                        >
                           {subItem.special ? (
                             <ShineBorder
                               className="min-h-0 w-full min-w-0 bg-transparent p-1 dark:bg-transparent"
                               borderRadius={10}
                               borderWidth={1.5}
                               duration={10}
-                              color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+                              color={
+                                item.title === "Explorer"
+                                  ? undefined
+                                  : ["#A07CFE", "#FE8FB5", "#FFBE7B"]
+                              }
                             >
                               <SidebarMenuSubButton
                                 asChild
@@ -109,6 +121,31 @@ export function NavMain({
                           )}
                         </SidebarMenuSubItem>
                       ))}
+                      {item.title === "Explorer" ? (
+                        isCategoriesLoading ? (
+                          <Loader className="mx-auto my-0 h-7 w-7 text-black dark:text-white" />
+                        ) : (
+                          categoriesData?.map((subItem) => (
+                            <SidebarMenuSubItem
+                              key={`${item.title}-${subItem.name}`}
+                            >
+                              <SidebarMenuSubButton
+                                asChild
+                                className="w-full"
+                                onClick={() => toggleSidebar()}
+                                isActive={currentPath === `/${subItem.tag}`}
+                              >
+                                <Link
+                                  className="relative z-10"
+                                  href={`/${subItem.tag}`}
+                                >
+                                  <span>{subItem.name}</span>
+                                </Link>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))
+                        )
+                      ) : null}
                     </SidebarMenuSub>
                   </CollapsibleContent>
                 </>

@@ -19,6 +19,8 @@ const config = {
     return config;
   },
   images: {
+    // loader: 'custom',
+    // loaderFile: 'imageLoader.ts',
     remotePatterns: [
       {
         protocol: "https",

@@ -129,7 +129,7 @@ export default async function DashboardPage() {
               </div>
             )}
             <Separator className="mt-3" />
-            </div>
+          </div>
         ))}
         <Link className="col-span-1 h-10 sm:col-start-2" href="/explore">
           <RainbowButton className="size-full">Explore More</RainbowButton>

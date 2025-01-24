@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 interface HeadingRevealProps {
   title: string;
-  description: string;
+  description?: string;
   className?: string;
   headerClassName?: string;
   descriptionClassName?: string;

@@ -23,18 +23,18 @@ const BlurIn = ({ word, className, variant, duration = 1 }: BlurIntProps) => {
   return (
     <LazyMotion features={domAnimation} strict>
       <AnimatePresence propagate>
-      <MotionH1
-        initial="hidden"
-        animate="visible"
-        transition={{ duration }}
-        variants={combinedVariants}
-        className={cn(
-          "text-center text-4xl tracking-[-0.02em] drop-shadow-sm md:text-7xl md:leading-[5rem]",
-          className,
-        )}
-      >
-        {word}
-      </MotionH1>
+        <MotionH1
+          initial="hidden"
+          animate="visible"
+          transition={{ duration }}
+          variants={combinedVariants}
+          className={cn(
+            "text-center text-4xl tracking-[-0.02em] drop-shadow-sm md:text-7xl md:leading-[5rem]",
+            className,
+          )}
+        >
+          {word}
+        </MotionH1>
       </AnimatePresence>
     </LazyMotion>
   );

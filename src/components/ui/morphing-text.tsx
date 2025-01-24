@@ -47,7 +47,7 @@ const useMorphingText = (texts: string[], morphTime = 1, cooldownTime = 3) => {
     if (fraction === 1) {
       textIndexRef.current++;
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setStyles]);
 
   const doCooldown = useCallback(() => {

@@ -1,6 +1,12 @@
 "use client";
 
-import { useScroll, useTransform, domAnimation, LazyMotion, AnimatePresence } from "motion/react";
+import {
+  useScroll,
+  useTransform,
+  domAnimation,
+  LazyMotion,
+  AnimatePresence,
+} from "motion/react";
 import { div as MotionDiv } from "motion/react-m";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
@@ -46,7 +52,7 @@ export const ParallaxScroll = ({
   const translateThird = useTransform(scrollYProgress, [0, 1], [0, -200]);
   const divideInto = isMobile ? 2 : 3;
   const parts = Math.ceil(items.length / divideInto);
-  
+
   const firstPart = items.slice(0, parts);
   const secondPart = items.slice(parts, 2 * parts);
   const thirdPart = items.slice(2 * parts);
@@ -66,10 +72,10 @@ export const ParallaxScroll = ({
         <div className="grid gap-3 md:gap-5">
           {firstPart.map((item, idx) => (
             <LazyMotion key={"grid-1" + idx} features={domAnimation} strict>
-      <AnimatePresence propagate>
-      <MotionDiv style={{ y: translateFirst as unknown as number }}>
-                <RenderComponent forCategory={forCategory} item={item} />
-              </MotionDiv>
+              <AnimatePresence propagate>
+                <MotionDiv style={{ y: translateFirst as unknown as number }}>
+                  <RenderComponent forCategory={forCategory} item={item} />
+                </MotionDiv>
               </AnimatePresence>
             </LazyMotion>
           ))}
@@ -77,10 +83,10 @@ export const ParallaxScroll = ({
         <div className="grid gap-3 md:gap-5">
           {secondPart.map((item, idx) => (
             <LazyMotion key={"grid-2" + idx} features={domAnimation} strict>
-      <AnimatePresence propagate>
-      <MotionDiv style={{ y: translateSecond as unknown as number }}>
-                <RenderComponent forCategory={forCategory} item={item} />
-              </MotionDiv>
+              <AnimatePresence propagate>
+                <MotionDiv style={{ y: translateSecond as unknown as number }}>
+                  <RenderComponent forCategory={forCategory} item={item} />
+                </MotionDiv>
               </AnimatePresence>
             </LazyMotion>
           ))}
@@ -89,10 +95,10 @@ export const ParallaxScroll = ({
           <div className="grid gap-3 md:gap-5">
             {thirdPart.map((item, idx) => (
               <LazyMotion key={"grid-3" + idx} features={domAnimation} strict>
-      <AnimatePresence propagate>
-      <MotionDiv style={{ y: translateThird as unknown as number }}>
-                  <RenderComponent forCategory={forCategory} item={item} />
-                </MotionDiv>
+                <AnimatePresence propagate>
+                  <MotionDiv style={{ y: translateThird as unknown as number }}>
+                    <RenderComponent forCategory={forCategory} item={item} />
+                  </MotionDiv>
                 </AnimatePresence>
               </LazyMotion>
             ))}

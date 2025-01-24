@@ -6,7 +6,7 @@ export interface Trail {
   guessedValue: string;
   isSolved: boolean;
   mysteryId: string;
-  points?: number
+  points?: number;
 }
 
 export interface MysteryInteraction {
@@ -45,5 +45,5 @@ export interface HunterTrail {
   trails: Trail[];
   interactions: Interactions;
   feedbacks: string[];
-  lastFeedbackAt: number | null
+  lastFeedbackAt: number | null;
 }

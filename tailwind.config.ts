@@ -90,6 +90,7 @@ export default {
       },
       animation: {
         meteor: "meteor 5s linear infinite",
+        "meteor-mobile": "meteor-mobile 5s linear infinite",
         grid: "grid 15s linear infinite",
         ripple: "ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite",
         shine: "shine var(--duration) infinite linear",
@@ -168,6 +169,19 @@ export default {
           },
           "70%": {
             opacity: "1",
+          },
+          "100%": {
+            transform: "rotate(215deg) translateX(-500px)",
+            opacity: "0",
+          },
+        },
+        "meteor-mobile": {
+          "0%": {
+            transform: "rotate(215deg) translateX(0)",
+            opacity: "1",
+          },
+          "50%": {
+            opacity: "0",
           },
           "100%": {
             transform: "rotate(215deg) translateX(-500px)",

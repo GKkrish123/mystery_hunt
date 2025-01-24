@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 interface MeteorsProps {
   number?: number;
-  sidebar?: boolean
+  sidebar?: boolean;
 }
 export const Meteors = memo(({ number = 20, sidebar }: MeteorsProps) => {
   const [meteorStyles, setMeteorStyles] = useState<Array<React.CSSProperties>>(
@@ -17,11 +17,14 @@ export const Meteors = memo(({ number = 20, sidebar }: MeteorsProps) => {
   const isMobile = useIsMobile();
 
   const { width } = useViewportSize();
-  const [debouncedWidth] = useDebouncedValue((isMobile || sidebar) ? 120 : width, 500);
+  const [debouncedWidth] = useDebouncedValue(
+    isMobile || sidebar ? 120 : width,
+    500,
+  );
 
   useEffect(() => {
     const styles = [
-      ...new Array((isMobile || sidebar) ? Math.floor(number / 3) : number),
+      ...new Array(isMobile || sidebar ? Math.floor(number / 3) : number),
     ].map(() => ({
       top: -5,
       left: Math.floor(Math.random() * debouncedWidth) + "px",
@@ -40,7 +43,11 @@ export const Meteors = memo(({ number = 20, sidebar }: MeteorsProps) => {
           key={idx}
           className={cn(
             "pointer-events-none absolute left-1/2 top-1/2 size-0.5 rotate-[215deg] rounded-full bg-slate-500 shadow-[0_0_0_1px_#ffffff10]",
-            isMobile ? "animate-meteor-mobile" : "animate-meteor",
+            isMobile
+              ? !sidebar
+                ? "!animate-meteor-mobile"
+                : ""
+              : "animate-meteor",
           )}
           style={style}
         >
