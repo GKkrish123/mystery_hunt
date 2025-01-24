@@ -120,7 +120,8 @@ function Calendar({
                   differenceInCalendarDays(
                     new Date(displayYears.from - 1, 0, 1),
                     startMonth,
-                  ) < 0) ??
+                    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+                  ) < 0) ||
                 (endMonth &&
                   differenceInCalendarDays(
                     new Date(displayYears.from - 1, 0, 1),
@@ -138,7 +139,8 @@ function Calendar({
                   differenceInCalendarDays(
                     new Date(displayYears.to + 1, 0, 1),
                     startMonth,
-                  ) < 0) ??
+                    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+                  ) < 0) ||
                 (endMonth &&
                   differenceInCalendarDays(
                     new Date(displayYears.to + 1, 0, 1),
@@ -150,7 +152,6 @@ function Calendar({
           })();
 
           const handlePreviousClick = useCallback(() => {
-            if (!previousMonth) return;
             if (navView === "years") {
               setDisplayYears((prev) => ({
                 from: prev.from - (prev.to - prev.from + 1),
@@ -165,12 +166,12 @@ function Calendar({
               );
               return;
             }
+            if (!previousMonth) return;
             goToMonth(previousMonth);
             onPrevClick?.(previousMonth);
           }, [previousMonth, goToMonth]);
 
           const handleNextClick = useCallback(() => {
-            if (!nextMonth) return;
             if (navView === "years") {
               setDisplayYears((prev) => ({
                 from: prev.from + (prev.to - prev.from + 1),
@@ -185,6 +186,7 @@ function Calendar({
               );
               return;
             }
+            if (!nextMonth) return;
             goToMonth(nextMonth);
             onNextClick?.(
               nextMonth as unknown as MouseEvent<HTMLButtonElement>,

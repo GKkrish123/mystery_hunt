@@ -31,7 +31,7 @@ export default async function DashboardLayout({
         <AppSidebar />
         <SidebarInset>
           <AppHeader />
-          <DelayedSuspense delay={3000}>{children}</DelayedSuspense>
+          <DelayedSuspense delay={3200}>{children}</DelayedSuspense>
         </SidebarInset>
         <FloatingNav />
       </SidebarProvider>

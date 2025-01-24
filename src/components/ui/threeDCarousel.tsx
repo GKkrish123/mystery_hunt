@@ -15,6 +15,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import ShineBorder from "./shine-border";
 import { CardContainer, CardItem } from "./three-d-card";
 import Image from "next/image";
+import { useSidebar } from "./sidebar";
 
 const keywords = [
   "night",
@@ -49,6 +50,7 @@ const Carousel = memo(function CarouselComponent({
   const faceCount = cards.length;
   const faceWidth = cylinderWidth / faceCount;
   const radius = cylinderWidth / (2 * Math.PI);
+  const { openMobile } = useSidebar();
 
   const rotation = useMotionValue(0);
   const transform = useTransform(
@@ -68,9 +70,13 @@ const Carousel = memo(function CarouselComponent({
   };
 
   useEffect(() => {
-    void startSlowRotation();
+    if (!openMobile) {
+      void startSlowRotation();
+    } else {
+      controls.stop();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [openMobile]);
 
   return (
     <div
@@ -108,8 +114,8 @@ const Carousel = memo(function CarouselComponent({
                   transition: {
                     type: "spring",
                     stiffness: 100,
-                    damping: 30,
-                    mass: 0.5,
+                    damping: 5,
+                    mass: 0.2,
                   },
                 });
               }
