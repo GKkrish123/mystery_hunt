@@ -28,6 +28,7 @@ const config = {
       },
     ],
   },
+  output: "standalone",
   // serverExternalPackages: ["three", "@react-three/drei", "@react-three/rapier", "@react-three/fiber"],
   experimental: {
     optimizePackageImports: ["lucide-react", "cobe", "motion"],
