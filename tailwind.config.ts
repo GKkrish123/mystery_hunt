@@ -105,6 +105,7 @@ export default {
         "shiny-text": "shiny-text 8s infinite",
         gradient: "gradient 8s linear infinite",
         "bg-position": "bg-position 10s infinite linear",
+        "line-shadow": "line-shadow 15s linear infinite",
       },
       keyframes: {
         "bg-position": {
@@ -174,6 +175,10 @@ export default {
             transform: "rotate(215deg) translateX(-500px)",
             opacity: "0",
           },
+        },
+        "line-shadow": {
+          "0%": { "background-position": "0 0" },
+          "100%": { "background-position": "100% -100%" },
         },
         "meteor-mobile": {
           "0%": {

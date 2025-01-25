@@ -1,6 +1,6 @@
 "use client";
 
-import { OTPInput, OTPInputContext } from "input-otp";
+import { OTPInput, OTPInputContext } from "./input-otp-essentials";
 import { Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {

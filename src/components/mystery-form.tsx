@@ -4,6 +4,7 @@ import {
   memo,
   type MutableRefObject,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -14,14 +15,13 @@ import { useGesture } from "@use-gesture/react";
 import { type Mystery } from "@/server/model/mysteries";
 import { type MysteryFormValues } from "@/server/constants";
 import { api } from "@/trpc/react";
-import { cn } from "@/lib/utils";
+import { cn, getRandomEmoji } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
 import confetti from "canvas-confetti";
 import { default as dynamicImport } from "next/dynamic";
 import Image from "next/image";
 import { toast } from "sonner";
 import { Timestamp } from "firebase/firestore";
-import { Pencil } from "lucide-react";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
 
@@ -44,16 +44,20 @@ const ScratchToReveal = dynamicImport(
     ),
   { ssr: false },
 );
+const LineShadowText = dynamicImport(
+  () => import("@/components/ui/line-shadow").then((mod) => mod.LineShadowText),
+  { ssr: false },
+);
+const Meteors = dynamicImport(
+  () => import("@/components/ui/meteors").then((mod) => mod.Meteors),
+  { ssr: false },
+);
 const Dialog = dynamicImport(
   () => import("@/components/ui/dialog").then((mod) => mod.Dialog),
   { ssr: false },
 );
 const DialogContent = dynamicImport(
   () => import("@/components/ui/dialog").then((mod) => mod.DialogContent),
-  { ssr: false },
-);
-const DialogTrigger = dynamicImport(
-  () => import("@/components/ui/dialog").then((mod) => mod.DialogTrigger),
   { ssr: false },
 );
 const Badge = dynamicImport(
@@ -368,6 +372,7 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
   const [loading, setLoading] = useState(false);
   const [scratchCardOpen, setScratchCardOpen] = useState(false);
   const [scratchComplete, setScratchComplete] = useState(true);
+  const [scoredPoints, setScoredPoints] = useState(0);
   const { mutateAsync } = api.mystery.recordMysteryView.useMutation();
   const { mutateAsync: verifyMystery } =
     api.mystery.verifyMysterySecret.useMutation();
@@ -509,6 +514,10 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
             ...((status.mysteryUpdate ?? {}) as Mystery & MysteryFormValues),
             triesLeft: mystery.triesLeft - 1,
           });
+          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+          setScoredPoints(status.points || 0);
+          setScratchComplete(false);
+          setScratchCardOpen(true);
           toast.success("You’ve found it – the mystery is solved!", {
             description:
               "The stars align for those who seek. Proceed to the next secret.",
@@ -535,6 +544,10 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
       });
     }
   };
+
+  const randomEmoji = useMemo(() => getRandomEmoji(), []);
+
+  console.log("si", secretInput);
 
   return (
     <div className="relative grid h-full auto-rows-min grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-7 md:gap-3">
@@ -594,14 +607,17 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
           />
         </div>
       ))}
-      {mystery.triesLeft > 0 ? (
+      {mystery.triesLeft > 0 || mystery.isSolved ? (
         <div className="col-span-full flex justify-center">
           <ShineBorder
             className="relative flex w-fit flex-col items-center justify-center overflow-hidden rounded-lg border bg-background p-5 md:shadow-xl"
             color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
           >
             <SecretInput
-              value={secretInput}
+              value={
+                mystery.isSolved ? (mystery.actualSecret ?? "") : secretInput
+              }
+              disabled={mystery.isSolved}
               onChange={(v) => setSecretInput(v.trim().toLowerCase())}
               expectedInput={mystery.expectedSecret}
               className="col-span-full"
@@ -671,28 +687,25 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
             </span>
           )
         ) : (
-          <MorphingText
-            texts={["You have already found the secret !"]}
-            className="h-6 w-full font-mono text-base lg:h-6 lg:text-base"
-          />
+          <>
+            <MorphingText
+              texts={["You have already found the secret"]}
+              className="h-6 w-full font-mono text-sm lg:h-6 lg:text-base"
+            />
+            <MorphingText
+              texts={[`Scored ${mystery.actualPoints} points !`]}
+              className="h-6 w-full font-mono text-sm lg:h-6 lg:text-base"
+            />
+          </>
         )}
       </div>
       <Dialog
         open={scratchCardOpen || !scratchComplete}
         // onOpenChange={(open) => setScratchCardOpen(open && scratchComplete)}
       >
-        <DialogTrigger
-          asChild
-          onClick={() => {
-            setScratchComplete(false);
-            setScratchCardOpen(true);
-          }}
-        >
-          <Pencil className="z-[1] ml-2 inline h-3 w-3 cursor-pointer" />
-        </DialogTrigger>
         <DialogContent
           hideCloseButton
-          className="lg: flex size-full max-w-full items-center justify-center border-0 bg-transparent"
+          className="flex size-full max-w-full items-center justify-center border-0 bg-transparent focus:outline-none"
           onClick={() => setScratchCardOpen(!scratchComplete)}
         >
           <VisuallyHidden.Root>
@@ -705,11 +718,32 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
             width={250}
             height={250}
             minScratchPercentage={70}
-            className="flex items-center justify-center overflow-hidden rounded-2xl border-2 bg-gray-100"
+            className="z-10 flex min-h-0 flex-col items-center overflow-hidden rounded-2xl"
             onComplete={() => setScratchComplete(true)}
             gradientColors={["#A97CF8", "#F38CB8", "#FDCC92"]}
           >
-            <p className="text-9xl">😎</p>
+            <ShineBorder
+              className="relative flex size-full min-w-0 flex-col p-0 dark:bg-neutral-50"
+              borderRadius={15}
+              borderWidth={3}
+              duration={5}
+              color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+            >
+              <p className="z-[5] pt-5 text-center text-5xl drop-shadow-[0.05em_0.05em_3px_#000000]">
+                {randomEmoji}
+              </p>
+              <LineShadowText
+                text={`${scoredPoints}`}
+                className="z-[5] -ml-2 mt-8 text-5xl text-black lg:mt-5 lg:text-6xl"
+              />
+              <LineShadowText
+                text="Points"
+                className="z-[5] -ml-2 mt-2 text-5xl text-black lg:text-6xl"
+              />
+              {scratchComplete ? (
+                <Meteors key="scratch-meteors" number={4} half />
+              ) : null}
+            </ShineBorder>
           </ScratchToReveal>
         </DialogContent>
       </Dialog>

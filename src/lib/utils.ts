@@ -4,9 +4,82 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import imageCompression, { type Options } from "browser-image-compression";
 
+const emojis = [
+  "😊",
+  "😜",
+  "😎",
+  "😴",
+  "😇",
+  "😺",
+  "💀",
+  "👽",
+  "💫",
+  "👏",
+  "💪",
+  "👑",
+  "💛",
+  "💍",
+  "🐷",
+  "🐒",
+  "🐥",
+  "🐍",
+  "🐝",
+  "🐜",
+  "🐬",
+  "🐳",
+  "🐐",
+  "🐓",
+  "🐖",
+  "🐁",
+  "🍀",
+  "🌹",
+  "🌻",
+  "🌙",
+  "🌍",
+  "⭐",
+  "🌀",
+  "🎁",
+  "🎊",
+  "🎈",
+  "🔑",
+  "🚬",
+  "💣",
+  "🎸",
+  "🎮",
+  "🎯",
+  "🏆",
+  "🍼",
+  "🍺",
+  "🍗",
+  "🍖",
+  "🍩",
+  "🍮",
+  "🍦",
+  "🍬",
+  "🍭",
+  "🍓",
+  "🍑",
+  "🍆",
+  "🍅",
+  "🌽",
+  "⛲",
+  "🎢",
+  "🎭",
+  "📍",
+  "🚩",
+  "❇",
+  "♏",
+  "♐",
+  "🔱",
+];
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const getRandomEmoji = () => {
+  return emojis[Math.floor(Math.random() * emojis.length)];
+};
 
 export async function compressBase64Image(
   base64String: string,

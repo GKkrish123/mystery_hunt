@@ -184,7 +184,7 @@ export const ScratchToReveal: FC<ScratchToRevealProps> = ({
             ref={canvasRef}
             width={width}
             height={height}
-            className="absolute left-0 top-0"
+            className={`absolute left-0 top-0 ${!isComplete ? "z-10" : ""}`}
             onMouseDown={handleMouseDown as unknown as MouseEventHandler}
             onTouchStart={handleTouchStart as unknown as TouchEventHandler}
             onClick={(e) => e.stopPropagation()}

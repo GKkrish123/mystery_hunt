@@ -116,6 +116,13 @@ export const mysteryRouter = createTRPCRouter({
         hunterTrailsData?.interactions?.mysteries?.[
           mysteryId
         ]?.lastGuessedAt?.toMillis();
+      const solvedTrail = isSolved
+        ? hunterTrailsData?.trails?.find(
+            (trail) => trail.mysteryId === mysteryData.id && trail.isSolved,
+          )
+        : undefined;
+      const actualSecret = solvedTrail?.guessedValue;
+      const actualPoints = solvedTrail?.points;
       return {
         ...mysteryData,
         isLiked,
@@ -123,6 +130,8 @@ export const mysteryRouter = createTRPCRouter({
         triesLeft,
         isSolved,
         lastTriedAt,
+        actualSecret,
+        actualPoints,
       } as Mystery & MysteryFormValues;
     }),
 

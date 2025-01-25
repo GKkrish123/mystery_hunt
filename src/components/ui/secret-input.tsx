@@ -11,6 +11,7 @@ interface SecretInputProps {
   onChange: (value: string) => void;
   expectedInput: string;
   className?: string;
+  disabled?: boolean;
 }
 
 export function SecretInput({
@@ -18,6 +19,7 @@ export function SecretInput({
   className,
   value,
   onChange,
+  disabled,
 }: SecretInputProps) {
   const splittedInput: string[] = expectedInput.split(" ");
   const lengthWithoutSpaces = expectedInput.replace(/\s+/g, "").length;
@@ -27,6 +29,7 @@ export function SecretInput({
     <InputOTP
       className={className}
       value={value}
+      disabled={disabled}
       onChange={onChange}
       maxLength={lengthWithoutSpaces}
     >
@@ -35,7 +38,7 @@ export function SecretInput({
           <InputOTPGroup>
             {group.split("").map((_, charIndex) => (
               <InputOTPSlot
-                className="border-gray-400"
+                className="border-gray-400 font-mono font-semibold text-black dark:text-white"
                 key={`secret-input-${groupIndex}-${charIndex}`}
                 index={indexCounter++}
               />

@@ -4,24 +4,29 @@
 import { memo, useEffect, useState } from "react";
 import { useDebouncedValue, useViewportSize } from "@mantine/hooks";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
 
 interface MeteorsProps {
   number?: number;
   sidebar?: boolean;
+  half?: boolean;
 }
-export const Meteors = memo(({ number = 20, sidebar }: MeteorsProps) => {
+export const Meteors = memo(({ number = 20, sidebar, half }: MeteorsProps) => {
   const [meteorStyles, setMeteorStyles] = useState<Array<React.CSSProperties>>(
     [],
   );
   const isMobile = useIsMobile();
 
   const { width } = useViewportSize();
-  const [debouncedWidth] = useDebouncedValue(sidebar ? 120 : width, 500);
+  const [debouncedWidth] = useDebouncedValue(
+    half || sidebar ? 120 : width,
+    500,
+  );
 
   useEffect(() => {
     const styles = [
-      ...new Array(isMobile || sidebar ? Math.floor(number / 3) : number),
+      ...new Array(
+        isMobile || sidebar ? (half ? number : Math.floor(number / 3)) : number,
+      ),
     ].map(() => ({
       top: -5,
       left: Math.floor(Math.random() * debouncedWidth) + "px",

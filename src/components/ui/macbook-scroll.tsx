@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import {
   type MotionValue,
   motion,
@@ -39,8 +39,8 @@ export const MacbookScroll = ({
 }: {
   src?: string;
   showGradient?: boolean;
-  title?: string | React.ReactNode;
-  badge?: React.ReactNode;
+  title?: string | ReactNode;
+  badge?: ReactNode;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -558,7 +558,7 @@ export const KBtn = ({
   backlit = true,
 }: {
   className?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
   childrenClassName?: string;
   backlit?: boolean;
 }) => {
@@ -593,7 +593,7 @@ export const KBtn = ({
   );
 };
 
-export const Row = ({ children }: { children: React.ReactNode }) => {
+export const Row = ({ children }: { children: ReactNode }) => {
   return (
     <div className="mb-[2px] flex w-full flex-shrink-0 gap-[2px]">
       {children}

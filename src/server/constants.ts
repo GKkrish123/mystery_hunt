@@ -24,6 +24,8 @@ export interface MysteryFormValues {
   triesLeft: number;
   isSolved: boolean;
   lastTriedAt?: number;
+  actualSecret?: string;
+  actualPoints?: string;
 }
 
 export const defaultMysteryInteraction: MysteryInteraction = {
