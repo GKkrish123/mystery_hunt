@@ -547,8 +547,6 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
 
   const randomEmoji = useMemo(() => getRandomEmoji(), []);
 
-  console.log("si", secretInput);
-
   return (
     <div className="relative grid h-full auto-rows-min grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-7 md:gap-3">
       <BlurIn

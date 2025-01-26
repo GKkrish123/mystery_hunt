@@ -27,6 +27,12 @@ export const eventsRouter = createTRPCRouter({
     const mysteriesCollection = collection(db, MysteryCollections.mysteries);
     const eventsWithMysteries = await Promise.all(
       mysteryEvents.map(async (event) => {
+        if (event.scheduledFrom.seconds * 1000 < now.getMilliseconds()) {
+          return {
+            ...event,
+            mysteries: [],
+          };
+        }
         const eventMysteriesQuery = query(
           mysteriesCollection,
           where(documentId(), "in", event.mysteries),

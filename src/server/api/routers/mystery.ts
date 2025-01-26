@@ -585,6 +585,7 @@ export const mysteryRouter = createTRPCRouter({
           message: "Congratulations! Mystery solved.",
           points: currentPoints,
           mysteryUpdate: {
+            isSolved: true,
             lastGuessedAt: now,
             lastTriedAt: now,
             lastSolvedAt: now,
