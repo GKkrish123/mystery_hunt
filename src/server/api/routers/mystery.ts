@@ -333,8 +333,16 @@ export const mysteryRouter = createTRPCRouter({
         `mystery:viewCount:${mysteryId}`,
       );
       if (!mysteryViewCount) {
-        await updateDoc(doc(db, MysteryCollections.mysteries, mysteryId), {
-          firstViewedAt: new Date(timestamp),
+        const docRef = doc(db, MysteryCollections.mysteries, mysteryId);
+        await runTransaction(db, async (transaction) => {
+          const docSnapshot = await transaction.get(docRef);
+          if (!docSnapshot.exists()) {
+            throw new Error("Document does not exist!");
+          }
+          const data = docSnapshot.data();
+          if (!data?.firstViewedAt) {
+            transaction.update(docRef, { firstViewedAt: new Date(timestamp) });
+          }
         });
       }
       const hunterTrailData = hunterTrail.data() as HunterTrail;
