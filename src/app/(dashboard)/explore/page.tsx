@@ -85,12 +85,7 @@ export default async function ExplorerPage() {
           />
           <Separator className="mt-3" />
         </div>
-        {[
-          ...hallOfFameMysteries,
-          ...hallOfFameMysteries,
-          ...hallOfFameMysteries,
-          ...hallOfFameMysteries,
-        ].map((item, index) => (
+        {hallOfFameMysteries.map((item, index) => (
           <div
             key={`hof-${item.category.name}-${index}`}
             className="z-10 col-span-3"

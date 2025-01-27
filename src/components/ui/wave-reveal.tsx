@@ -2,6 +2,7 @@
 
 import { type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import GraphemeSplitter from "grapheme-splitter";
 
 interface WaveRevealProps {
   /**
@@ -74,10 +75,11 @@ const Word = ({
   if (isWordMode) {
     return word;
   }
+  const splitter = new GraphemeSplitter();
 
   return (
     <>
-      {word.split("").map((letter, letterIndex) => {
+      {splitter.splitGraphemes(word).map((letter, letterIndex) => {
         return (
           <span
             key={`${letter}_${letterIndex}_${index}`}
@@ -134,13 +136,13 @@ const createAnimatedNodes = (
   const isLast = index === length - 1;
 
   const className = cn(
-    "inline-block opacity-0 transition-all ease-in-out fill-mode-forwards",
+    "inline-block opacity-0 transition-all ease-in-out opacity-100 lg:opacity-0 fill-mode-forwards",
     {
       // Determine the animation direction
-      ["!animate-[reveal-down]"]: !isUp && !blur,
-      ["!animate-[reveal-up]"]: isUp && !blur,
-      ["!animate-[reveal-down,content-blur]"]: !isUp && blur,
-      ["!animate-[reveal-up,content-blur]"]: isUp && blur,
+      ["animate-[reveal-down]"]: !isUp && !blur,
+      ["animate-[reveal-up]"]: isUp && !blur,
+      ["animate-[reveal-down,content-blur]"]: !isUp && blur,
+      ["animate-[reveal-up,content-blur]"]: isUp && blur,
     },
     args.className,
   );
@@ -197,14 +199,14 @@ export default function WaveReveal({
   if (!text) {
     return null;
   }
-
-  const words = text.trim().split("");
+  const splitter = new GraphemeSplitter();
+  const words = splitter.splitGraphemes(text.trim());
 
   const { nodes } = words.reduce<ReducedValue>(createAnimatedNodes, {
     nodes: [],
     offset: 0,
     wordsLength: words.length,
-    textLength: text.length,
+    textLength: splitter.splitGraphemes(text).length,
     direction,
     mode,
     duration: duration ?? 60,

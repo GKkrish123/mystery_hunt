@@ -133,11 +133,11 @@ export function NavMain({
                                 asChild
                                 className="w-full"
                                 onClick={() => toggleSidebar()}
-                                isActive={currentPath === `/${subItem.tag}`}
+                                isActive={currentPath === `/explore/${subItem.tag}`}
                               >
                                 <Link
                                   className="relative z-10"
-                                  href={`/${subItem.tag}`}
+                                  href={`/explore/${subItem.tag}`}
                                 >
                                   <span>{subItem.name}</span>
                                 </Link>

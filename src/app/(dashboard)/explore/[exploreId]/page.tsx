@@ -33,7 +33,8 @@ interface ExploreCategoryProps {
 export default async function ExploreCategoryPage({
   params,
 }: ExploreCategoryProps) {
-  const { exploreId } = await params;
+  const { exploreId: exploreParam } = await params;
+  const exploreId = decodeURIComponent(exploreParam);
 
   if (exploreId === "extension") {
     return (

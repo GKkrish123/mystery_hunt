@@ -572,7 +572,7 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
         <span className="text-xs md:text-sm">Unlock Attempts</span>
         <NumberTicker
           className="text-sm font-bold md:text-base"
-          value={mystery.guessCount}
+          value={mystery.guessCount || 0}
         />
       </div>
       <div className="col-span-1 col-start-3 ml-auto flex flex-row-reverse items-center pr-5 sm:col-start-4 md:col-span-2 md:col-start-6">
