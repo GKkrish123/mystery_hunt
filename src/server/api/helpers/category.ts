@@ -40,20 +40,25 @@ export async function snapshotsToCategories(
   hunterId?: string,
   categoryTrails?: Record<string, CategoryInteraction>,
 ) {
+  const now = Date.now();
   return await Promise.all(
     snapshots.docs.map(async (doc) => {
+      const docData = doc.data() as Category;
+      if (docData.scheduledAt.seconds * 1000 > now) {
+        return null;
+      }
       let isBookmarked = false;
       if (categoryTrails) {
         isBookmarked = !!categoryTrails?.[doc.id]?.isBookmarked;
       } else if (cacheRedis && hunterId) {
         isBookmarked = await getCachedBookmark(cacheRedis, hunterId, doc.id);
       }
-      const data = parseSnapshotDoc(doc.data()) as Category;
+      const data = parseSnapshotDoc(docData) as Category;
       return {
         ...data,
         isBookmarked,
         id: doc.id,
       } as Category;
     }),
-  );
+  ).then((results) => results.filter((item) => item !== null));
 }

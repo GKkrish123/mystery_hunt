@@ -9,6 +9,7 @@ export interface Category {
   themePicUrl: string;
   isBookmarked: boolean;
   viewsCount: number;
+  scheduledAt: Timestamp;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }

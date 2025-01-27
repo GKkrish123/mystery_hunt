@@ -84,8 +84,13 @@ export const mysteryRouter = createTRPCRouter({
       if (!mysteryDoc.exists()) {
         return null;
       }
+      const now = Date.now();
+      const mysteryDocData = mysteryDoc.data() as Mystery;
+      if (mysteryDocData.scheduledAt.seconds * 1000 > now) {
+        return null;
+      }
       const mysteryData = {
-        ...(parseSnapshotDoc(mysteryDoc.data()) as Mystery),
+        ...(parseSnapshotDoc(mysteryDocData) as Mystery),
         isLiked: await getCachedLike(redis, user.hunterId, mysteryId),
         id: mysteryDoc.id,
       } as Mystery;
@@ -486,9 +491,12 @@ export const mysteryRouter = createTRPCRouter({
         return { success: false, message: "Invalid mystery or hunter." };
       }
       const now = Date.now();
+      const mysteryData = mysteryDoc.data() as Mystery;
+      if (mysteryData.scheduledAt.seconds * 1000 > now) {
+        return { success: false, message: "Too soon... Too soon..." };
+      }
       const serverTimestampValue = new Date(now);
       const hunterTrailData = hunterTrailDoc.data() as HunterTrail;
-      const mysteryData = mysteryDoc.data() as Mystery;
       const newGuessCount =
         (hunterTrailData.interactions.mysteries?.[mysteryId]?.guessCount ?? 0) +
         1;

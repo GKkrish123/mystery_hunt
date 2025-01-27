@@ -40,6 +40,7 @@ export interface Mystery {
   retryInterval: number;
   isLiked: boolean;
   attachments: Attachments;
+  scheduledAt: Timestamp;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }

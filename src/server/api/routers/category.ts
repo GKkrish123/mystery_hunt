@@ -40,8 +40,13 @@ export const categoryRouter = createTRPCRouter({
       if (categoryDoc.empty || !categoryDoc.docs[0]) {
         return null;
       }
+      const now = Date.now();
+      const docData = categoryDoc.docs[0].data() as Category;
+      if (docData.scheduledAt.seconds * 1000 > now) {
+        return null;
+      }
       return {
-        ...(parseSnapshotDoc(categoryDoc.docs[0].data()) as Category),
+        ...(parseSnapshotDoc(docData) as Category),
         isBookmarked: await getCachedBookmark(
           ctx.redis,
           ctx.user.hunterId,

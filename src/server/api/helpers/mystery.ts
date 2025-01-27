@@ -14,6 +14,7 @@ import { parseSnapshotDoc } from "./query";
 import type Redis from "ioredis";
 import { getCachedLike } from "./hunter";
 import { type MysteryInteraction } from "@/server/model/hunter-trails";
+import GraphemeSplitter from "grapheme-splitter";
 
 export function fetchMysteriesByIdChunks(
   idChunks: string[][],
@@ -36,6 +37,7 @@ export function fetchMysteriesByIdChunks(
 }
 
 export function generateNGrams(text: string): string[] {
+  const splitter = new GraphemeSplitter();
   const words = text.toLowerCase().split(" ");
   const nGrams = new Set<string>();
 
@@ -48,8 +50,9 @@ export function generateNGrams(text: string): string[] {
   }
 
   words.forEach((word) => {
-    for (let i = 1; i <= word.length; i++) {
-      nGrams.add(word.substring(0, i));
+    const graphemes = splitter.splitGraphemes(word);
+    for (let i = 1; i <= graphemes.length; i++) {
+      nGrams.add(graphemes.slice(0, i).join(""));
     }
   });
 
@@ -62,20 +65,25 @@ export async function snapshotsToMysteries(
   hunterId?: string,
   mysteryTrails?: Record<string, MysteryInteraction>,
 ) {
+  const now = Date.now();
   return await Promise.all(
     snapshots.docs.map(async (doc) => {
+      const docData = doc.data() as Mystery;
+      if (docData.scheduledAt.seconds * 1000 > now) {
+        return null;
+      }
       let isLiked = false;
       if (mysteryTrails) {
         isLiked = !!mysteryTrails?.[doc.id]?.isLiked;
       } else if (cacheRedis && hunterId) {
         isLiked = await getCachedLike(cacheRedis, hunterId, doc.id);
       }
-      const data = parseSnapshotDoc(doc.data()) as Mystery;
+      const data = parseSnapshotDoc(docData) as Mystery;
       return {
         ...data,
         isLiked,
         id: doc.id,
       } as Mystery;
     }),
-  );
+  ).then((results) => results.filter((item) => item !== null));
 }

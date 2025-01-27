@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { Timestamp } from "firebase/firestore";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import GraphemeSplitter from "grapheme-splitter";
 
 const BlurIn = dynamicImport(
   () => import("@/components/ui/blur-in").then((mod) => mod.default),
@@ -379,6 +380,7 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
   const { canRetry, countdown } = useRetryCountdown(mystery);
   const { points: currentPoints, countdown: pointsCountdown } =
     usePointsCountdown(mystery);
+  const splitter = new GraphemeSplitter();
 
   useEffect(() => {
     setMystery(mysteryProp);
@@ -629,7 +631,7 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
             disabled={
               !canRetry ||
               mystery.triesLeft === 0 ||
-              secretInput.length !==
+              splitter.splitGraphemes(secretInput).length !==
                 mystery.expectedSecret?.split(" ")?.join("").length
             }
             onClick={onSubmit}
@@ -673,7 +675,7 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
               </div>
             </>
           ) : (
-            <span className="flex font-mono font-semibold">
+            <span className="flex justify-center font-mono font-semibold">
               You can retry in{" "}
               <MorphingText
                 texts={[`${countdown}`]}

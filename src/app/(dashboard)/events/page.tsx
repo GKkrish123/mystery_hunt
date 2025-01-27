@@ -39,15 +39,7 @@ export default async function EventsPage() {
             <ColourfulText text="Events" className="text-4xl !font-extrabold" />
           </div>
           <div className="flex w-full justify-center md:px-[10%] lg:px-[15%] xl:px-[20%] 2xl:px-[25%]">
-            <EventsCarousel
-              mysteryEvents={[
-                ...eventMysteries,
-                ...eventMysteries,
-                ...eventMysteries,
-                ...eventMysteries,
-                ...eventMysteries,
-              ]}
-            />
+            <EventsCarousel mysteryEvents={eventMysteries} />
           </div>
         </BlurFade>
         <Separator className="col-span-full" />
@@ -59,66 +51,12 @@ export default async function EventsPage() {
           >
             <HeadingReveal
               title={event.name}
-              coundown={Date.now() + 60 * 1000}
+              coundown={event.scheduledTo.seconds * 1000}
             />
             <HorizontalMysteries mysteries={event.mysteries} />
             <Separator className="mt-3" />
           </div>
         ))}
-        <div className="col-span-full">
-          <HeadingReveal
-            title={"March"}
-            coundown={Date.now() + 2 * 60 * 60 * 1000}
-          />
-          <HorizontalMysteries
-            mysteries={[
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-            ]}
-          />
-          <Separator className="mt-3" />
-        </div>
-        <div className="col-span-full">
-          <HeadingReveal
-            title={"April"}
-            coundown={Date.now() + 60 * 600 * 1000}
-          />
-          <HorizontalMysteries
-            mysteries={[
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-            ]}
-          />
-          <Separator className="mt-3" />
-        </div>
-        <div className="col-span-full">
-          <HeadingReveal
-            title={"May"}
-            coundown={Date.now() + 60 * 60 * 600 * 1000}
-          />
-          <HorizontalMysteries
-            mysteries={[
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-              ...(eventMysteries[0]?.mysteries ?? []),
-            ]}
-          />
-          <Separator className="mt-3" />
-        </div>
         <Link className="col-span-3 h-10 md:col-span-2" href="/explore">
           <ShinyButton className="size-full">Explore More</ShinyButton>
         </Link>
