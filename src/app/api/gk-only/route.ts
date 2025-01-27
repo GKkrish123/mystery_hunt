@@ -60,7 +60,7 @@ const PayloadSchema = z.object({
   mysteries: z.array(MysterySchema),
 });
 
-export async function uploadImage(fileName: string, imgString: string) {
+async function uploadImage(fileName: string, imgString: string) {
   const buffer = Buffer.from(imgString?.split(",")?.[1] ?? "", "base64");
   const maxSizeInBytes = 100 * 1024;
   if (buffer.length > maxSizeInBytes) {
@@ -82,7 +82,7 @@ export async function uploadImage(fileName: string, imgString: string) {
   return file.publicUrl();
 }
 
-export async function deleteFiles(files: string[]) {
+async function deleteFiles(files: string[]) {
   const storage = firebaseAdminApp.storage();
   const bucket = storage.bucket("gkrish-mystery-hunt.firebasestorage.app");
   for (const file of files) {
