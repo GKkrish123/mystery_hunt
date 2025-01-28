@@ -39,13 +39,18 @@ export default async function ExploreCategoryPage({
   if (exploreId === "extension") {
     return (
       <MacbookScroll
-        title={<span>This is new.</span>}
+        title={
+          <span className="font-mono">
+            THE MYSTERIES CAN BE ANYWHERE IN THE INTERNET AND THE POSSIBILITES
+            ARE ENDLESS...
+          </span>
+        }
         badge={
           <Link href="https://github.com/gkkrish123">
             <Code className="h-10 w-10 -rotate-12 transform" />
           </Link>
         }
-        src={`https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`}
+        src="https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/extension.jpg"
         showGradient={false}
       />
     );

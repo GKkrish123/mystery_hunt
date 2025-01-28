@@ -23,7 +23,10 @@ import {
   type MysteryFormValues,
 } from "@/server/constants";
 import { type Mystery } from "@/server/model/mysteries";
-import { type Achievement, type HunterTrail } from "@/server/model/hunter-trails";
+import {
+  type Achievement,
+  type HunterTrail,
+} from "@/server/model/hunter-trails";
 import { chunkArray, shuffleArray } from "@/lib/utils";
 import { type HunterRank } from "@/server/model/hunters";
 import {
@@ -356,13 +359,7 @@ export const mysteryRouter = createTRPCRouter({
     );
     let lastScored = 0;
     const achievements = solvedTrails.map(
-      ({
-        guessCount,
-        guessedValue,
-        mysteryId,
-        points,
-        achievement,
-      }) => {
+      ({ guessCount, guessedValue, mysteryId, points, achievement }) => {
         const targetMystery = mysteries.find(
           (mystery) => mystery.id === mysteryId,
         )!;

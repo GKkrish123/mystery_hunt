@@ -42,6 +42,7 @@ export const navData = {
     {
       title: "Explorer",
       url: "/explore",
+      isActive: true,
       icon: Map,
       items: [
         {

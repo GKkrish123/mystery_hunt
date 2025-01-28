@@ -227,7 +227,15 @@ const LightBoard = memo(function LightBoard({
         ctx.fill();
       }
     });
-  }, [basePattern, offset, columns, lightSize, gap, mergedColors, resolvedTheme]);
+  }, [
+    basePattern,
+    offset,
+    columns,
+    lightSize,
+    gap,
+    mergedColors,
+    resolvedTheme,
+  ]);
 
   // This makes our text move across the board
   useEffect(() => {

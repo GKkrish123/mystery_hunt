@@ -7,7 +7,7 @@ export interface Trail {
   isSolved: boolean;
   mysteryId: string;
   points?: number;
-  achievement?: string
+  achievement?: string;
 }
 
 export interface Achievement {
@@ -17,7 +17,7 @@ export interface Achievement {
   name: string;
   imgUrl: string;
   points: number;
-  achievement: string
+  achievement: string;
 }
 
 export interface MysteryInteraction {

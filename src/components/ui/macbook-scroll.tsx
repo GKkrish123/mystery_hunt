@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { type ReactNode, useRef } from "react";
 import {
   type MotionValue,
   motion,
@@ -30,6 +30,9 @@ import {
   Volume2,
   WholeWord,
 } from "lucide-react";
+import { mysteryFont } from "@/lib/fonts";
+import { Spotlight } from "./spotlight";
+import { ShootingStars } from "./shooting-stars";
 
 export const MacbookScroll = ({
   src,
@@ -48,75 +51,73 @@ export const MacbookScroll = ({
     offset: ["start start", "end start"],
   });
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    if (window && window.innerWidth < 768) {
-      setIsMobile(true);
-    }
-  }, []);
-
-  const scaleX = useTransform(
-    scrollYProgress,
-    [0, 0.3],
-    [1.2, isMobile ? 1 : 1.5],
-  );
-  const scaleY = useTransform(
-    scrollYProgress,
-    [0, 0.3],
-    [0.6, isMobile ? 1 : 1.5],
-  );
-  const translate = useTransform(scrollYProgress, [0, 1], [0, 1500]);
+  const scaleX = useTransform(scrollYProgress, [0, 0.3], [1.2, 1.5]);
+  const scaleY = useTransform(scrollYProgress, [0, 0.3], [0.6, 1.3]);
+  const translate = useTransform(scrollYProgress, [0, 1], ["0vh", "200vh"]);
   const rotate = useTransform(scrollYProgress, [0.1, 0.12, 0.3], [-28, -28, 0]);
   const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   return (
-    <div
-      ref={ref}
-      className="flex min-h-[200vh] flex-shrink-0 scale-[0.35] transform flex-col items-center justify-start py-0 [perspective:800px] sm:scale-50 md:scale-100 md:py-80"
-    >
-      <motion.h2
-        style={{
-          translateY: textTransform,
-          opacity: textOpacity,
-        }}
-        className="mb-20 text-center text-3xl font-bold text-neutral-800 dark:text-white"
-      >
-        {title}
-      </motion.h2>
-      {/* Lid */}
-      <Lid
-        src={src}
-        scaleX={scaleX}
-        scaleY={scaleY}
-        rotate={rotate}
-        translate={translate}
-      />
-      {/* Base area */}
-      <div className="relative -z-10 h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
-        {/* above keyboard bar */}
-        <div className="relative h-10 w-full">
-          <div className="absolute inset-x-0 mx-auto h-4 w-[80%] bg-[#050505]" />
-        </div>
-        <div className="relative flex">
-          <div className="mx-auto h-full w-[10%] overflow-hidden">
-            <SpeakerGrid />
-          </div>
-          <div className="mx-auto h-full w-[80%]">
-            <Keypad />
-          </div>
-          <div className="mx-auto h-full w-[10%] overflow-hidden">
-            <SpeakerGrid />
-          </div>
-        </div>
-        <Trackpad />
-        <div className="absolute inset-x-0 bottom-0 mx-auto h-2 w-20 rounded-tl-3xl rounded-tr-3xl bg-gradient-to-t from-[#272729] to-[#050505]" />
-        {showGradient && (
-          <div className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black"></div>
+    <div className="relative size-full" ref={ref}>
+      <span
+        className={cn(
+          "pointer-events-none absolute top-20 m-auto block w-full whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-4xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10 md:text-5xl",
+          mysteryFont.className,
         )}
-        {badge && <div className="absolute bottom-4 left-4">{badge}</div>}
+      >
+        MYSTERYVERSE IS EXPANDING...
+      </span>
+      <span
+        className={cn(
+          "pointer-events-none absolute top-52 m-auto block w-full whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-4xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10 md:text-5xl",
+          mysteryFont.className,
+        )}
+      >
+        COMING SOON
+      </span>
+      <div className="flex min-h-[170vh] flex-shrink-0 scale-[0.40] transform flex-col items-center justify-start py-0 [perspective:800px] sm:scale-50 md:min-h-[250vh] md:scale-75 md:py-80 lg:scale-90">
+        <motion.h2
+          style={{
+            translateY: textTransform,
+            opacity: textOpacity,
+          }}
+          className="mb-32 text-center text-3xl font-bold text-neutral-800 dark:text-white"
+        >
+          {title}
+        </motion.h2>
+        <Lid
+          src={src}
+          scaleX={scaleX}
+          scaleY={scaleY}
+          rotate={rotate}
+          translate={translate}
+        />
+        <div className="relative -z-10 h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
+          <div className="relative h-10 w-full">
+            <div className="absolute inset-x-0 mx-auto h-4 w-[80%] bg-[#050505]" />
+          </div>
+          <div className="relative flex">
+            <div className="mx-auto h-full w-[10%] overflow-hidden">
+              <SpeakerGrid />
+            </div>
+            <div className="mx-auto h-full w-[80%]">
+              <Keypad />
+            </div>
+            <div className="mx-auto h-full w-[10%] overflow-hidden">
+              <SpeakerGrid />
+            </div>
+          </div>
+          <Trackpad />
+          <div className="absolute inset-x-0 bottom-0 mx-auto h-2 w-20 rounded-tl-3xl rounded-tr-3xl bg-gradient-to-t from-[#272729] to-[#050505]" />
+          {showGradient && (
+            <div className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black"></div>
+          )}
+          {badge && <div className="absolute bottom-4 left-4">{badge}</div>}
+        </div>
       </div>
+      <Spotlight />
+      <ShootingStars />
     </div>
   );
 };
@@ -131,7 +132,7 @@ export const Lid = ({
   scaleX: MotionValue<number>;
   scaleY: MotionValue<number>;
   rotate: MotionValue<number>;
-  translate: MotionValue<number>;
+  translate: MotionValue<string>;
   src?: string;
 }) => {
   return (
@@ -151,7 +152,13 @@ export const Lid = ({
           className="absolute inset-0 flex items-center justify-center rounded-lg bg-[#010101]"
         >
           <span className="text-white">
-            <AceternityLogo />
+            <Image
+              src="/favicon.ico"
+              alt="mysteryverse-logo"
+              width={50}
+              height={50}
+              priority
+            />
           </span>
         </div>
       </div>
@@ -172,23 +179,19 @@ export const Lid = ({
           alt="Wooo"
           fill
           priority
-          className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top"
+          className="absolute inset-0 h-full w-full rounded-lg object-fill"
         />
       </motion.div>
     </div>
   );
 };
 
-export const Trackpad = () => {
-  return (
-    <div
-      className="mx-auto my-1 h-32 w-[40%] rounded-xl"
-      style={{
-        boxShadow: "0px 0px 1px 1px #00000020 inset",
-      }}
-    ></div>
-  );
-};
+export const Trackpad = () => (
+  <div
+    className="mx-auto my-1 h-32 w-[40%] rounded-xl"
+    style={{ boxShadow: "0px 0px 1px 1px #00000020 inset" }}
+  ></div>
+);
 
 export const Keypad = () => {
   return (
@@ -643,27 +646,6 @@ export const OptionKey = ({ className }: { className: string }) => {
         width="32"
         height="32"
         stroke="none"
-      />
-    </svg>
-  );
-};
-
-const AceternityLogo = () => {
-  return (
-    <svg
-      width="66"
-      height="65"
-      viewBox="0 0 66 65"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-3 w-3 text-white"
-    >
-      <path
-        d="M8 8.05571C8 8.05571 54.9009 18.1782 57.8687 30.062C60.8365 41.9458 9.05432 57.4696 9.05432 57.4696"
-        stroke="currentColor"
-        strokeWidth="15"
-        strokeMiterlimit="3.86874"
-        strokeLinecap="round"
       />
     </svg>
   );
