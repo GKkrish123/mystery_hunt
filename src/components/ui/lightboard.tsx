@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
+import { useTheme } from "next-themes";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 export type PatternCell = "0" | "1" | "2" | "3";
@@ -114,16 +115,17 @@ const textToPattern = (
 function getLightColor(
   state: PatternCell,
   colors: Partial<LightBoardColors>,
+  theme?: string,
 ): string {
   const mergedColors = { ...defaultColors, ...colors };
 
   switch (state) {
     case "1":
-      return mergedColors.textDim;
+      return theme === "dark" ? mergedColors.textBright : mergedColors.textDim;
     case "2":
       return mergedColors.drawLine;
     case "3":
-      return mergedColors.textBright;
+      return theme === "dark" ? mergedColors.textDim : mergedColors.textBright;
     default:
       return mergedColors.background;
   }
@@ -148,6 +150,7 @@ const LightBoard = memo(function LightBoard({
   // We decide how many rows and columns of lights we need
   const containerRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState(0);
+  const { resolvedTheme } = useTheme();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const mergedColors = { ...defaultColors, ...colors };
 
@@ -212,7 +215,7 @@ const LightBoard = memo(function LightBoard({
         const patternColIndex = (colIndex + offset) % patternWidth;
         const state = row[patternColIndex];
 
-        ctx.fillStyle = getLightColor(state!, mergedColors);
+        ctx.fillStyle = getLightColor(state!, mergedColors, resolvedTheme);
         ctx.beginPath();
         ctx.arc(
           colIndex * (lightSize + gap) + lightSize / 2,
@@ -224,7 +227,7 @@ const LightBoard = memo(function LightBoard({
         ctx.fill();
       }
     });
-  }, [basePattern, offset, columns, lightSize, gap, mergedColors]);
+  }, [basePattern, offset, columns, lightSize, gap, mergedColors, resolvedTheme]);
 
   // This makes our text move across the board
   useEffect(() => {
@@ -261,7 +264,15 @@ const LightBoard = memo(function LightBoard({
       setLastUpdateTime(currentTime);
     }
     drawToCanvas();
-  }, [updateInterval, isHovered, basePattern, drawToCanvas, lastUpdateTime]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    updateInterval,
+    isHovered,
+    basePattern,
+    drawToCanvas,
+    lastUpdateTime,
+    resolvedTheme,
+  ]);
 
   // This keeps our animation going
   useEffect(() => {
@@ -516,11 +527,11 @@ const sevenSegmentFont: Record<string, Pattern> = {
 
 const defaultFont: Record<string, Pattern> = {
   " ": [
-    ["0", "0", "0", "0"],
-    ["0", "0", "0", "0"],
-    ["0", "0", "0", "0"],
-    ["0", "0", "0", "0"],
-    ["0", "0", "0", "0"],
+    ["0", "0"],
+    ["0", "0"],
+    ["0", "0"],
+    ["0", "0"],
+    ["0", "0"],
   ],
   A: [
     ["0", "1", "1", "0"],
@@ -703,5 +714,75 @@ const defaultFont: Record<string, Pattern> = {
     ["0", "0", "1", "0"],
     ["0", "1", "0", "0"],
     ["1", "1", "1", "1"],
+  ],
+  0: [
+    ["1", "1", "1"],
+    ["1", "0", "1"],
+    ["1", "0", "1"],
+    ["1", "0", "1"],
+    ["1", "1", "1"],
+  ],
+  1: [
+    ["0", "1", "0"],
+    ["1", "1", "0"],
+    ["0", "1", "0"],
+    ["0", "1", "0"],
+    ["1", "1", "1"],
+  ],
+  2: [
+    ["1", "1", "1"],
+    ["0", "0", "1"],
+    ["1", "1", "1"],
+    ["1", "0", "0"],
+    ["1", "1", "1"],
+  ],
+  3: [
+    ["1", "1", "1"],
+    ["0", "0", "1"],
+    ["0", "1", "1"],
+    ["0", "0", "1"],
+    ["1", "1", "1"],
+  ],
+  4: [
+    ["1", "0", "1"],
+    ["1", "0", "1"],
+    ["1", "1", "1"],
+    ["0", "0", "1"],
+    ["0", "0", "1"],
+  ],
+  5: [
+    ["1", "1", "1"],
+    ["1", "0", "0"],
+    ["1", "1", "1"],
+    ["0", "0", "1"],
+    ["1", "1", "1"],
+  ],
+  6: [
+    ["1", "1", "1"],
+    ["1", "0", "0"],
+    ["1", "1", "1"],
+    ["1", "0", "1"],
+    ["1", "1", "1"],
+  ],
+  7: [
+    ["1", "1", "1"],
+    ["0", "0", "1"],
+    ["0", "0", "1"],
+    ["0", "1", "0"],
+    ["0", "1", "0"],
+  ],
+  8: [
+    ["1", "1", "1"],
+    ["1", "0", "1"],
+    ["1", "1", "1"],
+    ["1", "0", "1"],
+    ["1", "1", "1"],
+  ],
+  9: [
+    ["1", "1", "1"],
+    ["1", "0", "1"],
+    ["1", "1", "1"],
+    ["0", "0", "1"],
+    ["1", "1", "1"],
   ],
 };

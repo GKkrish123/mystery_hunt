@@ -3,20 +3,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React from "react";
 import { cn } from "@/lib/utils";
 import TiltedCover from "./tilted-cover";
-
-type Card = {
-  title: string;
-  src: string;
-};
+import { type Achievement } from "@/server/model/hunter-trails";
 
 export function FocusCards({
   cards,
   className,
 }: {
-  cards: Card[];
+  cards: Achievement[];
   className?: string;
 }) {
   return (
@@ -26,21 +21,23 @@ export function FocusCards({
         className,
       )}
     >
-      {cards.map((card) => (
+      {cards.map((card, index) => (
         <TiltedCover
-          key={card.title}
+          key={`achieved-${card.name}-${index}`}
           image={{
-            alt: card.title,
-            src: card.src,
+            alt: `achieved-${card.name}`,
+            src: card.imgUrl,
           }}
         >
           <div className="p-2">
-            <div className="mb-2 text-sm font-semibold text-foreground">
-              {card.title}
+            <div className="mb-2 text-center text-sm font-semibold text-foreground">
+              {card.name}
             </div>
-            <p className="leading-2 text-sm text-muted-foreground">
-              The Statue of Liberty is a colossal neoclassical sculpture on
-              Liberty Island in New York Harbor, within New York City.{" "}
+            <div className="mb-2 text-center font-mono text-sm text-foreground">
+              {card.points} Points
+            </div>
+            <p className="leading-2 text-center text-sm text-muted-foreground">
+              {card.achievement}
             </p>
           </div>
         </TiltedCover>

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { mysteryFont } from "@/lib/fonts";
 
 import { default as dynamicImport } from "next/dynamic";
+import { DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const AvatarUpload = dynamicImport(
   () => import("@/components/avatar-upload").then((mod) => mod.AvatarUpload),
@@ -40,20 +41,8 @@ const DialogContent = dynamicImport(
   () => import("@/components/ui/dialog").then((mod) => mod.DialogContent),
   { ssr: false },
 );
-const DialogDescription = dynamicImport(
-  () => import("@/components/ui/dialog").then((mod) => mod.DialogDescription),
-  { ssr: false },
-);
 const DialogFooter = dynamicImport(
   () => import("@/components/ui/dialog").then((mod) => mod.DialogFooter),
-  { ssr: false },
-);
-const DialogHeader = dynamicImport(
-  () => import("@/components/ui/dialog").then((mod) => mod.DialogHeader),
-  { ssr: false },
-);
-const DialogTitle = dynamicImport(
-  () => import("@/components/ui/dialog").then((mod) => mod.DialogTitle),
   { ssr: false },
 );
 const DialogTrigger = dynamicImport(

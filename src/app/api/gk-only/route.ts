@@ -19,10 +19,11 @@ const MysterySchema = z.object({
   title: z.string().min(3).max(50),
   searchKeywords: z.array(z.string().min(3).max(50)),
   description: z.string().max(100),
-  question: z.string(),
+  question: z.string().min(1),
   hints: z.array(z.string()),
   maxTries: z.number().int().min(1),
   expectedSecret: z.string().min(1),
+  achievement: z.string().min(1).optional(),
   linkedEvent: z.string(),
   maxPoints: z.number().int().positive(),
   minPoints: z.number().int().positive(),
@@ -149,7 +150,10 @@ export async function POST(req: NextRequest) {
     const newCategoryIds: string[] = [];
     const newEventIds: string[] = [];
     const eventMysteryMapping: Record<string, string[]> = {};
-    const mysterySecretMapping: Record<string, string> = {};
+    const mysterySecretMapping: Record<
+      string,
+      { secret: string; achievement: string }
+    > = {};
 
     await runTransaction(db, async (transaction) => {
       for (const mystery of newMysteries) {
@@ -164,7 +168,11 @@ export async function POST(req: NextRequest) {
             }),
           ),
         };
-        mysterySecretMapping[mysteryDoc.id] = mystery.expectedSecret;
+        mysterySecretMapping[mysteryDoc.id] = {
+          secret: mystery.expectedSecret,
+          achievement: mystery.achievement!,
+        };
+        delete mystery.achievement;
         const expectedSecret = splitter
           .splitGraphemes(mystery.expectedSecret)
           .map((_) => "*")
@@ -184,10 +192,16 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      Object.entries(mysterySecretMapping).forEach(([mysteryId, secret]) => {
-        const secretDoc = doc(db, MysteryCollections.secretChamber, mysteryId);
-        transaction.set(secretDoc, { secret });
-      });
+      Object.entries(mysterySecretMapping).forEach(
+        ([mysteryId, { secret, achievement }]) => {
+          const secretDoc = doc(
+            db,
+            MysteryCollections.secretChamber,
+            mysteryId,
+          );
+          transaction.set(secretDoc, { secret, achievement });
+        },
+      );
 
       for (const category of newCategories) {
         const categoryDoc = doc(collection(db, MysteryCollections.categories));

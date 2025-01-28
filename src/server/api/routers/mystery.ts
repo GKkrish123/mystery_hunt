@@ -23,7 +23,7 @@ import {
   type MysteryFormValues,
 } from "@/server/constants";
 import { type Mystery } from "@/server/model/mysteries";
-import { type HunterTrail } from "@/server/model/hunter-trails";
+import { type Achievement, type HunterTrail } from "@/server/model/hunter-trails";
 import { chunkArray, shuffleArray } from "@/lib/utils";
 import { type HunterRank } from "@/server/model/hunters";
 import {
@@ -31,7 +31,11 @@ import {
   snapshotsToMysteries,
 } from "../helpers/mystery";
 import { getCachedLike, getHuntersRankList } from "../helpers/hunter";
-import { getHunterTrailById, parseSnapshotDoc } from "../helpers/query";
+import {
+  getHunterById,
+  getHunterTrailById,
+  parseSnapshotDoc,
+} from "../helpers/query";
 import { type MysterySecret } from "@/server/model/secret-chamber";
 import { snapshotsToCategories } from "../helpers/category";
 
@@ -324,6 +328,61 @@ export const mysteryRouter = createTRPCRouter({
     return mysteries;
   }),
 
+  getAchievements: privateProcedure.query(async ({ ctx }) => {
+    const hunterId = ctx.user.hunterId;
+    const hunterDoc = await getHunterById(hunterId);
+    if (!hunterDoc) {
+      throw new Error("User not found", {
+        cause: "user-not-found",
+      });
+    }
+    const hunterTrailsSnapshot = await getHunterTrailById(hunterId);
+    const hunterTrailsData = hunterTrailsSnapshot.data() as HunterTrail;
+    const solvedTrails = (hunterTrailsData?.trails || []).filter(
+      (trail) => trail.isSolved,
+    );
+    const solvedMysteryIds = [
+      ...new Set(solvedTrails.map((trail) => trail.mysteryId)),
+    ];
+    const idChunks = chunkArray(solvedMysteryIds, 10);
+    const mysteriesPromises = fetchMysteriesByIdChunks(
+      idChunks,
+      hunterTrailsData?.interactions?.mysteries,
+    );
+    const mysteriesArray = await Promise.all(mysteriesPromises);
+    const mysteries = mysteriesArray.flat();
+    solvedTrails.sort(
+      (a, b) => b.guessedAt.toMillis() - a.guessedAt.toMillis(),
+    );
+    let lastScored = 0;
+    const achievements = solvedTrails.map(
+      ({
+        guessCount,
+        guessedValue,
+        mysteryId,
+        points,
+        achievement,
+      }) => {
+        const targetMystery = mysteries.find(
+          (mystery) => mystery.id === mysteryId,
+        )!;
+        if (!lastScored) {
+          lastScored = points ?? 0;
+        }
+        return {
+          guessCount,
+          guessedValue,
+          name: targetMystery.title,
+          imgUrl: targetMystery.thumbnailUrl,
+          points: points ?? 0,
+          achievement: achievement ?? "",
+        } as Achievement;
+      },
+    );
+
+    return { lastScored, scoreBoard: hunterDoc.scoreBoard, achievements };
+  }),
+
   recordMysteryView: privateProcedure
     .input(z.object({ mysteryId: z.string() }))
     .mutation(async ({ input, ctx }) => {
@@ -571,6 +630,7 @@ export const mysteryRouter = createTRPCRouter({
               guessedValue: secret,
               isSolved: true,
               points: currentPoints,
+              achievement: secretData.achievement,
               mysteryId,
             }),
           });

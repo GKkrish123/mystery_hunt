@@ -25,13 +25,25 @@ export function ImageCarousel({
         (prevIndex - 1 + initialItems.length) % initialItems.length,
     );
   };
-  const visibleIndices = [
-    (currentIndex - 1 + initialItems.length) % initialItems.length,
-    currentIndex,
-    (currentIndex + 1) % initialItems.length,
-  ];
 
-  const visibleItems = visibleIndices.map((index) => initialItems[index]!);
+  let visibleItems: Mystery[] = [];
+
+  if (initialItems.length === 1) {
+    visibleItems = initialItems;
+  } else if (initialItems.length === 2) {
+    visibleItems = [
+      initialItems[(currentIndex + 1) % initialItems.length]!,
+      initialItems[currentIndex]!,
+    ];
+  } else {
+    visibleItems = [
+      initialItems[
+        (currentIndex - 1 + initialItems.length) % initialItems.length
+      ]!,
+      initialItems[currentIndex]!,
+      initialItems[(currentIndex + 1) % initialItems.length]!,
+    ];
+  }
 
   return (
     <div
@@ -40,33 +52,41 @@ export function ImageCarousel({
         className,
       )}
     >
-      <div
-        onClick={handlePrev}
-        className="navigation-item-left absolute left-5 top-[50%] z-20 flex h-7 w-7 translate-y-[-50%] cursor-pointer items-center justify-center rounded-full border bg-neutral-200 backdrop-blur-sm backdrop-filter dark:bg-neutral-700"
-      >
-        <ChevronLeft className="-ml-[2px] text-zinc-700 dark:text-slate-200" />
-      </div>
-      <div
-        onClick={handleNext}
-        className="navigation-item-right absolute right-5 top-[50%] z-20 flex h-7 w-7 translate-y-[-50%] cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-neutral-200 backdrop-blur-sm backdrop-filter dark:border-zinc-800 dark:bg-neutral-700"
-      >
-        <ChevronRight className="-mr-[2px] text-zinc-700 dark:text-slate-200" />
-      </div>
+      {initialItems.length > 1 && (
+        <div
+          onClick={handlePrev}
+          className="navigation-item-left absolute left-5 top-[50%] z-20 flex h-7 w-7 translate-y-[-50%] cursor-pointer items-center justify-center rounded-full border bg-neutral-200 backdrop-blur-sm backdrop-filter dark:bg-neutral-700"
+        >
+          <ChevronLeft className="-ml-[2px] text-zinc-700 dark:text-slate-200" />
+        </div>
+      )}
+      {initialItems.length > 1 && (
+        <div
+          onClick={handleNext}
+          className="navigation-item-right absolute right-5 top-[50%] z-20 flex h-7 w-7 translate-y-[-50%] cursor-pointer items-center justify-center rounded-full border border-slate-200 bg-neutral-200 backdrop-blur-sm backdrop-filter dark:border-zinc-800 dark:bg-neutral-700"
+        >
+          <ChevronRight className="-mr-[2px] text-zinc-700 dark:text-slate-200" />
+        </div>
+      )}
+
       {visibleItems.map((item, index) => (
         <div
           key={`${item.id}-${index}`}
-          className={
-            "!animate-fadeIn absolute left-[50%] top-[10%] z-10 w-[220px] rounded-xl bg-transparent"
-          }
+          className="!animate-fadeIn absolute left-[50%] top-[10%] z-10 w-[220px] rounded-xl bg-transparent"
           style={{
             transform:
               index === 1
                 ? "translateX(-50%)"
                 : index === 0
-                  ? "translateX(-130%) rotate(-10deg)"
+                  ? initialItems.length === 2
+                    ? "translateX(-60%) rotate(-10deg)"
+                    : initialItems.length === 1
+                      ? "translateX(-50%)"
+                      : "translateX(-130%) rotate(-10deg)"
                   : "translateX(30%) rotate(10deg)",
             transition: "transform 0.5s ease, filter 0.5s ease",
-            filter: index === 1 ? "none" : "blur(4px)",
+            filter:
+              index === 1 || initialItems.length === 1 ? "none" : "blur(4px)",
             zIndex: index === 1 ? 3 : 1,
           }}
         >

@@ -17,7 +17,7 @@ export default function SupportPage() {
         <div className="col-span-full flex h-[23rem] w-full items-center justify-center md:h-[30rem]">
           <PinContainer
             title="/gkkrish123.git"
-            href="https://github.com/gkkrish123"
+            href="upi://pay?pa=www.krishnan.arulsigamani-1@okicici&pn=GKkrish&cu=INR"
           >
             <div className="flex h-[17rem] w-[15rem] basis-full flex-col p-4 tracking-tight text-slate-100/50 sm:basis-1/2 md:h-[20rem] md:w-[20rem]">
               <h3 className="!m-0 max-w-xs !pb-2 text-base font-bold text-black dark:text-slate-100 md:text-lg">

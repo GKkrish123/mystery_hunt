@@ -7,6 +7,17 @@ export interface Trail {
   isSolved: boolean;
   mysteryId: string;
   points?: number;
+  achievement?: string
+}
+
+export interface Achievement {
+  guessCount: number;
+  guessedAt: Timestamp;
+  guessedValue: string;
+  name: string;
+  imgUrl: string;
+  points: number;
+  achievement: string
 }
 
 export interface MysteryInteraction {
