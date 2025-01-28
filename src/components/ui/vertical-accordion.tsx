@@ -4,46 +4,61 @@ import { type Dispatch, type SetStateAction, useState } from "react";
 import { div as MotionDiv } from "motion/react-m";
 import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 import { useViewportSize } from "@mantine/hooks";
-import { type LucideIcon } from "lucide-react";
-import { Bell, ChartArea, DollarSign, Play } from "lucide-react";
+import {
+  CalendarRange,
+  ChartColumnStacked,
+  LockKeyhole,
+  Stars,
+  Trophy,
+  type LucideIcon,
+} from "lucide-react";
 import ShineBorder from "./shine-border";
 
 const items: ItemProps[] = [
   {
     id: 1,
-    title: "Earn more",
-    Icon: DollarSign,
+    title: "Mysteryverse",
+    Icon: Stars,
     imgSrc:
-      "https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80",
+      "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/help_mysteries.jpeg",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum eius deserunt quia consectetur aliquid obcaecati voluptatibus quos distinctio natus! Tenetur.",
+      "Mysteryverse is a platform for mystery enthusiasts to solve thrilling puzzles. Each mystery offers clues to help you uncover hidden secret letters. But be cautious—your points decay with time, and you have limited attempts to solve each mystery!",
   },
   {
     id: 2,
-    title: "Play more",
-    Icon: Play,
+    title: "Categories",
+    Icon: ChartColumnStacked,
     imgSrc:
-      "https://images.unsplash.com/photo-1541532713592-79a0317b6b77?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80",
+      "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/help_categories.jpeg",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum eius deserunt quia consectetur aliquid obcaecati voluptatibus quos distinctio natus! Tenetur.",
+      "Mysteries are organized into categories based on themes or languages. A mystery can belong to multiple categories. Categories allow you to explore mysteries in your preferred theme or langauge.",
   },
   {
     id: 3,
-    title: "Keep track",
-    Icon: Bell,
+    title: "Secret Letters",
+    Icon: LockKeyhole,
     imgSrc:
-      "https://images.unsplash.com/photo-1578450671530-5b6a7c9f32a8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+      "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/help_secret.jpeg",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum eius deserunt quia consectetur aliquid obcaecati voluptatibus quos distinctio natus! Tenetur.",
+      "Secret letters are always in lowercase. Spaces can be ignored, but other special characters can be entered as they are. Depending on the category, the secret letters can be in regional languages, such as Tamil. Regional keyboard inputs are also supported.",
   },
   {
     id: 4,
-    title: "Grow faster",
-    Icon: ChartArea,
+    title: "Events and Prizes",
+    Icon: CalendarRange,
     imgSrc:
-      "https://images.unsplash.com/photo-1543286386-713bdd548da4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80",
+      "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/help_events.jpeg",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum eius deserunt quia consectetur aliquid obcaecati voluptatibus quos distinctio natus! Tenetur.",
+      "Events are time-limited challenges where you can participate and solve mysteries within a specific time frame. Once the event concludes, the top scorers are rewarded with mysterious prizes!",
+  },
+  {
+    id: 5,
+    title: "Leaderboards",
+    Icon: Trophy,
+    imgSrc:
+      "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/help_leaderboards.jpeg",
+    description:
+      "The leaderboards display the top mystery hunters based on their performance across different regions and events. Keep an eye on your rank, compete with others, and strive to reach the top to earn rewards and recognition!",
   },
 ];
 
@@ -116,11 +131,13 @@ const Panel = ({
           style={{
             writingMode: "vertical-lr",
           }}
-          className="hidden rotate-180 text-xl font-light lg:block"
+          className="hidden rotate-180 text-lg font-light lg:block lg:text-xl"
         >
           {title}
         </span>
-        <span className="block text-xl font-light lg:hidden">{title}</span>
+        <span className="block text-lg font-light lg:hidden lg:text-xl">
+          {title}
+        </span>
         <div className="grid aspect-square w-6 place-items-center text-black dark:text-white lg:w-full">
           <Icon />
         </div>
@@ -180,7 +197,7 @@ const panelVariants = {
 const panelVariantsSm = {
   open: {
     width: "100%",
-    height: "200px",
+    height: "230px",
   },
   closed: {
     width: "100%",

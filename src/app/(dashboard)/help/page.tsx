@@ -17,34 +17,27 @@ const VerticalAccordion = dynamicImport(() =>
 const slugs = [
   "typescript",
   "javascript",
-  "dart",
-  "java",
   "react",
-  "flutter",
-  "android",
+  "nextdotjs",
   "html5",
   "css3",
-  "nodedotjs",
-  "express",
-  "nextdotjs",
-  "prisma",
-  "amazonaws",
-  "postgresql",
   "firebase",
-  "nginx",
-  "vercel",
-  "testinglibrary",
-  "jest",
-  "cypress",
+  "google",
+  "redis",
   "docker",
   "git",
-  "jira",
   "github",
-  "gitlab",
   "visualstudiocode",
-  "androidstudio",
-  "sonarqube",
-  "figma",
+  "shadcnui",
+  "upstash",
+  "framer",
+  "tailwindcss",
+  "trpc",
+  "threedotjs",
+  "reacthookform",
+  "zod",
+  "googlepubsub",
+  "npm",
 ];
 
 export default function HelpPage() {
@@ -62,8 +55,11 @@ export default function HelpPage() {
           <VerticalAccordion />
         </div>
         <div className="col-span-full flex justify-center">
-          <div className="md:w-[350px]">
+          <div className="relative md:w-[350px]">
             <IconCloud iconSlugs={slugs} />
+            <span className="pointer-events-none absolute top-[40%] m-auto block w-full whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-4xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10 md:text-5xl">
+              Built With
+            </span>
           </div>
         </div>
       </div>
