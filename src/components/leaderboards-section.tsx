@@ -32,10 +32,7 @@ export async function LeaderboardsSection({
       city: city ?? undefined,
       event: event ?? undefined,
     })
-    .catch((e) => {
-      console.error("Failed to fetch leaderboards", e);
-      return [];
-    });
+    .catch(() => []);
 
   const topThree = [2, 1, 3].map(
     (rank) => leaderboardsData.find((item) => item.rank === rank) ?? null,

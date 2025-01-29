@@ -17,6 +17,7 @@ export interface Hunter {
     totalScore: number;
     lastScoredAt: Timestamp;
     eventScores: Record<string, number>;
+    eventsLastScoredAt: Record<string, Timestamp>;
   };
   userId: string;
   disabled: boolean;

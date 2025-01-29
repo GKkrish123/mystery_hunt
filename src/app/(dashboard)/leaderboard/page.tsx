@@ -54,7 +54,7 @@ export default async function LeaderboardPage({
         />
         <EventsSelect wrapperClassName="col-span-2 z-[12]" value={event} />
         <Suspense
-          key={`${state}-${city}`}
+          key={`${state}-${city}-${event}`}
           fallback={
             <AppLoader className="col-span-full h-[calc(100vh-15rem)]" />
           }

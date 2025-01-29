@@ -31,7 +31,7 @@ const items: ItemProps[] = [
     imgSrc:
       "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/help_categories.jpeg",
     description:
-      "Mysteries are organized into categories based on themes or languages. A mystery can belong to multiple categories. Categories allow you to explore mysteries in your preferred theme or langauge.",
+      "Mysteries are organized into categories based on themes or languages. A mystery can belong to multiple categories. Categories allow you to explore mysteries in your preferred theme or language.",
   },
   {
     id: 3,

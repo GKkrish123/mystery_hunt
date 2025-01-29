@@ -41,6 +41,7 @@ import {
 } from "../helpers/query";
 import { type MysterySecret } from "@/server/model/secret-chamber";
 import { snapshotsToCategories } from "../helpers/category";
+import { type MysteryEvent } from "@/server/model/events";
 
 export const mysteryRouter = createTRPCRouter({
   getMysteries: privateProcedure
@@ -597,6 +598,16 @@ export const mysteryRouter = createTRPCRouter({
         );
 
         await runTransaction(db, async (transaction) => {
+          let isOnEvent = false;
+          if (mysteryData.linkedEvent) {
+            const eventDoc = await transaction.get(
+              doc(db, MysteryCollections.events, mysteryData.linkedEvent),
+            );
+            if (eventDoc.exists()) {
+              const eventData = eventDoc.data() as MysteryEvent;
+              isOnEvent = eventData.scheduledTo.seconds * 1000 < now;
+            }
+          }
           transaction.update(mysteryRef, {
             lastGuessedAt: serverTimestampValue,
             lastSolvedAt: serverTimestampValue,
@@ -636,10 +647,12 @@ export const mysteryRouter = createTRPCRouter({
             {
               "scoreBoard.totalScore": increment(currentPoints),
               "scoreBoard.lastScoredAt": serverTimestampValue,
-              ...(mysteryData.linkedEvent
+              ...(isOnEvent
                 ? {
                     [`scoreBoard.eventScores.${mysteryData.linkedEvent}`]:
                       increment(currentPoints),
+                    [`scoreBoard.eventsLastScoredAt.${mysteryData.linkedEvent}`]:
+                      serverTimestampValue,
                   }
                 : {}),
             },

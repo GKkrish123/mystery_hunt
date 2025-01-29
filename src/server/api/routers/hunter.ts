@@ -222,6 +222,9 @@ export const userRouter = createTRPCRouter({
       const scoreAlias = event
         ? `scoreBoard.eventScores.${event}`
         : "scoreBoard.totalScore";
+      const lastScoredAlias = event
+        ? `scoreBoard.eventsLastScoredAt.${event}`
+        : "scoreBoard.lastScoredAt";
       let queryRef = queryHunters();
       queryRef = query(queryRef, where(scoreAlias, ">", 0));
       if (state) {
@@ -233,7 +236,7 @@ export const userRouter = createTRPCRouter({
       queryRef = query(
         queryRef,
         orderBy(scoreAlias, "desc"),
-        orderBy("scoreBoard.lastScoredAt", "asc"),
+        orderBy(lastScoredAlias, "asc"),
       );
       queryRef = query(queryRef, limit(state || city || event ? 50 : 100));
       const querySnapshot = await getDocs(queryRef);
@@ -345,6 +348,7 @@ export const userRouter = createTRPCRouter({
                 totalScore: 0,
                 lastScoredAt: serverTimestamp(),
                 eventScores: {},
+                eventsLastScoredAt: {},
               },
               proPicUrl: "",
               userId: "",
@@ -373,6 +377,7 @@ export const userRouter = createTRPCRouter({
                 totalScore: 0,
                 lastScoredAt: serverTimestamp(),
                 eventScores: {},
+                eventsLastScoredAt: {},
               },
               proPicUrl: "",
               userId: "",
