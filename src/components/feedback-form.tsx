@@ -2,13 +2,11 @@
 
 import confetti from "canvas-confetti";
 import { useRef } from "react";
-
 import { default as dynamicImport } from "next/dynamic";
 import { api } from "@/trpc/react";
 import { useDebouncedState } from "@mantine/hooks";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const Ripple = dynamicImport(
   () => import("@/components/ui/ripple").then((mod) => mod.default),
@@ -110,59 +108,42 @@ export const FeedbackForm = () => {
   };
 
   const feedbackDisabled =
-    isPending ||
-    !data?.success ||
-    isFeedbackSaving ||
-    !feedback.trim() ||
-    isSuccess;
-
-  const feedbackButton = (
-    <Button
-      ref={sendButtonRef}
-      disabled={feedbackDisabled}
-      variant="outline"
-      className="br- absolute -bottom-7 z-10 h-14 w-14 rounded-full md:h-16 md:w-16"
-      size="icon"
-      onClick={handleSendClick}
-    >
-      {isFeedbackSaving || isPending ? (
-        <Loader className="h-7 w-7 text-black dark:text-white" />
-      ) : (
-        <Send
-          style={{
-            width: "1.5rem",
-            height: "1.5rem",
-          }}
-        />
-      )}
-    </Button>
-  );
+    isPending || !data?.success || isFeedbackSaving || isSuccess;
 
   return (
     <>
       <div className="relative col-span-full col-start-1 row-span-6 flex w-full flex-col items-center justify-center rounded-lg border bg-background p-4 md:col-span-3 md:col-start-2 md:shadow-xl">
         <Textarea
           ref={textAreaRef}
-          className="z-10 h-full w-full resize-none border-none border-transparent pt-6 text-center text-base font-medium text-zinc-700 shadow-none placeholder:pt-24 placeholder:text-lg focus-visible:ring-0 focus-visible:placeholder:text-transparent dark:text-slate-100 md:text-lg md:placeholder:pt-32 md:placeholder:text-xl smh:placeholder:pt-[50px]"
-          placeholder="Here's your space to tell me anything you would like to..."
+          className="z-10 h-full w-full resize-none border-none border-transparent pt-6 text-center text-base font-medium text-zinc-700 shadow-none placeholder:pt-24 placeholder:text-lg focus-visible:ring-0 focus-visible:placeholder:text-transparent disabled:opacity-100 dark:text-slate-100 md:text-lg md:placeholder:pt-32 md:placeholder:text-xl smh:placeholder:pt-[50px]"
+          placeholder={
+            feedbackDisabled
+              ? "Too much feedback within 24 hours is injurious, come back later."
+              : "Here's your space to tell me anything you would like to..."
+          }
+          disabled={feedbackDisabled}
           onChange={(e) => setFeedback(e.target.value)}
         />
         <Ripple />
-        {feedbackDisabled && !!feedback.trim() ? (
-          <Tooltip>
-            <TooltipTrigger asChild className="!pointer-events-auto">
-              {feedbackButton}
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>
-                Too much feedback within 24 hours is injurious, Please try again
-                later.
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        ) : (
-          feedbackButton
-        )}
+        <Button
+          ref={sendButtonRef}
+          disabled={feedbackDisabled || !feedback.trim()}
+          variant="outline"
+          className="br- absolute -bottom-7 z-10 h-14 w-14 rounded-full md:h-16 md:w-16"
+          size="icon"
+          onClick={handleSendClick}
+        >
+          {isFeedbackSaving || isPending ? (
+            <Loader className="h-7 w-7 text-black dark:text-white" />
+          ) : (
+            <Send
+              style={{
+                width: "1.5rem",
+                height: "1.5rem",
+              }}
+            />
+          )}
+        </Button>
       </div>
       <FeedbackDisplay />
     </>

@@ -36,7 +36,7 @@ import { isValidPhoneNumber, parsePhoneNumber } from "react-phone-number-input";
 import ThemeToggle from "./ui/theme-toggle";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
-import { CalendarIcon, Eye, EyeClosed, Rainbow } from "lucide-react";
+import { CalendarIcon, Eye, EyeClosed, ShieldAlert } from "lucide-react";
 import GenderTrans from "@/components/icons/gender-trans.svg";
 import GenderMale from "@/components/icons/gender-male.svg";
 import GenderFemale from "@/components/icons/gender-female.svg";
@@ -54,6 +54,9 @@ import {
 import { api } from "@/trpc/react";
 import { FirebaseError } from "firebase/app";
 import { setCookie } from "cookies-next";
+import SignUpFaq from "./signup-faq";
+import { Label } from "./ui/label";
+import { AnimatedShinyText } from "./ui/animated-shiny-text";
 
 const formSchema = z
   .object({
@@ -129,6 +132,7 @@ export function SignupForm() {
   const [isLoading, startTransition] = useTransition();
   const [hidePassword, setHidePassword] = useState(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
+  const [showFaq, setShowFaq] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -297,350 +301,416 @@ export function SignupForm() {
 
   return (
     <>
-      <ThemeToggle className="absolute right-2 top-2 bg-accent" />
-      <Card className="z-10 mx-auto max-w-sm">
-        <CardHeader className="pb-5">
-          <CardTitle className="text-2xl">Sign Up</CardTitle>
-          <CardDescription>
-            The mystery portal is waiting to know you to begin
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-0">
-          <ScrollArea className="scrollbar-shadow h-[500px] px-4 pb-3 smh:h-[350px]">
-            <div className="grid gap-4">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-4 px-1"
+      <div
+        className={cn(
+          "relative h-[660px] w-full !transition-all !duration-500 !ease-in-out [transform-style:preserve-3d] smh:h-[520px]",
+          showFaq && "[transform:rotateY(180deg)]",
+        )}
+      >
+        <div
+          className={cn(
+            "absolute h-full w-full [backface-visibility:hidden]",
+            !showFaq && "z-20",
+          )}
+        >
+          <Card className="relative mx-auto max-w-sm">
+            <ThemeToggle className="absolute right-2 top-2 bg-accent" />
+            <CardHeader className="pb-5">
+              <CardTitle className="flex w-full">
+                <span className="text-2xl">Sign Up</span>
+                <div
+                  className={cn(
+                    "group ml-auto mr-5 flex items-center rounded-full border border-black/50 bg-neutral-100 text-xs text-white !transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/50 dark:bg-neutral-900 dark:hover:bg-neutral-800 lg:text-sm",
+                  )}
+                  onClick={() => setShowFaq(true)}
                 >
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="dob"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel>Date of birth</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
+                  <AnimatedShinyText className="!animate-shiny-text inline-flex items-center justify-center px-2 py-1 !transition ease-out hover:text-neutral-800 hover:duration-300 hover:dark:text-neutral-200">
+                    <ShieldAlert className="mr-0.5 size-4 text-black/70 !transition-transform duration-300 ease-in-out group-hover:-translate-x-0.5 dark:text-white/70 lg:mr-1 lg:size-5" />
+                    <span>The Trust Code</span>
+                  </AnimatedShinyText>
+                </div>
+              </CardTitle>
+              <CardDescription>
+                The mystery portal is waiting to know you to begin
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-0">
+              <ScrollArea className="scrollbar-shadow h-[500px] px-4 pb-3 smh:h-[350px]">
+                <div className="grid gap-4">
+                  <Form {...form}>
+                    <form
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="space-y-4 px-1"
+                    >
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Name</FormLabel>
                             <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "w-full pl-3 text-left font-normal",
-                                  !field.value && "text-muted-foreground",
-                                )}
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="dob"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col">
+                            <FormLabel>Date of birth</FormLabel>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <FormControl>
+                                  <Button
+                                    variant={"outline"}
+                                    className={cn(
+                                      "w-full pl-3 text-left font-normal",
+                                      !field.value && "text-muted-foreground",
+                                    )}
+                                  >
+                                    {field.value
+                                      ? format(field.value, "PPP")
+                                      : ""}
+                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                  </Button>
+                                </FormControl>
+                              </PopoverTrigger>
+                              <PopoverContent
+                                className="w-auto p-0"
+                                align="start"
                               >
-                                {field.value ? format(field.value, "PPP") : ""}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              autoFocus
-                              startMonth={new Date("1900-01-01")}
-                              endMonth={new Date()}
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="gender"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Gender</FormLabel>
-                        <FormControl>
-                          <ToggleGroup
-                            className="justify-start"
-                            size="lg"
-                            variant="outline"
-                            type="single"
-                            {...field}
-                            onValueChange={field.onChange}
-                          >
-                            <ToggleGroupItem
-                              className="data-[state=on]:bg-sky-200 data-[state=on]:dark:bg-sky-500"
-                              value="male"
-                              aria-label="Toggle bold"
-                            >
-                              <GenderMale className="dark:fill-white" />
-                            </ToggleGroupItem>
-                            <ToggleGroupItem
-                              className="data-[state=on]:bg-rose-200 data-[state=on]:dark:bg-rose-500"
-                              value="female"
-                              aria-label="Toggle italic"
-                            >
-                              <GenderFemale className="dark:fill-white" />
-                            </ToggleGroupItem>
-                            <ToggleGroupItem
-                              className="data-[state=on]:bg-gradient-to-r data-[state=on]:from-sky-200 data-[state=on]:to-rose-200 data-[state=on]:dark:from-sky-500 data-[state=on]:dark:to-rose-500"
-                              value="trans"
-                              aria-label="Toggle strikethrough"
-                            >
-                              <GenderTrans className="dark:fill-white" />
-                            </ToggleGroupItem>
-                            <ToggleGroupItem
-                              className="data-[state=on]:bg-gradient-to-r data-[state=on]:from-red-300 data-[state=on]:via-blue-300 data-[state=on]:via-green-300 data-[state=on]:via-yellow-300 data-[state=on]:to-purple-300 data-[state=on]:dark:bg-gradient-to-r data-[state=on]:dark:from-red-500 data-[state=on]:dark:via-blue-500 data-[state=on]:dark:via-green-500 data-[state=on]:dark:via-yellow-500 data-[state=on]:dark:to-purple-500"
-                              value="rainbow"
-                              aria-label="Toggle strikethrough"
-                            >
-                              <Rainbow
-                                style={{
-                                  width: "1.25rem",
-                                  height: "1.25rem",
-                                }}
-                              />
-                            </ToggleGroupItem>
-                          </ToggleGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="profilePic"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col items-center justify-center">
-                        <FormLabel className="start w-full">
-                          Profile Picture
-                        </FormLabel>
-                        <FormControl>
-                          <AvatarUpload {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Phone Number</FormLabel>
-                        <FormControl className="z-10">
-                          <PhoneInput {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="flex gap-1">
-                    <FormField
-                      control={form.control}
-                      name="country"
-                      render={() => (
-                        <FormItem className="w-1/3">
-                          <FormLabel>Country</FormLabel>
-                          <Select value="India">
+                                <Calendar
+                                  mode="single"
+                                  selected={field.value}
+                                  onSelect={field.onChange}
+                                  autoFocus
+                                  startMonth={new Date("1900-01-01")}
+                                  endMonth={new Date()}
+                                />
+                              </PopoverContent>
+                            </Popover>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="gender"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Gender</FormLabel>
                             <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="India">India</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="state"
-                      render={({ field }) => (
-                        <FormItem className="w-1/3">
-                          <FormLabel>State</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            disabled={isStatesLoading || !statesData?.length}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                {!isStatesLoading ? (
-                                  <SelectValue
-                                    placeholder={
-                                      statesData?.length ? "" : "N/A"
-                                    }
-                                  />
-                                ) : (
-                                  <Loader className="mx-auto my-0 h-7 w-7" />
-                                )}
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {statesData?.map((state) => (
-                                <SelectItem
-                                  key={`select-${state.state_code}`}
-                                  value={state.name}
+                              <ToggleGroup
+                                className="justify-evenly gap-3"
+                                size="lg"
+                                variant="outline"
+                                type="single"
+                                {...field}
+                                onValueChange={field.onChange}
+                              >
+                                <ToggleGroupItem
+                                  className="relative data-[state=on]:bg-sky-200 data-[state=on]:dark:bg-sky-500"
+                                  value="male"
+                                  aria-label="Toggle male"
                                 >
-                                  {state.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="city"
-                      render={({ field }) => (
-                        <FormItem className="w-1/3">
-                          <FormLabel>City</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            disabled={isCitiesLoading || !citiesData?.length}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                {!isCitiesLoading ? (
-                                  <SelectValue
-                                    placeholder={
-                                      citiesData?.length ? "" : "N/A"
-                                    }
+                                  <Label className="absolute -top-3 left-[0.65rem] rounded-sm bg-white px-[0.3rem] text-[0.6rem] font-semibold text-muted-foreground dark:bg-black">
+                                    M
+                                  </Label>
+                                  <GenderMale className="dark:fill-white" />
+                                </ToggleGroupItem>
+                                <ToggleGroupItem
+                                  className="relative data-[state=on]:bg-rose-200 data-[state=on]:dark:bg-rose-500"
+                                  value="female"
+                                  aria-label="Toggle female"
+                                >
+                                  <Label className="absolute -top-3 left-[0.7rem] rounded-sm bg-white px-[0.35rem] text-[0.6rem] font-semibold text-muted-foreground dark:bg-black">
+                                    F
+                                  </Label>
+                                  <GenderFemale className="dark:fill-white" />
+                                </ToggleGroupItem>
+                                <ToggleGroupItem
+                                  className="relative data-[state=on]:bg-gradient-to-r data-[state=on]:from-sky-200 data-[state=on]:to-rose-200 data-[state=on]:dark:from-sky-500 data-[state=on]:dark:to-rose-500"
+                                  value="trans"
+                                  aria-label="Toggle trans"
+                                >
+                                  <Label className="absolute -top-3 left-[0.7rem] rounded-sm bg-white px-[0.35rem] text-[0.6rem] font-semibold text-muted-foreground dark:bg-black">
+                                    T
+                                  </Label>
+                                  <GenderTrans className="dark:fill-white" />
+                                </ToggleGroupItem>
+                                {/* <ToggleGroupItem
+                                  className="data-[state=on]:bg-gradient-to-r data-[state=on]:from-red-300 data-[state=on]:via-blue-300 data-[state=on]:via-green-300 data-[state=on]:via-yellow-300 data-[state=on]:to-purple-300 data-[state=on]:dark:bg-gradient-to-r data-[state=on]:dark:from-red-500 data-[state=on]:dark:via-blue-500 data-[state=on]:dark:via-green-500 data-[state=on]:dark:via-yellow-500 data-[state=on]:dark:to-purple-500"
+                                  value="rainbow"
+                                  aria-label="Toggle strikethrough"
+                                >
+                                  <Rainbow
+                                    style={{
+                                      width: "1.25rem",
+                                      height: "1.25rem",
+                                    }}
                                   />
-                                ) : (
-                                  <Loader className="mx-auto my-0 h-7 w-7" />
-                                )}
-                              </SelectTrigger>
+                                </ToggleGroupItem> */}
+                              </ToggleGroup>
                             </FormControl>
-                            <SelectContent>
-                              {citiesData?.map((city) => (
-                                <SelectItem key={`select-${city}`} value={city}>
-                                  {city}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl className="z-10">
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Input
-                              type={!hidePassword ? "text" : "password"}
-                              {...field}
-                            />
-                            <Button
-                              variant="ghost"
-                              className="absolute right-2 top-1 h-7 w-7 p-0"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setHidePassword(!hidePassword);
-                              }}
-                            >
-                              {hidePassword ? (
-                                <EyeClosed className="h-7 w-7 opacity-40" />
-                              ) : (
-                                <Eye className="h-7 w-7" />
-                              )}
-                            </Button>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Confirm Password</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Input
-                              type={!hideConfirmPassword ? "text" : "password"}
-                              {...field}
-                            />
-                            <Button
-                              variant="ghost"
-                              className="absolute right-2 top-1 h-7 w-7 p-0"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setHideConfirmPassword(!hideConfirmPassword);
-                              }}
-                            >
-                              {hideConfirmPassword ? (
-                                <EyeClosed className="h-7 w-7 opacity-40" />
-                              ) : (
-                                <Eye className="h-7 w-7" />
-                              )}
-                            </Button>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button disabled={isLoading} type="submit" className="w-full">
-                    {isLoading ? (
-                      <>
-                        <Loader className="text-white" /> Checking you...
-                      </>
-                    ) : (
-                      "Sign Up"
-                    )}
-                  </Button>
-                </form>
-              </Form>
-            </div>
-            <ScrollBar />
-          </ScrollArea>
-          <div className="pb-4 text-center text-sm">
-            Already have an account?{" "}
-            <Link href="/login" className="underline">
-              Login
-            </Link>
-          </div>
-        </CardContent>
-        <div id="recaptcha-container"></div>
-      </Card>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="profilePic"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col items-center justify-center">
+                            <FormLabel className="start w-full">
+                              Profile Picture
+                            </FormLabel>
+                            <FormControl>
+                              <AvatarUpload {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Phone Number</FormLabel>
+                            <FormControl className="z-10">
+                              <PhoneInput {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="flex gap-1">
+                        <FormField
+                          control={form.control}
+                          name="country"
+                          render={() => (
+                            <FormItem className="w-1/3">
+                              <FormLabel>Country</FormLabel>
+                              <Select value="India">
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="India">India</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="state"
+                          render={({ field }) => (
+                            <FormItem className="w-1/3">
+                              <FormLabel>State</FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                disabled={
+                                  isStatesLoading || !statesData?.length
+                                }
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    {!isStatesLoading ? (
+                                      <SelectValue
+                                        placeholder={
+                                          statesData?.length ? "" : "N/A"
+                                        }
+                                      />
+                                    ) : (
+                                      <Loader className="mx-auto my-0 h-7 w-7" />
+                                    )}
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {statesData?.map((state) => (
+                                    <SelectItem
+                                      key={`select-${state.state_code}`}
+                                      value={state.name}
+                                    >
+                                      {state.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="city"
+                          render={({ field }) => (
+                            <FormItem className="w-1/3">
+                              <FormLabel>City</FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                disabled={
+                                  isCitiesLoading || !citiesData?.length
+                                }
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    {!isCitiesLoading ? (
+                                      <SelectValue
+                                        placeholder={
+                                          citiesData?.length ? "" : "N/A"
+                                        }
+                                      />
+                                    ) : (
+                                      <Loader className="mx-auto my-0 h-7 w-7" />
+                                    )}
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {citiesData?.map((city) => (
+                                    <SelectItem
+                                      key={`select-${city}`}
+                                      value={city}
+                                    >
+                                      {city}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl className="z-10">
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Password</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Input
+                                  type={!hidePassword ? "text" : "password"}
+                                  {...field}
+                                />
+                                <Button
+                                  variant="ghost"
+                                  className="absolute right-2 top-1 h-7 w-7 p-0"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setHidePassword(!hidePassword);
+                                  }}
+                                >
+                                  {hidePassword ? (
+                                    <EyeClosed className="h-7 w-7 opacity-40" />
+                                  ) : (
+                                    <Eye className="h-7 w-7" />
+                                  )}
+                                </Button>
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Confirm Password</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Input
+                                  type={
+                                    !hideConfirmPassword ? "text" : "password"
+                                  }
+                                  {...field}
+                                />
+                                <Button
+                                  variant="ghost"
+                                  className="absolute right-2 top-1 h-7 w-7 p-0"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setHideConfirmPassword(
+                                      !hideConfirmPassword,
+                                    );
+                                  }}
+                                >
+                                  {hideConfirmPassword ? (
+                                    <EyeClosed className="h-7 w-7 opacity-40" />
+                                  ) : (
+                                    <Eye className="h-7 w-7" />
+                                  )}
+                                </Button>
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Button
+                        disabled={isLoading}
+                        type="submit"
+                        className="w-full"
+                      >
+                        {isLoading ? (
+                          <>
+                            <Loader className="text-white" /> Checking you...
+                          </>
+                        ) : (
+                          "Sign Up"
+                        )}
+                      </Button>
+                    </form>
+                  </Form>
+                </div>
+                <ScrollBar />
+              </ScrollArea>
+              <div className="pb-4 text-center text-sm">
+                Already have an account?{" "}
+                <Link href="/login" className="underline">
+                  Login
+                </Link>
+              </div>
+            </CardContent>
+
+            <div id="recaptcha-container"></div>
+          </Card>
+        </div>
+        <div
+          className={cn(
+            "absolute z-10 h-full w-full [backface-visibility:hidden]",
+            "[transform:rotateY(180deg)]",
+            showFaq && "z-20",
+          )}
+        >
+          <SignUpFaq onSubmit={() => setShowFaq(false)} />
+        </div>
+      </div>
     </>
   );
 }

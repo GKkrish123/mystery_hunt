@@ -12,6 +12,7 @@ import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Loader from "./ui/loader";
+import { Label } from "./ui/label";
 
 export function EventsSelect({
   wrapperClassName,
@@ -44,7 +45,10 @@ export function EventsSelect({
   };
 
   return (
-    <div className={cn("flex", wrapperClassName)}>
+    <div className={cn("relative flex", wrapperClassName)}>
+      <Label className="absolute -top-2 left-[0.8rem] rounded-md bg-white px-1 text-[0.7rem] text-muted-foreground dark:bg-black lg:text-xs">
+        Events
+      </Label>
       <Select
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         value={eventValue || "all"}
@@ -62,11 +66,33 @@ export function EventsSelect({
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Mysteryverse</SelectItem>
-          {data?.map((event) => (
-            <SelectItem key={`select-${event.id}`} value={event.id}>
-              {event.name}
-            </SelectItem>
-          ))}
+          {data?.map((event) => {
+            const scheduledFromDate = new Date(
+              event.scheduledFrom.seconds * 1000,
+            );
+            const scheduledToDate = new Date(
+              event.scheduledFrom.seconds * 1000,
+            );
+            const scheduledFromDateValue = scheduledFromDate
+              .toDateString()
+              .split(" ")
+              .slice(1, 3)
+              .join(" ");
+            const scheduledToDateValue = scheduledToDate
+              .toDateString()
+              .split(" ")
+              .slice(1, 3)
+              .join(" ");
+            const timeline =
+              scheduledFromDateValue === scheduledToDateValue
+                ? scheduledFromDateValue
+                : `${scheduledFromDateValue} - ${scheduledToDateValue}`;
+            return (
+              <SelectItem key={`select-${event.id}`} value={event.id}>
+                {event.name} [{timeline}]
+              </SelectItem>
+            );
+          })}
         </SelectContent>
       </Select>
     </div>

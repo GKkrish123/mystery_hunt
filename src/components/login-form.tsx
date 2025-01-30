@@ -185,8 +185,8 @@ export function LoginForm() {
 
   return (
     <>
-      <ThemeToggle className="absolute right-2 top-2 bg-accent" />
-      <Card className="z-10 mx-auto max-w-sm">
+      <Card className="relative z-10 mx-auto max-w-sm">
+        <ThemeToggle className="absolute right-2 top-2 bg-accent" />
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>

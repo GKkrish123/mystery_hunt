@@ -90,7 +90,9 @@ export async function LeaderboardsSection({
       <div className="flex h-[550px] w-full">
         {leaderboardsData.length === 0 ? (
           <span className="pointer-events-none m-auto block whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-4xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10 md:text-5xl">
-            No Hunters found in {city ? city : state}
+            {event
+              ? "No Hunters Engaged"
+              : `No Hunters From ${city ? city : state}`}
           </span>
         ) : (
           <LeaderboardsTable

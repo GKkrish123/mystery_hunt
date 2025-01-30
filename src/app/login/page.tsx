@@ -23,7 +23,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       <LoginEffects />
       <BlurFade
         key={isSignup ? "signup" : "login"}
-        className="z-10"
+        className="z-10 flex w-full justify-center"
         yOffset={0}
         delay={0.25}
       >
