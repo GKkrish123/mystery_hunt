@@ -515,6 +515,7 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
             ...mystery,
             ...((status.mysteryUpdate ?? {}) as Mystery & MysteryFormValues),
             triesLeft: mystery.triesLeft - 1,
+            actualSecret: secretInput,
           });
           // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
           setScoredPoints(status.points || 0);
@@ -693,7 +694,9 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
               className="h-6 w-full font-mono text-sm lg:h-6 lg:text-base"
             />
             <MorphingText
-              texts={[`Scored ${mystery.actualPoints} points !`]}
+              texts={[
+                `Scored ${mystery.actualPoints ?? scoredPoints} points !`,
+              ]}
               className="h-6 w-full font-mono text-sm lg:h-6 lg:text-base"
             />
           </>

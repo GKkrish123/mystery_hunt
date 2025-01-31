@@ -15,7 +15,7 @@ export const PinContainer = ({
 }: {
   children: React.ReactNode;
   title?: string;
-  href?: string;
+  href: string;
   className?: string;
   containerClassName?: string;
 }) => {
@@ -31,14 +31,14 @@ export const PinContainer = ({
   };
 
   return (
-    <Link
+    <div
       className={cn(
         "group/pin relative z-50 cursor-pointer",
         containerClassName,
       )}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      href={href ?? "/"}
+      // href={href ?? "/"}
     >
       <div
         style={{
@@ -51,31 +51,38 @@ export const PinContainer = ({
           style={{
             transform: transform,
           }}
-          className="absolute left-1/2 top-1/2 flex items-start justify-start overflow-hidden rounded-2xl border border-black bg-slate-200 p-4 shadow-[0_8px_16px_rgb(0_0_0/0.4)] transition duration-700 group-hover/pin:border-white/[0.2] dark:border-white dark:bg-black"
+          className="absolute left-1/2 top-1/2 flex items-start justify-start overflow-hidden rounded-2xl border border-black bg-slate-200 p-4 shadow-[0_8px_16px_rgb(0_0_0/0.4)] !transition !duration-700 group-hover/pin:border-white/[0.2] dark:border-white dark:bg-black"
         >
           <div className={cn("relative z-50", className)}>{children}</div>
         </div>
       </div>
       <PinPerspective title={title} href={href} />
-    </Link>
+    </div>
   );
 };
 
-const PinPerspective = ({ title }: { title?: string; href?: string }) => {
+const PinPerspective = ({ title, href }: { title?: string; href: string }) => {
   return (
     <LazyMotion features={domAnimation} strict>
       <AnimatePresence propagate>
-        <MotionDiv className="pointer-events-none z-[60] flex h-80 w-96 items-center justify-center opacity-0 transition duration-500 group-hover/pin:opacity-100">
+        <MotionDiv className="z-[60] flex h-80 w-96 items-center justify-center opacity-0 transition duration-500 group-hover/pin:opacity-100">
           <div className="inset-0 -mt-7 h-full w-full flex-none">
-            <div className="absolute inset-x-0 top-0 flex justify-center">
+            <Link
+              href={href}
+              onClick={(e) => e.stopPropagation()}
+              className="absolute inset-x-0 top-0 flex justify-center drop-shadow-[1px_1px_2px_rgba(0,0,0)] dark:drop-shadow-[1px_1px_2px_rgba(255,255,255)]"
+            >
               <div className="relative z-10 flex items-center space-x-2 rounded-full bg-slate-200 px-4 py-0.5 ring-1 ring-zinc-700 dark:bg-zinc-950 dark:ring-white">
-                <span className="relative z-20 inline-block py-0.5 text-xs font-bold text-black dark:text-white">
+                <div className="relative z-20 inline-block py-0.5 text-xs font-bold text-black dark:text-white">
+                  <span className="drop-shadow-[-1px_-1px_3px_rgba(0,0,0)] dark:drop-shadow-[-1px_-1px_3px_rgba(255,255,255)]">
+                    ✨
+                  </span>{" "}
                   {title}
-                </span>
+                </div>
 
                 <span className="absolute -bottom-0 left-[1.125rem] h-px w-[calc(100%-2.25rem)] bg-gradient-to-r from-emerald-400/0 via-emerald-400/90 to-emerald-400/0 transition-opacity duration-500 group-hover/btn:opacity-40"></span>
               </div>
-            </div>
+            </Link>
 
             <div
               style={{

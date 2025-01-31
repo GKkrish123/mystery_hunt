@@ -425,7 +425,7 @@ export const userRouter = createTRPCRouter({
           {
             userId: updatedUser.uid,
             proPicUrl: proPicPublicUrl,
-            // proPicUpdatedAt: now, // Not setting proPicUpdatedAt here to avoid cooldown first time
+            proPicUpdatedAt: now,
             updatedAt: serverTimestamp(),
             emailVerified: false,
           },

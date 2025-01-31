@@ -103,6 +103,7 @@ export default {
         spotlight: "spotlight 2s ease .75s 1 forwards",
         aurora: "aurora 60s linear infinite",
         "shiny-text": "shiny-text 8s infinite",
+        "shiny-text-fast": "shiny-text 3s infinite",
         gradient: "gradient 8s linear infinite",
         "bg-position": "bg-position 10s infinite linear",
         "line-shadow": "line-shadow 15s linear infinite",

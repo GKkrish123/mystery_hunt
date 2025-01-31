@@ -303,7 +303,7 @@ export function SignupForm() {
     <>
       <div
         className={cn(
-          "relative h-[660px] w-full !transition-all !duration-500 !ease-in-out [transform-style:preserve-3d] smh:h-[520px]",
+          "relative h-[660px] w-full !transition-all !duration-500 !ease-in-out [transform-style:preserve-3d] smh:h-[550px]",
           showFaq && "[transform:rotateY(180deg)]",
         )}
       >
@@ -319,14 +319,15 @@ export function SignupForm() {
               <CardTitle className="flex w-full">
                 <span className="text-2xl">Sign Up</span>
                 <div
-                  className={cn(
-                    "group ml-auto mr-5 flex items-center rounded-full border border-black/50 bg-neutral-100 text-xs text-white !transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/50 dark:bg-neutral-900 dark:hover:bg-neutral-800 lg:text-sm",
-                  )}
+                  className="group ml-auto mr-5 flex items-center rounded-full border border-black/50 bg-neutral-100 text-xs text-white drop-shadow-[1px_1px_1px_rgba(0,0,0)] transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/50 dark:bg-neutral-900 dark:drop-shadow-[1px_1px_1px_rgba(255,255,255)] dark:hover:bg-neutral-800 lg:text-sm"
                   onClick={() => setShowFaq(true)}
                 >
-                  <AnimatedShinyText className="!animate-shiny-text inline-flex items-center justify-center px-2 py-1 !transition ease-out hover:text-neutral-800 hover:duration-300 hover:dark:text-neutral-200">
+                  <AnimatedShinyText
+                    shimmerWidth={150}
+                    className="!animate-shiny-text-fast inline-flex items-center justify-center bg-gradient-to-r from-transparent via-black via-100% to-transparent px-2 py-1 text-neutral-800/70 transition ease-out hover:text-neutral-800 hover:duration-300 dark:via-white/80 dark:text-neutral-200/70 hover:dark:text-neutral-200"
+                  >
                     <ShieldAlert className="mr-0.5 size-4 text-black/70 !transition-transform duration-300 ease-in-out group-hover:-translate-x-0.5 dark:text-white/70 lg:mr-1 lg:size-5" />
-                    <span>The Trust Code</span>
+                    <span>CODE OF TRUST</span>
                   </AnimatedShinyText>
                 </div>
               </CardTitle>
@@ -692,7 +693,10 @@ export function SignupForm() {
               </ScrollArea>
               <div className="pb-4 text-center text-sm">
                 Already have an account?{" "}
-                <Link href="/login" className="underline">
+                <Link
+                  href="/login"
+                  className="underline decoration-double underline-offset-4"
+                >
                   Login
                 </Link>
               </div>

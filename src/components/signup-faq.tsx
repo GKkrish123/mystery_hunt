@@ -1,10 +1,42 @@
 "use client";
 
-import { type Dispatch, type SetStateAction, useState } from "react";
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
+import Image from "next/image";
+import { fetchSimpleIcons, renderSimpleIcon } from "react-icon-cloud";
+import { useTheme } from "next-themes";
+import { toast } from "sonner";
+
+const faqs: Omit<FAQItemProps, "index" | "openIndex" | "setOpenIndex">[] = [
+  {
+    question: "Why is my phone number mandatory?",
+    answer:
+      "The only reason is to keep the game fair! Your phone number helps prevent spam and cheating. Google's OTP verification is used for added security. Rest assured, your number stays private—only visible on your profile page and nowhere else.",
+  },
+  {
+    question: "Why a profile picture is needed?",
+    answer:
+      "Because every mystery hunter deserves an identity! Your profile picture makes the leaderboard feel alive and for a `little magic` in your profile page. Feel free to use any image you like—Also Be Mindful! It will be showcased in your victory moments.",
+  },
+  {
+    question: "What’s the deal with my email address?",
+    answer:
+      "Your email is your key to the Mysteryverse—it’s how you log in, stay updated, and the only way you will receive notifications about events, updates and prizes. No spam, just the essentials.",
+  },
+  {
+    question: "Why Mysteryverse?",
+    answer:
+      "I’m a big fan of mysteries and I want you to experience the thrill of solving them! I want Mysteryverse to be one of the most trustworthy, challenging, intriguing, rewarding and informative applications.",
+  },
+  {
+    question: "Is my data safe?",
+    answer:
+      "Absolutely! I made cautious decisions on user privacy and data. Your data is handled securely through Google’s authentication and management services and will not misused at any cause. Any concerns or feedback? I’m just below...",
+  },
+];
 
 interface FAQItemProps {
   question: string;
@@ -104,7 +136,7 @@ function FAQItem({
               },
             }}
           >
-            <div className="px-6 pb-4 pt-2">
+            <div className="px-6 pb-4">
               <motion.p
                 initial={{ y: -8, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -126,35 +158,25 @@ function FAQItem({
 }
 
 function SignUpFaq({ onSubmit }: { onSubmit: () => void }) {
-  const faqs: Omit<FAQItemProps, "index" | "openIndex" | "setOpenIndex">[] = [
-    {
-      question: "Why Phone Number?",
-      answer:
-        "Something Something Something Something Something Something Something Something Something Something Something Something Something Something Something.",
-    },
-    {
-      question: "Why Profile Picture?",
-      answer:
-        "Something Something Something Something Something Something Something Something Something Something Something Something Something Something Something Something",
-    },
-    {
-      question: "Why Email Address?",
-      answer:
-        "Something Something Something Something Something Something Something Something Something Something Something..",
-    },
-    {
-      question: "Why Mysteryverse?",
-      answer:
-        "Something Something Something Something Something Something Something Something Something Something Something Something Something Something Something",
-    },
-  ];
-
   const [openIndex, setOpenIndex] = useState(0);
+  const [icons, setIconsData] =
+    useState<Awaited<ReturnType<typeof fetchSimpleIcons>>>();
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    void fetchSimpleIcons({ slugs: ["discord", "instagram"] }).then(
+      setIconsData,
+    );
+  }, []);
+
+  const bgHex = resolvedTheme === "light" ? "#f3f2ef" : "#080510";
+  const fallbackHex = resolvedTheme === "light" ? "#6e6e73" : "#ffffff";
+  const minContrastRatio = resolvedTheme === "dark" ? 2 : 1.2;
 
   return (
-    <div className="container mx-auto max-w-sm">
-      <h2 className="mb-3 text-center text-xl font-semibold text-black dark:text-white">
-        The Trust Code
+    <div className="container mx-auto -mt-4 max-w-sm">
+      <h2 className="mb-3 text-center text-xl text-black drop-shadow-[0.05em_0.05em_1px_#000000] dark:text-white dark:drop-shadow-[0.05em_0.05em_1px_#cbd5e1]">
+        CODE OF TRUST
       </h2>
 
       <div className="mx-auto max-w-2xl space-y-2">
@@ -168,16 +190,79 @@ function SignUpFaq({ onSubmit }: { onSubmit: () => void }) {
           />
         ))}
       </div>
-      <div className="mx-auto max-w-sm pt-3 text-center">
-        {/* <div className="mb-4 inline-flex items-center justify-center rounded-full">
-          <Mail className="h-4 w-4" />
-        </div> */}
-        <p className="text-sm font-medium text-gray-900 dark:text-white">
-          Still have second thoughts?
-        </p>
-        <p className="mb-4 text-xs text-gray-600 dark:text-gray-400">
-          I am ahh ahh blah...
-        </p>
+      <p className="mt-2 text-center font-mono text-xs font-semibold text-muted-foreground lg:text-sm">
+        Trust finds its way, in its own time...
+      </p>
+      <div className="mx-auto flex max-w-sm items-center gap-2 px-3 pt-2">
+        <Image
+          alt="GKkrish"
+          width={64}
+          height={64}
+          priority
+          src="https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/gk.jpeg"
+          className="h-14 w-14 rounded-full"
+        />
+        <div className="flex flex-1 flex-col items-center">
+          <h3 className="text-sm text-foreground lg:text-base">
+            Gokulakrishnan{" "}
+            <span className="align-super text-[0.65rem] text-foreground drop-shadow-[0.05em_0.03em_0.5px_#000000] dark:drop-shadow-[0.05em_0.03em_0.5px_#cbd5e1] lg:text-xs">
+              [GK]
+            </span>
+          </h3>
+          <p className="text-xs font-light text-muted-foreground lg:text-sm">
+            Kanchipuram, TN
+          </p>
+        </div>
+        <div className="flex items-center justify-evenly gap-2">
+          <a
+            href="mailto:mysteryverse.co@gmail.com"
+            onClick={async () => {
+              await navigator.clipboard.writeText("mysteryverse.co@gmail.com");
+              toast.info("Mail copied to your clipboard!", {
+                duration: 1500,
+              });
+            }}
+          >
+            <Mail
+              size={22}
+              className="transition-transform duration-300 hover:scale-110"
+            />
+          </a>
+          {icons?.simpleIcons.instagram
+            ? renderSimpleIcon({
+                icon: icons.simpleIcons.instagram,
+                size: 20,
+                bgHex,
+                fallbackHex,
+                minContrastRatio,
+                aProps: {
+                  href: "https://www.instagram.com/gkkrish_16/",
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  className:
+                    "transition-transform duration-300 hover:scale-110",
+                },
+              })
+            : null}
+          {icons?.simpleIcons.discord
+            ? renderSimpleIcon({
+                icon: icons.simpleIcons.discord,
+                size: 22,
+                bgHex,
+                fallbackHex,
+                minContrastRatio,
+                aProps: {
+                  href: "https://discord.gg/4spYKVDe",
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  className:
+                    "transition-transform duration-300 hover:scale-110",
+                },
+              })
+            : null}
+        </div>
+      </div>
+      <div className="flex w-full justify-center pt-2">
         <Button
           onClick={onSubmit}
           className={cn(
@@ -188,7 +273,7 @@ function SignUpFaq({ onSubmit }: { onSubmit: () => void }) {
             "font-medium",
           )}
         >
-          Continue SignUp...
+          Continue Sign Up...
         </Button>
       </div>
     </div>

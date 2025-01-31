@@ -281,7 +281,10 @@ export function LoginForm() {
           </div>
           <div className="mt-3 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="/login?signup=true" className="underline">
+            <Link
+              href="/login?signup=true"
+              className="underline decoration-double underline-offset-4"
+            >
               Sign up
             </Link>
           </div>

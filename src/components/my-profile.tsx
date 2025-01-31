@@ -1,8 +1,28 @@
+"use client";
+
 import { cn } from "@/lib/utils";
-import { Dribbble, Facebook, Linkedin, X } from "lucide-react";
+import { Mail } from "lucide-react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { fetchSimpleIcons, renderSimpleIcon } from "react-icon-cloud";
+import { toast } from "sonner";
 
 export function MyProfile({ className }: { className?: string }) {
+  const [icons, setIconsData] =
+    useState<Awaited<ReturnType<typeof fetchSimpleIcons>>>();
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    void fetchSimpleIcons({ slugs: ["discord", "instagram"] }).then(
+      setIconsData,
+    );
+  }, []);
+
+  const bgHex = resolvedTheme === "light" ? "#f3f2ef" : "#080510";
+  const fallbackHex = resolvedTheme === "light" ? "#6e6e73" : "#ffffff";
+  const minContrastRatio = resolvedTheme === "dark" ? 2 : 1.2;
+
   return (
     <div
       className={cn(
@@ -11,57 +31,69 @@ export function MyProfile({ className }: { className?: string }) {
       )}
     >
       <Image
-        alt="Avatar"
+        alt="GKkrish"
         width={64}
         height={64}
         priority
-        src="https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg"
+        src="https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/gk.jpeg"
         className="h-16 w-16 rounded-full duration-300 ease-in-out hover:scale-125"
       />
       <div className="mt-2 flex flex-col items-center justify-center">
-        <h3 className="font-sans font-semibold text-foreground">GK</h3>
+        <h3 className="text-sm text-foreground lg:text-base">
+          Gokulakrishnan{" "}
+          <span className="align-super text-[0.65rem] text-foreground drop-shadow-[0.05em_0.03em_0.5px_#000000] dark:drop-shadow-[0.05em_0.03em_0.5px_#cbd5e1] lg:text-xs">
+            [GK]
+          </span>
+        </h3>
         <p className="text-sm font-light text-muted-foreground">
-          Gokulakrishnan
+          Kanchipuram, Tamil Nadu
         </p>
       </div>
       <div className="mt-2 flex w-full flex-row justify-evenly rounded-3xl bg-background/70 p-2 text-foreground dark:bg-background/25">
         <a
-          href="https://x.com/?lang=en&mx=2"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="mailto:mysteryverse.co@gmail.com"
+          onClick={async () => {
+            await navigator.clipboard.writeText("mysteryverse.co@gmail.com");
+            toast.info("Mail copied to your clipboard!", {
+              duration: 1500,
+            });
+          }}
         >
-          <X
-            size={18}
+          <Mail
+            size={22}
             className="transition-transform duration-300 hover:scale-110"
           />
         </a>
-        <a
-          href="https://linkedin.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Linkedin
-            size={16}
-            className="transition-transform duration-300 hover:scale-110"
-          />
-        </a>
-        <a
-          href="https://dribbble.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Dribbble
-            size={16}
-            className="transition-transform duration-300 hover:scale-110"
-          />
-        </a>
-        <a
-          href="https://facebook.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Facebook size={16} className="duration-300 hover:scale-110" />
-        </a>
+        {icons?.simpleIcons.instagram
+          ? renderSimpleIcon({
+              icon: icons.simpleIcons.instagram,
+              size: 20,
+              bgHex,
+              fallbackHex,
+              minContrastRatio,
+              aProps: {
+                href: "https://www.instagram.com/gkkrish_16/",
+                target: "_blank",
+                rel: "noopener noreferrer",
+                className: "transition-transform duration-300 hover:scale-110",
+              },
+            })
+          : null}
+        {icons?.simpleIcons.discord
+          ? renderSimpleIcon({
+              icon: icons.simpleIcons.discord,
+              size: 22,
+              bgHex,
+              fallbackHex,
+              minContrastRatio,
+              aProps: {
+                href: "https://discord.gg/4spYKVDe",
+                target: "_blank",
+                rel: "noopener noreferrer",
+                className: "transition-transform duration-300 hover:scale-110",
+              },
+            })
+          : null}
       </div>
     </div>
   );
