@@ -34,7 +34,7 @@ const faqs: Omit<FAQItemProps, "index" | "openIndex" | "setOpenIndex">[] = [
   {
     question: "Is my data safe?",
     answer:
-      "Absolutely! I made cautious decisions on user privacy and data. Your data is handled securely through Google’s authentication and management services and will not misused at any cause. Any concerns or feedback? I’m just below...",
+      "Absolutely! I made cautious decisions on user privacy and data. Your data is handled securely through Google’s authentication and management services and will not be misused at any cause. Any concerns or feedback? I’m just below...",
   },
 ];
 

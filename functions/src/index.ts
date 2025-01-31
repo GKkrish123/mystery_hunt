@@ -10,11 +10,13 @@ export const resetRedis = onSchedule("0 8-20/1 * * *", async () => {
     const timestamp = Date.now();
     const cutoffTime = timestamp - 24 * 60 * 60 * 1000;
 
-    const redisKeyViewCountKeys = await redis.keys("mystery:viewCount:*");
+    const redisMysteryViewCountKeys = await redis.keys("mystery:viewCount:*");
+    const redisCategoryViewCountKeys = await redis.keys("category:viewCount:*");
     const redisKeyRecentViews = await redis.keys("mystery:recentViews:*");
 
     if (
-      redisKeyViewCountKeys.length === 0 &&
+      redisMysteryViewCountKeys.length === 0 &&
+      redisCategoryViewCountKeys.length === 0 &&
       redisKeyRecentViews.length === 0
     ) {
       logger.info("No keys found in Redis, skipping processing.");
@@ -23,9 +25,11 @@ export const resetRedis = onSchedule("0 8-20/1 * * *", async () => {
 
     const redisPipeline = redis.pipeline();
 
-    redisKeyViewCountKeys.forEach((key) => {
-      redisPipeline.get(key);
-    });
+    [...redisMysteryViewCountKeys, ...redisCategoryViewCountKeys].forEach(
+      (key) => {
+        redisPipeline.get(key);
+      },
+    );
     redisKeyRecentViews.forEach((key) => {
       redisPipeline.zcount(key, cutoffTime, timestamp);
     });
@@ -39,13 +43,23 @@ export const resetRedis = onSchedule("0 8-20/1 * * *", async () => {
       return;
     }
 
-    const viewCounts = results.slice(0, redisKeyViewCountKeys.length);
-    const recentViewCounts = results.slice(redisKeyViewCountKeys.length);
+    const mysteryViewCounts = results.slice(
+      0,
+      redisMysteryViewCountKeys.length,
+    );
+    const categoryViewCounts = results.slice(
+      redisMysteryViewCountKeys.length,
+      redisCategoryViewCountKeys.length,
+    );
+    const recentViewCounts = results.slice(
+      redisMysteryViewCountKeys.length + redisCategoryViewCountKeys.length,
+    );
 
     const updates: Record<string, Record<string, unknown>> = {};
+    const categoryUpdates: Record<string, Record<string, unknown>> = {};
 
-    viewCounts.forEach(([err, count], index) => {
-      const mysteryId = redisKeyViewCountKeys[index].split(":").pop();
+    mysteryViewCounts.forEach(([err, count], index) => {
+      const mysteryId = redisMysteryViewCountKeys[index].split(":").pop();
       if (!err && count && mysteryId) {
         const parsedCount = parseInt(count as string, 10);
         if (!isNaN(parsedCount)) {
@@ -53,12 +67,32 @@ export const resetRedis = onSchedule("0 8-20/1 * * *", async () => {
           updates[mysteryId].viewsCount = FieldValue.increment(parsedCount);
         } else {
           logger.error(
-            `Invalid view count for key ${redisKeyViewCountKeys[index]}: ${count}`,
+            `Invalid mystery view count for key ${redisMysteryViewCountKeys[index]}: ${count}`,
           );
         }
       } else if (err) {
         logger.error(
-          `Error retrieving view count for key ${redisKeyViewCountKeys[index]}: ${err}`,
+          `Error retrieving mystery view count for key ${redisMysteryViewCountKeys[index]}: ${err}`,
+        );
+      }
+    });
+
+    categoryViewCounts.forEach(([err, count], index) => {
+      const categoryId = redisCategoryViewCountKeys[index].split(":").pop();
+      if (!err && count && categoryId) {
+        const parsedCount = parseInt(count as string, 10);
+        if (!isNaN(parsedCount)) {
+          categoryUpdates[categoryId] = categoryUpdates[categoryId] || {};
+          categoryUpdates[categoryId].viewsCount =
+            FieldValue.increment(parsedCount);
+        } else {
+          logger.error(
+            `Invalid category view count for key ${redisCategoryViewCountKeys[index]}: ${count}`,
+          );
+        }
+      } else if (err) {
+        logger.error(
+          `Error retrieving category view count for key ${redisCategoryViewCountKeys[index]}: ${err}`,
         );
       }
     });
@@ -91,14 +125,28 @@ export const resetRedis = onSchedule("0 8-20/1 * * *", async () => {
       batchHasOperations = true;
     });
 
+    Object.entries(categoryUpdates).forEach(([categoryId]) => {
+      const docRef = firestore.collection("categories").doc(categoryId);
+      batch.set(docRef, categoryUpdates[categoryId], { merge: true });
+      batchHasOperations = true;
+    });
+
     if (batchHasOperations) {
       await batch.commit();
     } else {
       logger.info("No Firestore updates needed, skipping batch commit.");
     }
 
-    if (redisKeyViewCountKeys.length > 0 || redisKeyRecentViews.length > 0) {
-      await redis.del(...redisKeyViewCountKeys, ...redisKeyRecentViews);
+    if (
+      redisMysteryViewCountKeys.length > 0 ||
+      redisCategoryViewCountKeys.length > 0 ||
+      redisKeyRecentViews.length > 0
+    ) {
+      await redis.del(
+        ...redisMysteryViewCountKeys,
+        ...redisCategoryViewCountKeys,
+        ...redisKeyRecentViews,
+      );
     } else {
       logger.info("No keys to delete from redis.");
     }

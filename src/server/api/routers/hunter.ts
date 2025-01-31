@@ -42,6 +42,7 @@ import {
 } from "../helpers/query";
 import { fetchMysteriesByIdChunks } from "../helpers/mystery";
 import { fetchCategoriesByIdChunks } from "../helpers/category";
+import { type MysteryEvent } from "@/server/model/events";
 
 export const userRouter = createTRPCRouter({
   getUser: privateProcedure.query(async ({ ctx }) => {
@@ -219,6 +220,25 @@ export const userRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const { state, city, event } = input;
+      if (event) {
+        const now = Date.now();
+        const eventsCollection = collection(db, MysteryCollections.events);
+        const eventQuery = query(
+          eventsCollection,
+          where("name", "==", event),
+          limit(1),
+        );
+        const eventDoc = await getDocs(eventQuery);
+        if (
+          eventDoc.empty ||
+          !eventDoc.docs[0] ||
+          (eventDoc.docs[0].data() as MysteryEvent).scheduledTo.seconds *
+            1000 >=
+            now
+        ) {
+          return [];
+        }
+      }
       const scoreAlias = event
         ? `scoreBoard.eventScores.${event}`
         : "scoreBoard.totalScore";

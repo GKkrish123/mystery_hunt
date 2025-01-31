@@ -4,7 +4,11 @@ import {
   arrayUnion,
   collection,
   doc,
+  getDocs,
+  orderBy,
+  query,
   runTransaction,
+  where,
 } from "firebase/firestore";
 import { db } from "firebase-user";
 import { MysteryCollections } from "@/server/constants";
@@ -22,7 +26,7 @@ const MysterySchema = z.object({
   question: z.string().min(1),
   hints: z.array(z.string()),
   maxTries: z.number().int().min(1),
-  expectedSecret: z.string().min(1),
+  expectedSecret: z.string().min(1).toLowerCase(),
   achievement: z.string().min(1).optional(),
   linkedEvent: z.string(),
   maxPoints: z.number().int().positive(),
@@ -235,9 +239,28 @@ export async function POST(req: NextRequest) {
       });
     });
 
+    const indexRequired: string[] = [];
+    for (const event of newEventIds) {
+      try {
+        const fetchEventHuntersQuery = query(
+          collection(db, "hunters"),
+          where("disabled", "==", false),
+          where("emailVerified", "==", true),
+          orderBy(`scoreBoard.eventScores.${event}`, "desc"),
+          orderBy(`scoreBoard.eventsLastScoredAt.${event}`, "asc"),
+        );
+        await getDocs(fetchEventHuntersQuery);
+      } catch (error) {
+        const errMsg = `EVENT - "${event}" FETCH ERROR!!!: ${(error as Error).message}`;
+        console.error(errMsg);
+        indexRequired.push(errMsg);
+      }
+    }
+
     return NextResponse.json(
       {
         success: true,
+        indexRequired,
         message: "All Done",
         mysteries: newMysteryIds,
         categories: newCategoryIds,
@@ -248,10 +271,7 @@ export async function POST(req: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.error(
-      "Error in GK ONLY handler:",
-      JSON.stringify((error as Error).message),
-    );
+    console.error("Error in GK ONLY handler:", (error as Error).message);
     if (uploadedImages.length) {
       await deleteFiles(uploadedImages);
     }
