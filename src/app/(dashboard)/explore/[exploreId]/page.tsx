@@ -64,6 +64,8 @@ export default async function ExploreCategoryPage({
     notFound();
   }
 
+  void api.category.recordCategoryView({ categoryId: exploreId })
+
   return (
     <>
       <div className="relative grid h-full w-full auto-rows-min grid-cols-1 gap-3 overflow-hidden px-3 pb-3 pt-0 sm:grid-cols-2 md:grid-cols-5 md:px-4 md:pb-4">
