@@ -25,6 +25,7 @@ const EventsEffects = dynamicImport(() =>
 );
 
 export default async function EventsPage() {
+  const now = Date.now();
   const eventMysteries = await api.events.getEvents().catch(() => []);
 
   if (eventMysteries.length === 0) {
@@ -43,20 +44,22 @@ export default async function EventsPage() {
           </div>
         </BlurFade>
         <Separator className="col-span-full" />
-        {eventMysteries.map((event) => (
-          <div
-            id={`event-${event.id}`}
-            key={`event-${event.id}`}
-            className="col-span-full"
-          >
-            <HeadingReveal
-              title={event.name}
-              coundown={event.scheduledTo.seconds * 1000}
-            />
-            <HorizontalMysteries mysteries={event.mysteries} />
-            <Separator className="mt-3" />
-          </div>
-        ))}
+        {eventMysteries
+          .filter((event) => event.scheduledFrom.seconds * 1000 < now)
+          .map((event) => (
+            <div
+              id={`event-${event.id}`}
+              key={`event-${event.id}`}
+              className="col-span-full"
+            >
+              <HeadingReveal
+                title={event.name}
+                coundown={event.scheduledTo.seconds * 1000}
+              />
+              <HorizontalMysteries mysteries={event.mysteries} />
+              <Separator className="mt-3" />
+            </div>
+          ))}
         <Link className="col-span-3 h-10 md:col-span-2" href="/explore">
           <ShinyButton className="size-full">Explore More</ShinyButton>
         </Link>

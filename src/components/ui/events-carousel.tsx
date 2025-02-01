@@ -13,9 +13,10 @@ import {
   AnimatePresence,
 } from "motion/react";
 import { div as MotionDiv } from "motion/react-m";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, Crown } from "lucide-react";
 import { RainbowButton } from "./rainbow-button";
 import { type MysteryEventWithData } from "@/server/model/events";
+import Link from "next/link";
 
 const ONE_SECOND = 1000;
 const AUTO_DELAY = ONE_SECOND * 10;
@@ -130,6 +131,7 @@ const Images = ({
     <>
       {events.map((event, idx) => {
         const eventStart = event.scheduledFrom.seconds * 1000;
+        const eventEnd = event.scheduledTo.seconds * 1000;
         const { day, month, time, period } = formatDateTime(eventStart);
         return (
           <LazyMotion key={idx} features={domMax} strict>
@@ -150,13 +152,21 @@ const Images = ({
                   {event.name}
                 </span>
                 {now > eventStart ? (
-                  <RainbowButton
-                    scrollTo={`event-${event.id}`}
-                    className="z-10"
-                    modeShift
-                  >
-                    Enter <ArrowDown className="ml-2" />
-                  </RainbowButton>
+                  eventEnd < now ? (
+                    <Link href={`/leaderboard?event=${event.name}`}>
+                      <RainbowButton className="z-10" modeShift>
+                        Champions <Crown className="ml-2" />
+                      </RainbowButton>
+                    </Link>
+                  ) : (
+                    <RainbowButton
+                      scrollTo={`event-${event.id}`}
+                      className="z-10"
+                      modeShift
+                    >
+                      Enter <ArrowDown className="ml-2" />
+                    </RainbowButton>
+                  )
                 ) : (
                   <div className="grid auto-cols-max grid-flow-col gap-2 text-center font-mono font-bold">
                     <div className="text-neutral-content flex gap-1 rounded-md bg-neutral-300 p-1 text-sm drop-shadow-[3px_3px_2px_rgba(255,255,255)] dark:bg-zinc-700 dark:from-white dark:to-slate-500/80 dark:drop-shadow-[3px_3px_2px_rgba(0,0,0)] lg:text-base">

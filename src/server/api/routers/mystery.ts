@@ -605,7 +605,9 @@ export const mysteryRouter = createTRPCRouter({
             );
             if (eventDoc.exists()) {
               const eventData = eventDoc.data() as MysteryEvent;
-              isOnEvent = eventData.scheduledTo.seconds * 1000 < now;
+              isOnEvent =
+                eventData.scheduledFrom.seconds * 1000 >= now &&
+                now <= eventData.scheduledTo.seconds * 1000;
             }
           }
           transaction.update(mysteryRef, {

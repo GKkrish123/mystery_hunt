@@ -70,6 +70,7 @@ export const columns: ColumnDef<HunterRank>[] = [
         <AvatarImage
           src={row.getValue("proPicUrl")}
           alt={`${String(row.getValue("name"))}-${String(row.getValue("rank"))}`}
+          className="object-cover"
         />
         <AvatarFallback>
           {String(row.getValue("name")).slice(0, 2).toUpperCase()}
