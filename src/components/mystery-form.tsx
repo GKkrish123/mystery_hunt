@@ -571,10 +571,14 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
       </div>
       <div className="col-span-1 col-start-2 flex flex-col items-center justify-center gap-1 sm:col-span-2 md:col-span-3 md:col-start-3">
         <span className="text-xs md:text-sm">Unlock Attempts</span>
-        <NumberTicker
-          className="text-sm font-bold md:text-base"
-          value={mystery.guessCount || 0}
-        />
+        {mystery.guessCount ? (
+          <NumberTicker
+            className="text-sm font-bold md:text-base"
+            value={mystery.guessCount}
+          />
+        ) : (
+          <span className="text-sm font-bold md:text-base">0</span>
+        )}
       </div>
       <div className="col-span-1 col-start-3 ml-auto flex flex-row-reverse items-center pr-5 sm:col-start-4 md:col-span-2 md:col-start-6">
         <AnimatedTooltip items={mystery.topThree.slice(0, 1)} />
