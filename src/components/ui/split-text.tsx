@@ -14,7 +14,7 @@ export default function SplitText({
   const timer = useRef<NodeJS.Timeout>();
 
   const letterClassName =
-    "inline h-1/2 select-none overflow-y-hidden leading-none transition-all duration-300 ease-out whitespace-pre";
+    "inline h-1/2 select-none overflow-y-hidden leading-none !transition-all !duration-300 !ease-out whitespace-pre";
 
   return (
     <div

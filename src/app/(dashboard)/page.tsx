@@ -2,7 +2,7 @@ import { api } from "@/trpc/server";
 import { type Mystery } from "@/server/model/mysteries";
 import { type Category } from "@/server/model/categories";
 import { default as dynamicImport } from "next/dynamic";
-import HomeHeader from "@/components/effects/home-header";
+import ProductFeatures from "@/components/ui/feature-card";
 import Link from "next/link";
 
 const HomeEffects = dynamicImport(() => import("@/components/effects/home"));
@@ -113,7 +113,7 @@ export default async function DashboardPage() {
   return (
     <>
       <div className="relative grid auto-rows-min grid-cols-1 gap-4 px-3 pb-3 pt-0 sm:grid-cols-3 md:px-4 md:pb-4">
-        <HomeHeader />
+        <ProductFeatures className="col-span-full bg-transparent" />
         {dashboardContents.map(({ title, description, type, id }, index) => (
           <div id={id} key={id} className="z-10 col-span-full">
             <HeadingReveal title={title} description={description} />

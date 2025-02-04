@@ -38,6 +38,7 @@ export function NavUser({ user }: NavUserProps) {
       await deleteCookie("token");
       await deleteCookie("token-boom");
       await auth.signOut();
+      router.replace("/login");
     } catch (error) {
       console.error("Error in signing out user", error);
       toast.error("Oops, Something went wrong while checking you out!", {

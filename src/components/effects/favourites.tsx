@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useSidebar } from "../ui/sidebar";
 
 const ShootingStars = dynamic(
   () =>
@@ -11,7 +12,8 @@ const ShootingStars = dynamic(
 );
 
 export default function FavouritesEffects() {
-  return (
+  const { openMobile } = useSidebar();
+  return openMobile ? null : (
     <>
       <ShootingStars />
     </>

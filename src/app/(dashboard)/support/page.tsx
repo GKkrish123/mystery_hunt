@@ -1,3 +1,6 @@
+import BlurIn from "@/components/ui/blur-in";
+import { mysteryFont } from "@/lib/fonts";
+import { cn } from "@/lib/utils";
 import { default as dynamicImport } from "next/dynamic";
 
 const MyProfile = dynamicImport(() =>
@@ -14,7 +17,16 @@ export default function SupportPage() {
   return (
     <>
       <div className="relative grid h-full auto-rows-min grid-cols-1 gap-3 overflow-hidden px-3 pb-3 pt-0 sm:grid-cols-2 md:grid-cols-5 md:px-4 md:pb-4">
-        <div className="col-span-full flex h-[23rem] w-full items-center justify-center md:h-[30rem]">
+        <div className="col-span-full flex items-center justify-center">
+          <BlurIn
+            word="Support"
+            className={cn(
+              "mx-auto h-8 text-3xl font-bold text-black dark:text-white md:h-10 md:text-4xl",
+              mysteryFont.className,
+            )}
+          />
+        </div>
+        <div className="col-span-full flex h-[21rem] w-full items-start justify-center md:h-[25rem]">
           <PinContainer
             title="Donate"
             href="upi://pay?pa=www.krishnan.arulsigamani-1@okicici&pn=GKkrish&cu=INR"

@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useSidebar } from "../ui/sidebar";
 
 const WarpBackground = dynamic(
   () =>
@@ -11,7 +12,8 @@ const WarpBackground = dynamic(
 );
 
 export default function ExploreEffects() {
-  return (
+  const { openMobile } = useSidebar();
+  return openMobile ? null :(
     <>
       <WarpBackground />
     </>

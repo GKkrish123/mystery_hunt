@@ -39,7 +39,7 @@ export const BoldCopy: React.FC<BoldCopyProps> = ({
         >
           <div
             className={cn(
-              "text-5xl font-bold uppercase text-foreground/15 transition-all group-hover:opacity-50 group-active:opacity-50 md:text-7xl",
+              "text-5xl font-bold uppercase text-foreground/15 !transition-all group-hover:opacity-50 group-active:opacity-50 md:text-7xl",
               backgroundTextClassName?.[index],
             )}
           >
@@ -47,7 +47,7 @@ export const BoldCopy: React.FC<BoldCopyProps> = ({
           </div>
           <div
             className={cn(
-              "absolute text-3xl font-bold uppercase text-foreground transition-all group-hover:text-5xl group-active:text-5xl md:text-[2.75rem] group-hover:md:text-7xl group-active:md:text-7xl",
+              "absolute text-3xl font-bold uppercase text-foreground !transition-all group-hover:text-5xl group-active:text-5xl md:text-[2.75rem] group-hover:md:text-7xl group-active:md:text-7xl",
               textClassName?.[index],
             )}
           >

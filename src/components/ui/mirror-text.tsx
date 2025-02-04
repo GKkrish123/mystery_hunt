@@ -19,7 +19,7 @@ export default function MirrorText({
 
   containerClassName?: string;
 }) {
-  const animation = cn("transition-all duration-500 ease-slow", {
+  const animation = cn("!transition-all !duration-500 !ease-slow", {
     "group-hover:-translate-y-3": direction === "up",
     "group-hover:translate-y-3": direction === "down",
     "group-hover:-translate-x-3": direction === "left",
@@ -40,19 +40,19 @@ export default function MirrorText({
   return (
     <div
       className={cn(
-        "group relative w-full justify-end text-foreground",
+        "group relative justify-end text-foreground",
         containerClassName,
         mysteryFont.className,
       )}
     >
       {/* <div className={cn("h-3 overflow-hidden delay-200", animation)}>{content}</div> */}
       <div
-        className={cn("h-[0.3rem] overflow-hidden delay-100 md:h-2", animation)}
+        className={cn("h-[0.3rem] overflow-hidden !delay-100 md:h-2", animation)}
       >
         {content}
       </div>
       <div
-        className={cn("h-[0.3rem] overflow-hidden delay-75 md:h-2", animation)}
+        className={cn("h-[0.3rem] overflow-hidden !delay-75 md:h-2", animation)}
       >
         {content}
       </div>

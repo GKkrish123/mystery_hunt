@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useSidebar } from "../ui/sidebar";
 
 const BackgroundLines = dynamic(
   () =>
@@ -11,7 +12,8 @@ const BackgroundLines = dynamic(
 );
 
 export default function AchievementsEffects() {
-  return (
+  const { openMobile } = useSidebar();
+  return openMobile ? null : (
     <>
       <BackgroundLines />
     </>

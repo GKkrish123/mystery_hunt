@@ -23,7 +23,7 @@ export const TextSplit: React.FC<TextSplitProps> = ({
       <AnimatePresence propagate>
         <MotionDiv
           className={cn(
-            "relative inline-block w-full text-center",
+            "relative inline-block text-center",
             containerClassName,
             mysteryFont.className,
           )}

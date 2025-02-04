@@ -7,6 +7,7 @@ import { domAnimation, LazyMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
+import { useSidebar } from "./sidebar";
 
 interface WordRotateProps {
   words: string[];
@@ -23,15 +24,19 @@ export function WordRotate({
   wrapperClassName,
 }: WordRotateProps) {
   const [index, setIndex] = useState(0);
+  const { openMobile } = useSidebar();
 
   useEffect(() => {
+    if (openMobile) {
+      return;
+    }
     const interval = setInterval(() => {
       setIndex((prevIndex) => (prevIndex + 1) % words.length);
     }, duration);
 
     // Clean up interval on unmount
     return () => clearInterval(interval);
-  }, [words, duration]);
+  }, [words, duration, openMobile]);
 
   return (
     <div className={cn("py-2", wrapperClassName)}>

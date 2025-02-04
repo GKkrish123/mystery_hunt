@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useSidebar } from "../ui/sidebar";
 
 const AnimatedGridPattern = dynamic(
   () =>
@@ -11,7 +12,8 @@ const AnimatedGridPattern = dynamic(
 );
 
 export default function MysteryEffects() {
-  return (
+  const { openMobile } = useSidebar();
+  return openMobile ? null : (
     <>
       <AnimatedGridPattern
         numSquares={30}

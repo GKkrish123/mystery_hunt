@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useSidebar } from "../ui/sidebar";
 
 const SparklingGrid = dynamic(
   () =>
@@ -11,7 +12,8 @@ const SparklingGrid = dynamic(
 );
 
 export default function CategoryEffects() {
-  return (
+  const { openMobile } = useSidebar();
+  return openMobile ? null : (
     <>
       <SparklingGrid />
     </>

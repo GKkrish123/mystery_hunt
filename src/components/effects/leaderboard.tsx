@@ -1,6 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useSidebar } from "../ui/sidebar";
+
 const StarsBackground = dynamic(
   () =>
     import("@/components/ui/stars-background").then(
@@ -10,7 +12,6 @@ const StarsBackground = dynamic(
     ssr: false,
   },
 );
-
 const BackgroundBeams = dynamic(
   () =>
     import("@/components/ui/background-beams").then(
@@ -20,7 +21,6 @@ const BackgroundBeams = dynamic(
     ssr: false,
   },
 );
-
 const Cobe = dynamic(
   () => import("@/components/ui/globe").then((mod) => mod.Cobe),
   {
@@ -29,7 +29,8 @@ const Cobe = dynamic(
 );
 
 export default function LeaderboardEffects() {
-  return (
+  const { openMobile } = useSidebar();
+  return openMobile ? null : (
     <>
       <StarsBackground />
       <BackgroundBeams />

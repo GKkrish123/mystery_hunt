@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useSidebar } from "../ui/sidebar";
 
 const BackgroundBeamsWithCollision = dynamic(
   () =>
@@ -13,9 +14,6 @@ const BackgroundBeamsWithCollision = dynamic(
 );
 
 export default function HomeEffects() {
-  return (
-    <>
-      <BackgroundBeamsWithCollision />
-    </>
-  );
+  const { openMobile } = useSidebar();
+  return openMobile ? null : <BackgroundBeamsWithCollision />;
 }

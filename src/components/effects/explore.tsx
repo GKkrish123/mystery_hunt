@@ -1,13 +1,15 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useSidebar } from "../ui/sidebar";
 
 const Swirl = dynamic(() => import("@/components/ui/swirl"), {
   ssr: false,
 });
 
 export default function ExploreEffects() {
-  return (
+  const { openMobile } = useSidebar();
+  return openMobile ? null : (
     <>
       <Swirl
         particleCount={50}

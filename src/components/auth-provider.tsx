@@ -37,6 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           await updateToken(user);
         } else {
           await auth.signOut();
+          router.replace("/login");
         }
       })();
     }, timeUntilExpiryMs);
