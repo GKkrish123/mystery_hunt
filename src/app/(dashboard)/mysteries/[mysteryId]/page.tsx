@@ -35,7 +35,6 @@ export default async function MysteryPage({ params }: MysteryPageProps) {
 }
 
 export const dynamic = "force-dynamic";
-export const revalidate = 60;
 export const metadata = {
   title: "Mysteryverse",
   description: "This is mystery page of Mysteryverse",

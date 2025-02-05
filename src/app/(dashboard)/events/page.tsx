@@ -76,7 +76,6 @@ export default async function EventsPage() {
 }
 
 export const dynamic = "force-dynamic";
-export const revalidate = 60;
 export const metadata = {
   title: "Mysteryverse Events",
   description: "This is an events page of Mysteryverse",

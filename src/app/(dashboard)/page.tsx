@@ -141,7 +141,6 @@ export default async function DashboardPage() {
 }
 
 export const dynamic = "force-dynamic";
-export const revalidate = 60;
 export const metadata = {
   title: "Mysteryverse Home",
   description: "This is a home page of Mysteryverse",

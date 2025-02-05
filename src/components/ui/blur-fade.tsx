@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { memo, useRef } from "react";
 import {
   AnimatePresence,
   useInView,
@@ -28,7 +28,7 @@ interface BlurFadeProps {
   blur?: string;
 }
 
-export default function BlurFade({
+export default memo(function BlurFade({
   children,
   className,
   variant,
@@ -68,4 +68,4 @@ export default function BlurFade({
       </AnimatePresence>
     </LazyMotion>
   );
-}
+});

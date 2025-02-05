@@ -10,8 +10,9 @@ import { Search } from "lucide-react";
 export function SearchBar({
   className,
   value,
+  forCategory = false,
   ...props
-}: React.ComponentProps<typeof Input>) {
+}: React.ComponentProps<typeof Input> & { forCategory?: boolean }) {
   const [searchValue, setSearchValue] = useState<string>(
     (value as string) ?? "",
   );
@@ -19,14 +20,15 @@ export function SearchBar({
   const router = useRouter();
 
   useEffect(() => {
+    const path = forCategory ? "/categories" : "/mysteries";
     if (!debouncedSearchValue) {
       if (value) {
-        router.replace("/mysteries");
+        router.replace(path);
       }
       return;
     }
     router.replace(
-      `/mysteries?search=${encodeURIComponent(debouncedSearchValue)}`,
+      `${path}?search=${encodeURIComponent(debouncedSearchValue)}`,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchValue]);

@@ -45,6 +45,7 @@ const MysterySchema = z.object({
 
 const CategorySchema = z.object({
   name: z.string().min(3).max(30),
+  searchKeywords: z.array(z.string().min(3).max(30)),
   description: z.string().max(100),
   tag: z.string().min(3).max(30),
   themePicUrl: z.string(),
@@ -136,6 +137,9 @@ export async function POST(req: NextRequest) {
     }));
     const newCategories = validationResult.data.categories.map((category) => ({
       ...category,
+      searchKeywords: [...category.searchKeywords, category.name].flatMap(
+        (keyword) => generateNGrams(keyword),
+      ),
       scheduledAt: new Date(category.scheduledAt),
       createdAt: now,
       updatedAt: now,

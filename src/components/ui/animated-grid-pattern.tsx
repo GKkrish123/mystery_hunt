@@ -117,7 +117,7 @@ export const GridPattern = memo(function GridPattern({
           <LazyMotion key={id} features={domAnimation} strict>
             <AnimatePresence propagate>
               <MotionRect
-                className="will-change-[transform,opacity]"
+                className="!will-change-[transform,opacity]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: maxOpacity }}
                 transition={{

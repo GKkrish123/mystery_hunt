@@ -35,7 +35,7 @@ export default async function CategoriesPage({
           wrapperClassName="col-span-full"
           bouncingIndices={[0, 2, 5, 9]}
         />
-        <SearchBar value={search} />
+        <SearchBar value={search} forCategory />
         <Suspense
           key={`${search}`}
           fallback={

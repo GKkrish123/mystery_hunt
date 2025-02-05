@@ -32,3 +32,9 @@ export default async function ProgressPage() {
     </>
   );
 }
+
+export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "Mysteryverse Progress",
+  description: "This is a progress page of Mysteryverse",
+};

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import BoxReveal from "./ui/box-reveal";
 import { AnimatedShinyText } from "./ui/animated-shiny-text";
 import { ArrowRightIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 interface HeadingRevealProps {
   title: string;
@@ -65,7 +65,7 @@ const useCountdown = (endTime?: number) => {
   return timeLeft;
 };
 
-export function HeadingReveal({
+export const HeadingReveal = memo(function HeadingReveal({
   title,
   description,
   className,
@@ -173,4 +173,4 @@ export function HeadingReveal({
       ) : null}
     </div>
   );
-}
+});
