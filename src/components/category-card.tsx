@@ -21,6 +21,7 @@ export function CategoryCard({
   name,
   description,
   themePicUrl,
+  tag,
   isBookmarked: bookmarkStatus,
 }: Category & { forDrag?: boolean }) {
   const [isBookmarked, setIsBookmarked] = useState<boolean>(bookmarkStatus);
@@ -50,7 +51,7 @@ export function CategoryCard({
   return (
     <BlurFade inView>
       <Link
-        href={`/explore/${name}`}
+        href={`/explore/${tag}`}
         className={cn(
           "block cursor-pointer space-y-3 p-1 transition-all",
           forDrag ? "space-y-2 md:space-y-3" : "hover:scale-105",
@@ -67,7 +68,7 @@ export function CategoryCard({
         }}
         onTouchEnd={(e) => {
           if (!(e.target instanceof SVGElement) && forDrag && !isDragging) {
-            router.push(`/explore/${name}`);
+            router.push(`/explore/${tag}`);
           }
         }}
         onTouchMove={() => {
