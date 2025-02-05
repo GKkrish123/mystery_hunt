@@ -64,7 +64,7 @@ export default async function ExploreCategoryPage({
     notFound();
   }
 
-  void api.category.recordCategoryView({ categoryId: exploreId })
+  void api.category.recordCategoryView({ categoryId: category.id })
 
   return (
     <>
