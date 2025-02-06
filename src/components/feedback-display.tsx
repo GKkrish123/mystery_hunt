@@ -5,56 +5,57 @@ import Marquee from "@/components/ui/marquee";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Image from "next/image";
+import { memo } from "react";
 
 const reviews = [
   {
     name: "Rajini",
     username: "@rajini",
-    body: "Kanna kalakkitta da kanna",
-    img: "https://avatar.vercel.sh/rajini",
+    body: "Ha Ha ha.. Konjo frame paarunga jii!",
+    img: "https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/19563e151175451.630738fbe8d78.jpg",
   },
   {
     name: "Kamal",
     username: "@kamal",
-    body: "Idhuvum kadandhu pogum, aana indha app top la pogum!",
-    img: "https://avatar.vercel.sh/kamal",
+    body: "எதிர்பாராததை எதிர்பாருங்கள்! இத்தகைய அறிய செயலியை உருவாக்கியவர்க்கு வாழ்த்துக்கள்",
+    img: "https://mir-s3-cdn-cf.behance.net/project_modules/fs/a2490b157638269.637cc8f6e248b.jpg",
   },
   {
     name: "Vijay",
     username: "@vijay",
-    body: "App uh sooperu. Summa pattaya kelappalam!",
-    img: "https://avatar.vercel.sh/vijay",
+    body: "App uh sooperunga naa.. Summa pattaya kelappalam!",
+    img: "https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/006da686040121.5d8d5ab1d2ee3.png",
   },
   {
     name: "Ajith Kumar",
     username: "@thala",
-    body: "Intha App uh. Thamaasu Thamaasu!",
-    img: "https://avatar.vercel.sh/ajith",
+    body: "Intha app ah namma paathukitta, Mela irukavan nammala paathukuvan. Athuu!",
+    img: "https://mir-s3-cdn-cf.behance.net/project_modules/disp/20f935104926409.5f6d8d1ca68a2.jpg",
   },
   {
     name: "Dhanush",
     username: "@dhanush",
-    body: "Rowdy baby... indha app vera level!",
-    img: "https://avatar.vercel.sh/dhanush",
+    body: "Yaaruku epdi vena irukalam, aana enaku intha app romba pudikum.",
+    img: "https://mir-s3-cdn-cf.behance.net/project_modules/disp/39e656131810851.619cbc7ae5e55.jpg",
   },
   {
-    name: "Sivakarthikeyan",
+    name: "Siva K",
     username: "@siva",
-    body: "Oii Mamooty App uh sooperano",
-    img: "https://avatar.vercel.sh/siva",
+    body: "Oii Mamooty.. App uh sooperano",
+    img: "https://mir-s3-cdn-cf.behance.net/project_modules/disp/ff84ab164111361.63f125987e468.jpg",
   },
   {
-    name: "Vikram",
-    username: "@vikram",
-    body: "Indha app oda speed ah yaaralayum adakkave mudiyadhu",
-    img: "https://avatar.vercel.sh/vikram",
+    name: "Surya",
+    username: "@surya",
+    body: "Mystery ah Youtube la paathrupa Netflix la paathrupa, Mysteryverse la paathrukiyaa!",
+    img: "https://mir-s3-cdn-cf.behance.net/project_modules/disp/0b0c15217078851.678a7020d41e9.jpg",
   },
 ];
 
 const firstRow = reviews.slice(0, reviews.length / 2);
 const secondRow = reviews.slice(reviews.length / 2);
 
-const ReviewCard = ({
+const ReviewCard = memo(function ReviewCard({
   img,
   name,
   username,
@@ -66,19 +67,19 @@ const ReviewCard = ({
   username: string;
   body: string;
   vertical: boolean;
-}) => {
+}) {
   return (
     <figure
       className={cn(
         "relative cursor-pointer overflow-hidden rounded-xl border p-4",
         "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
         "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]",
-        vertical ? "h-44 w-36" : "w-64",
+        vertical ? "h-52 w-36" : "w-64",
       )}
     >
       <div className="flex flex-row items-center gap-2">
         <Image
-          className="rounded-full"
+          className="aspect-square rounded-full object-cover"
           width="32"
           height="32"
           alt=""
@@ -94,9 +95,9 @@ const ReviewCard = ({
       <blockquote className="mt-2 text-sm">{body}</blockquote>
     </figure>
   );
-};
+});
 
-export const FeedbackDisplay = () => {
+export const FeedbackDisplay = memo(function FeedbackDisplay() {
   const isMobile = useIsMobile();
 
   return (
@@ -140,4 +141,4 @@ export const FeedbackDisplay = () => {
       <BorderBeam size={isMobile ? 300 : 400} duration={6} delay={9} />
     </div>
   );
-};
+});

@@ -29,7 +29,7 @@ export default function SupportPage() {
         <div className="col-span-full flex h-[21rem] w-full items-start justify-center md:h-[25rem]">
           <PinContainer
             title="Donate"
-            href="upi://pay?pa=www.krishnan.arulsigamani-1@okicici&pn=GKkrish&cu=INR"
+            href="paytmmp://pay?pa=www.krishnan.arulsigamani-1@oksbi&pn=GKkrish&cu=INR"
           >
             <div className="flex h-[17rem] w-[15rem] basis-full flex-col p-4 tracking-tight text-slate-100/50 sm:basis-1/2 md:h-[20rem] md:w-[20rem]">
               <h3 className="!m-0 max-w-xs !pb-2 text-base font-bold text-black dark:text-slate-100 md:text-lg">
@@ -37,13 +37,13 @@ export default function SupportPage() {
               </h3>
               <div className="!m-0 !p-0 text-sm font-normal md:text-base">
                 <span className="text-slate-600 dark:text-slate-400">
-                  Be a part of the Mysteryverse,
+                  Be a part of Mysteryverse,
                 </span>
                 <p className="text-slate-600 dark:text-slate-400">
                   Your support powers the journey!
                 </p>
               </div>
-              <div className="mt-4 flex w-full flex-1 rounded-lg bg-gradient-to-br from-violet-500 via-purple-500 to-blue-500" />
+              <div className="mt-4 flex w-full flex-1 rounded-lg bg-gradient-to-br from-orange-500 via-purple-500 to-yellow-500" />
             </div>
           </PinContainer>
         </div>

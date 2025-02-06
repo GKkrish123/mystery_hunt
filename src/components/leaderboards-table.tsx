@@ -246,7 +246,7 @@ export function LeaderboardsTable({
           </TableBody>
         </Table>
       </div>
-      <div className="mt-auto flex items-center justify-end space-x-2 py-2">
+      <div className="mt-auto flex items-center justify-end space-x-2 pt-2 pb-9 lg:pb-2">
         <div className="space-x-2">
           <Button
             variant="outline"

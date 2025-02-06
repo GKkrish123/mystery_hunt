@@ -1,5 +1,4 @@
 import { api } from "@/trpc/server";
-
 import { default as dynamicImport } from "next/dynamic";
 
 const LeaderboardsTable = dynamicImport(() =>
@@ -62,12 +61,10 @@ export async function LeaderboardsSection({
           >
             <CanvasRevealEffect
               animationSpeed={3}
-              containerClassName="bg-black"
+              containerClassName="bg-amber-600/80"
               colors={[
-                [236, 72, 153],
-                [232, 121, 249],
+                [253, 94, 83],
               ]}
-              dotSize={2}
             />
             <div className="absolute inset-0 bg-black/50 [mask-image:radial-gradient(100px_at_center,white,transparent)] dark:bg-black/90" />
           </RevealCard>
@@ -80,7 +77,7 @@ export async function LeaderboardsSection({
           >
             <CanvasRevealEffect
               animationSpeed={3}
-              containerClassName="bg-black"
+              containerClassName="bg-stone-500"
               colors={[[125, 211, 252]]}
             />
             <div className="absolute inset-0 bg-black/50 [mask-image:radial-gradient(200px_at_center,white,transparent)] dark:bg-black/90" />

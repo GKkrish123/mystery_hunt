@@ -65,7 +65,7 @@ const PinPerspective = ({ title, href }: { title?: string; href: string }) => {
   return (
     <LazyMotion features={domAnimation} strict>
       <AnimatePresence propagate>
-        <MotionDiv className="z-[60] flex h-80 w-96 items-center justify-center opacity-0 transition duration-500 group-hover/pin:opacity-100">
+        <MotionDiv className="z-[60] flex h-80 w-96 items-center justify-center opacity-0 !transition !duration-500 group-hover/pin:opacity-100">
           <div className="inset-0 -mt-7 h-full w-full flex-none">
             <Link
               href={href}
