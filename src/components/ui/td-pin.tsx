@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { div as MotionDiv } from "motion/react-m";
 import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
+import { toast } from "sonner";
 
 export const PinContainer = ({
   children,
@@ -69,7 +70,13 @@ const PinPerspective = ({ title, href }: { title?: string; href: string }) => {
           <div className="inset-0 -mt-7 h-full w-full flex-none">
             <Link
               href={href}
-              onClick={(e) => e.stopPropagation()}
+              onClick={async (e) => {
+                e.stopPropagation();
+                await navigator.clipboard.writeText("www.krishnan.arulsigamani-1@oksbi");
+                toast.info("UPI ID copied to your clipboard!", {
+                  duration: 1500,
+                });
+              }}
               className="absolute inset-x-0 top-0 flex justify-center drop-shadow-[1px_1px_2px_rgba(0,0,0)] dark:drop-shadow-[1px_1px_2px_rgba(255,255,255)]"
             >
               <div className="relative z-10 flex items-center space-x-2 rounded-full bg-slate-200 px-4 py-0.5 ring-1 ring-zinc-700 dark:bg-zinc-950 dark:ring-white">

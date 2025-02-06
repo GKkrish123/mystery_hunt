@@ -15,12 +15,13 @@ import { AnimatePresence } from "motion/react";
 import { getBreadcrumb } from "./nav-data";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
+import { memo } from "react";
 
 const LetterPullup = dynamic(() =>
   import("./ui/letter-pullup").then((mod) => mod.default),
 );
 
-export function AppHeader() {
+export const AppHeader = memo(function AppHeader() {
   const { open, openMobile, isMobile } = useSidebar();
   const pathname = usePathname();
   const splittedPathname = pathname.split("/");
@@ -76,4 +77,4 @@ export function AppHeader() {
       <ThemeToggle />
     </header>
   );
-}
+});

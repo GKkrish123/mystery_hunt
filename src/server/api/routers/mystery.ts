@@ -359,11 +359,12 @@ export const mysteryRouter = createTRPCRouter({
       (a, b) => b.guessedAt.toMillis() - a.guessedAt.toMillis(),
     );
     let lastScored = 0;
-    const achievements = solvedTrails.map(
-      ({ guessCount, guessedValue, mysteryId, points, achievement }) => {
+    const achievements = solvedTrails
+      .map(({ guessCount, guessedValue, mysteryId, points, achievement }) => {
         const targetMystery = mysteries.find(
           (mystery) => mystery.id === mysteryId,
-        )!;
+        );
+        if (!targetMystery) return null;
         if (!lastScored) {
           lastScored = points ?? 0;
         }
@@ -375,8 +376,8 @@ export const mysteryRouter = createTRPCRouter({
           points: points ?? 0,
           achievement: achievement ?? "",
         } as Achievement;
-      },
-    );
+      })
+      .filter((achievement) => achievement !== null);
 
     return { lastScored, scoreBoard: hunterDoc.scoreBoard, achievements };
   }),

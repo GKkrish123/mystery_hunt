@@ -1,6 +1,10 @@
-"use client";
-
-import { ArrowDown, ChevronRight, Map } from "lucide-react";
+import {
+  ArrowDown,
+  ChevronLeft,
+  ChevronRight,
+  Map,
+  Sparkles,
+} from "lucide-react";
 import Link from "next/link";
 import { memo } from "react";
 import { cn } from "@/lib/utils";
@@ -12,9 +16,8 @@ import BlurFade from "./blur-fade";
 import { RainbowButton } from "./rainbow-button";
 import { AnimatedGradientText } from "./animated-gradient-text";
 
-const CoolMode = dynamicImport(
-  () => import("./cool-mode").then((mod) => mod.default),
-  { ssr: false },
+const CoolMode = dynamicImport(() =>
+  import("./cool-mode").then((mod) => mod.default),
 );
 
 export default memo(function ProductFeatures({
@@ -74,20 +77,36 @@ export default memo(function ProductFeatures({
       <RainbowButton scrollTo="trending-mysteries" className="z-10">
         Ready to Unravel <ArrowDown className="ml-2" />
       </RainbowButton>
-      <Link href="/explore" className="z-10 cursor-pointer">
-        <AnimatedGradientText>
-          <Map className="h-5 w-5" />{" "}
-          <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
-          <span
-            className={cn(
-              `inline !animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
-            )}
-          >
-            Explorer
-          </span>
-          <ChevronRight className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
-        </AnimatedGradientText>
-      </Link>
+      <div className="flex items-center gap-3">
+        <Link href="/explore" className="z-10 cursor-pointer">
+          <AnimatedGradientText>
+            <ChevronLeft className="mr-1 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+            <span
+              className={cn(
+                `inline !animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
+              )}
+            >
+              Explore
+            </span>
+            <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
+            <Map className="h-5 w-5" />{" "}
+          </AnimatedGradientText>
+        </Link>
+        <Link href="/events" className="z-10 cursor-pointer">
+          <AnimatedGradientText>
+            <Sparkles className="h-5 w-5" />{" "}
+            <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
+            <span
+              className={cn(
+                `inline !animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
+              )}
+            >
+              Events
+            </span>
+            <ChevronRight className="ml-1 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+          </AnimatedGradientText>
+        </Link>
+      </div>
       <ThreeDPhotoCarousel />
     </section>
   );

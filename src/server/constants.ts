@@ -12,6 +12,7 @@ export enum MysteryCollections {
   secretChamber = "secret-chamber",
   categories = "categories",
   hiddenGems = "hidden-gems",
+  mail = "mail",
 }
 
 export interface State {

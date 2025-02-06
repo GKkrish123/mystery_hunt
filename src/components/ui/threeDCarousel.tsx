@@ -186,7 +186,7 @@ const ThreeDPhotoCarousel = () => {
   return (
     <LazyMotion features={domAnimation} strict>
       <AnimatePresence propagate>
-        <MotionDiv layout className="relative -mt-2 md:-mt-20">
+        <MotionDiv layout className="relative -mt-4 md:-mt-20">
           <div className="relative h-[350px] w-full">
             <Carousel
               handleClick={handleClick}
