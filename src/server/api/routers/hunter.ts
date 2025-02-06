@@ -119,6 +119,7 @@ export const userRouter = createTRPCRouter({
     .input(z.object({ feedback: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { feedback } = input;
+      const hunterdata = await getHunterById(ctx.user.hunterId);
       const hunterTrailsSnapshot = await getHunterTrailById(ctx.user.hunterId);
       const hunterTrailsData = hunterTrailsSnapshot.data() as HunterTrail;
 
@@ -140,6 +141,25 @@ export const userRouter = createTRPCRouter({
           lastFeedbackAt: now,
         },
         { merge: true },
+      );
+      void addDoc(
+        collection(db, MysteryCollections.mail),
+        {
+          to: "me <mysteryverse.co@gmail.com>",
+          message: {
+            subject: "New Feedback",
+            html: `
+              <ul>
+                <li><strong>Feedback:</strong> ${feedback}</li>
+                <li><strong>Timestamp:</strong> ${new Date(now).toLocaleString()}</li>
+                <li><strong>Name:</strong> ${hunterdata?.name ?? "N/A"}</li>
+                <li><strong>State:</strong> ${hunterdata?.state ?? "N/A"}</li>
+                <li><strong>City:</strong> ${hunterdata?.city ?? "N/A"}</li>
+                <li><strong>ID:</strong> ${hunterdata?.id ?? "N/A"}</li>
+              </ul>
+            `,
+          },
+        },
       );
       return { success: true };
     }),
