@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
 import { memo } from "react";
@@ -17,36 +15,36 @@ interface LetterPullupProps {
   forHeader?: boolean;
 }
 
+const pullupVariant = {
+  hidden: { filter: "blur(10px)", opacity: 0 },
+  visible: { filter: "blur(0px)", opacity: 1, transition: { duration: 0.5 } },
+  initial: { y: 100, opacity: 0 },
+  animate: (i: any) => ({
+    y: 0,
+    opacity: 1,
+    transition: {
+      delay: i * 0.03, // By default, delay each letter's animation by 0.05 seconds
+    },
+  }),
+  exit: (i: any) => ({
+    x: -50,
+    opacity: 0,
+    transition: {
+      delay: i * 0.01, // By default, delay each letter's animation by 0.05 seconds
+    },
+  }),
+};
+
 export default memo(function LetterPullup({
   className,
   words,
-  delay,
+  // delay,
   wrapperClassName,
   type,
   forSidebar,
   forHeader,
 }: LetterPullupProps) {
   const letters = words.split("");
-
-  const pullupVariant = {
-    hidden: { filter: "blur(10px)", opacity: 0 },
-    visible: { filter: "blur(0px)", opacity: 1, transition: { duration: 0.5 } },
-    initial: { y: 100, opacity: 0 },
-    animate: (i: any) => ({
-      y: 0,
-      opacity: 1,
-      transition: {
-        delay: i * (delay ? delay : 0.03), // By default, delay each letter's animation by 0.05 seconds
-      },
-    }),
-    exit: (i: any) => ({
-      x: -100,
-      opacity: 0,
-      transition: {
-        delay: i * (delay ? delay : 0.01), // By default, delay each letter's animation by 0.05 seconds
-      },
-    }),
-  };
 
   return (
     <div

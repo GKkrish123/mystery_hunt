@@ -1,10 +1,4 @@
-"use client";
-
-import dynamic from "next/dynamic";
-
-const AppLoader = dynamic(() => import("@/components/ui/app-loader"), {
-  ssr: false,
-});
+import AppLoader from "@/components/ui/app-loader";
 
 export default function Loading() {
   return <AppLoader />;

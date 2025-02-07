@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import { mysteryFont } from "@/lib/fonts";
 import { memo } from "react";
@@ -14,6 +12,16 @@ interface LetterShootProps {
   wrapperClassName?: string;
 }
 
+const generateRandomPosition = () => ({
+  x: Math.random() * 7000 - 1000, // Random value between -100 and 100
+  y: Math.random() * 4000 - 3000, // Random value between -100 and 100
+});
+
+const generateRandomExitPosition = () => ({
+  y: Math.random() * 4000 + 3000, // Random drop to bottom (100 to 400px)
+  // x: Math.random() * 2000 - 1000, // Slight horizontal shift (-50 to 50px)
+});
+
 export default memo(function LetterShoot({
   className,
   words,
@@ -24,19 +32,9 @@ export default memo(function LetterShoot({
   const letters = words.split("");
   const centerIndex = Math.floor(letters.length / 2);
 
-  const generateRandomPosition = () => ({
-    x: Math.random() * 7000 - 1000, // Random value between -100 and 100
-    y: Math.random() * 4000 - 3000, // Random value between -100 and 100
-  });
-
-  const generateRandomExitPosition = () => ({
-    y: Math.random() * 4000 + 3000, // Random drop to bottom (100 to 400px)
-    // x: Math.random() * 2000 - 1000, // Slight horizontal shift (-50 to 50px)
-  });
-
   const scaleVariant = {
     hidden: () => ({
-      scale: 30,
+      scale: 10,
       opacity: 0,
       ...generateRandomPosition(),
     }),

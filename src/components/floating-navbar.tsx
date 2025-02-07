@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import {
   useScroll,
   useMotionValueEvent,
@@ -15,7 +15,11 @@ import { Button } from "./ui/button";
 import { MoveUp } from "lucide-react";
 import ThemeToggle from "./ui/theme-toggle";
 
-export const FloatingNav = ({ className }: { className?: string }) => {
+export const FloatingNav = memo(function FloatingNav({
+  className,
+}: {
+  className?: string;
+}) {
   const { scrollYProgress } = useScroll();
   const { openMobile } = useSidebar();
   const [visible, setVisible] = useState(false);
@@ -84,4 +88,4 @@ export const FloatingNav = ({ className }: { className?: string }) => {
       </AnimatePresence>
     </LazyMotion>
   );
-};
+});
