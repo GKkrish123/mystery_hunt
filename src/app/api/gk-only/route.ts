@@ -40,7 +40,12 @@ const MysterySchema = z.object({
   attachments: z.object({
     photos: z.array(z.string()).min(1),
     audios: z.array(z.string()),
-    links: z.array(z.string()),
+    links: z.array(
+      z.object({
+        thumbnail: z.string().url(),
+        url: z.string().url(),
+      }),
+    ),
   }),
   scheduledAt: z.string(),
 });

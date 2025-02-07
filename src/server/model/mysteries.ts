@@ -3,7 +3,10 @@ import { type Timestamp } from "firebase/firestore";
 export interface Attachments {
   photos: string[];
   audios: string[];
-  links: string[];
+  links: {
+    thumbnail: string,
+    url: string,
+  }[];
 }
 
 export interface Mystery {

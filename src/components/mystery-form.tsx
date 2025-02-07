@@ -31,7 +31,8 @@ import { Timestamp } from "firebase/firestore";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import GraphemeSplitter from "grapheme-splitter";
-import { GripHorizontal } from "lucide-react";
+import { ExternalLink, GripHorizontal } from "lucide-react";
+import Link from "next/link";
 
 const BlurIn = dynamicImport(
   () => import("@/components/ui/blur-in").then((mod) => mod.default),
@@ -151,12 +152,13 @@ const DragCards = memo(
             <Card
               key={`drag-card-link-${index}`}
               containerRef={containerRef}
-              src={item}
+              src={item.thumbnail}
               alt={`Drag card link ${index}`}
               rotate={randomRotate}
               top={`${randomTop}%`}
               left={`${randomLeft}%`}
               className="w-36 md:w-56"
+              url={item.url}
             />
           );
         })}
@@ -176,6 +178,7 @@ interface Props {
   left: string;
   rotate: number;
   className?: string;
+  url?: string;
   forAudio?: boolean;
 }
 
@@ -187,6 +190,7 @@ const Card = ({
   left,
   rotate: initialRotate,
   className,
+  url,
   forAudio,
 }: Props) => {
   const zIndex = useMotionValue<number>(0);
@@ -302,14 +306,24 @@ const Card = ({
           }}
         >
           {!forAudio ? (
-            <Image
-              width={300}
-              height={500}
-              priority
-              className={twMerge("w-48", className)}
-              src={src}
-              alt={alt}
-            />
+            <>
+              <Image
+                width={300}
+                height={500}
+                priority
+                className={twMerge("w-48", className)}
+                src={src}
+                alt={alt}
+              />
+              {url ? (
+                <Link
+                  className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-1 outline dark:bg-black"
+                  href={url}
+                >
+                  <ExternalLink className="h-10 w-10" />
+                </Link>
+              ) : null}
+            </>
           ) : (
             <>
               <audio
