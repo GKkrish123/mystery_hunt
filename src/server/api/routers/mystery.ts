@@ -109,7 +109,7 @@ export const mysteryRouter = createTRPCRouter({
           where(
             documentId(),
             "in",
-            mysteryData.solvedBy.map((solved) => solved.hunterId),
+            [mysteryData.solvedBy.map((solved) => solved.hunterId)[0]],
           ),
         );
         const querySnapshot = await getDocs(huntersCollection);

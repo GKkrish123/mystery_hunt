@@ -2,6 +2,8 @@ import { type Timestamp } from "firebase/firestore";
 
 export interface Attachments {
   photos: string[];
+  audios: string[];
+  links: string[];
 }
 
 export interface Mystery {

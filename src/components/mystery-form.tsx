@@ -3,12 +3,18 @@
 import {
   memo,
   type MutableRefObject,
+  type RefObject,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { AnimatePresence, LazyMotion, domMax } from "motion/react";
+import {
+  AnimatePresence,
+  LazyMotion,
+  domMax,
+  useMotionValue,
+} from "motion/react";
 import { div as MotionDiv } from "motion/react-m";
 import { twMerge } from "tailwind-merge";
 import { useGesture } from "@use-gesture/react";
@@ -25,6 +31,7 @@ import { Timestamp } from "firebase/firestore";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import GraphemeSplitter from "grapheme-splitter";
+import { GripHorizontal } from "lucide-react";
 
 const BlurIn = dynamicImport(
   () => import("@/components/ui/blur-in").then((mod) => mod.default),
@@ -89,7 +96,7 @@ const ShineBorder = dynamicImport(() => import("./ui/shine-border"), {
 });
 
 interface DragCardsProps {
-  items: string[];
+  items: Mystery["attachments"];
 }
 
 const DragCards = memo(
@@ -98,17 +105,54 @@ const DragCards = memo(
 
     return (
       <div className="absolute inset-0 z-10" ref={containerRef}>
-        {items.map((item, index) => {
+        {items.photos.map((item, index) => {
           const randomRotate = Math.floor(Math.random() * 20) - 10;
           const randomTop = Math.floor(Math.random() * 40) + 10;
           const randomLeft = Math.floor(Math.random() * 30) + 10;
 
           return (
             <Card
-              key={`drag-card-${index}`}
+              key={`drag-card-photo-${index}`}
               containerRef={containerRef}
               src={item}
               alt={`Drag card image ${index}`}
+              rotate={randomRotate}
+              top={`${randomTop}%`}
+              left={`${randomLeft}%`}
+              className="w-36 md:w-56"
+            />
+          );
+        })}
+        {items.audios?.map((item, index) => {
+          const randomRotate = Math.floor(Math.random() * 20) - 10;
+          const randomTop = Math.floor(Math.random() * 40) + 10;
+          const randomLeft = Math.floor(Math.random() * 30) + 10;
+
+          return (
+            <Card
+              key={`drag-card-audio-${index}`}
+              containerRef={containerRef}
+              src={item}
+              alt={`Drag card audio ${index}`}
+              rotate={randomRotate}
+              top={`${randomTop}%`}
+              left={`${randomLeft}%`}
+              className="w-36 md:w-56"
+              forAudio
+            />
+          );
+        })}
+        {items.links?.map((item, index) => {
+          const randomRotate = Math.floor(Math.random() * 20) - 10;
+          const randomTop = Math.floor(Math.random() * 40) + 10;
+          const randomLeft = Math.floor(Math.random() * 30) + 10;
+
+          return (
+            <Card
+              key={`drag-card-link-${index}`}
+              containerRef={containerRef}
+              src={item}
+              alt={`Drag card link ${index}`}
               rotate={randomRotate}
               top={`${randomTop}%`}
               left={`${randomLeft}%`}
@@ -132,6 +176,7 @@ interface Props {
   left: string;
   rotate: number;
   className?: string;
+  forAudio?: boolean;
 }
 
 const Card = ({
@@ -142,16 +187,19 @@ const Card = ({
   left,
   rotate: initialRotate,
   className,
+  forAudio,
 }: Props) => {
-  const [zIndex, setZIndex] = useState(0);
-  const [rotate, setRotate] = useState(initialRotate);
-  // const [scale, setScale] = useState(1);
-  const target = useRef<HTMLDivElement>(null);
+  const zIndex = useMotionValue<number>(0);
+  const rotate = useMotionValue(initialRotate);
+  const scale = useMotionValue<number>(1);
+  const target = useRef<HTMLDivElement | HTMLAudioElement>(null);
   const [forRotation, setForRotation] = useState(false);
-  const initialAngleRef = useRef(0); // Store initial angle when dragging starts
+  const initialAngleRef = useRef(0);
   const initialRotationRef = useRef(0);
 
-  const updateZIndex = (e: React.MouseEvent<HTMLDivElement>) => {
+  const updateZIndex = (
+    e: React.MouseEvent<HTMLDivElement> | React.PointerEvent<HTMLAudioElement>,
+  ) => {
     const els = document.querySelectorAll(".drag-elements");
 
     let maxZIndex = -Infinity;
@@ -166,14 +214,14 @@ const Card = ({
       }
     });
 
-    setZIndex(maxZIndex + 1);
+    zIndex.set(maxZIndex + 1);
     const rect = target.current?.getBoundingClientRect();
     if (!rect) return;
 
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     initialAngleRef.current = getAngle(centerX, centerY, e.clientX, e.clientY);
-    initialRotationRef.current = rotate;
+    initialRotationRef.current = rotate.get() as unknown as number;
   };
 
   const getAngle = (cx: number, cy: number, x: number, y: number) => {
@@ -183,7 +231,11 @@ const Card = ({
     return Math.atan2(dy, dx) * (180 / Math.PI); // Convert radians to degrees
   };
 
-  const handleMouseRotation = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseRotation = (
+    event:
+      | React.MouseEvent<HTMLDivElement>
+      | React.PointerEvent<HTMLAudioElement>,
+  ) => {
     if (forRotation && event.shiftKey) {
       const rect = target.current?.getBoundingClientRect();
       if (!rect) return;
@@ -198,20 +250,16 @@ const Card = ({
       );
       const angle =
         initialRotationRef.current + (currentAngle - initialAngleRef.current);
-      setRotate(angle);
+      rotate.set(angle);
     }
   };
 
   useGesture(
     {
-      onPinch: ({
-        movement: [
-          // scale
-        ],
-        offset: [_, angle],
-      }) => {
-        // setScale(scale);
-        setRotate(angle);
+      onPinch: ({ movement: move, offset: [_, angle] }) => {
+        const moveScale = move[0];
+        scale.set(Math.max(Math.min(moveScale, 2), 0.7));
+        rotate.set(angle);
       },
     },
     {
@@ -223,13 +271,17 @@ const Card = ({
     <LazyMotion features={domMax} strict>
       <AnimatePresence propagate>
         <MotionDiv
-          className="drag-elements absolute rounded bg-zinc-700 p-0.5 pb-3 dark:bg-slate-300"
-          ref={target}
+          className={cn(
+            "drag-elements absolute rounded bg-zinc-700 p-0.5 dark:bg-slate-300",
+            forAudio ? "pb-6" : "pb-3",
+          )}
+          ref={target as RefObject<HTMLDivElement>}
           style={{
             top,
             left,
-            rotate: `${rotate}deg`, // Apply rotation dynamically
-            zIndex,
+            rotate: forAudio ? 0 : (rotate as unknown as number),
+            zIndex: zIndex as unknown as number,
+            scale: forAudio ? 0.8 : (scale as unknown as number),
           }}
           drag={!forRotation}
           dragConstraints={containerRef}
@@ -240,7 +292,7 @@ const Card = ({
           onPointerUp={() => {
             setForRotation(false);
           }}
-          onPointerMove={handleMouseRotation} // Track mouse movement for rotation
+          onPointerMove={handleMouseRotation}
           onPointerDown={(e) => {
             e.preventDefault();
             updateZIndex(e);
@@ -249,14 +301,27 @@ const Card = ({
             }
           }}
         >
-          <Image
-            width={300}
-            height={500}
-            priority
-            className={twMerge("w-48", className)}
-            src={src}
-            alt={alt}
-          />
+          {!forAudio ? (
+            <Image
+              width={300}
+              height={500}
+              priority
+              className={twMerge("w-48", className)}
+              src={src}
+              alt={alt}
+            />
+          ) : (
+            <>
+              <audio
+                src={src}
+                onPointerDown={(e) => e.stopPropagation()}
+                onDrag={(e) => e.preventDefault()}
+                controls
+                controlsList="nodownload noplaybackrate"
+              />
+              <GripHorizontal className="absolute bottom-0 right-[45%] text-white dark:text-black" />
+            </>
+          )}
         </MotionDiv>
       </AnimatePresence>
     </LazyMotion>
@@ -600,7 +665,7 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
           baseHue={210}
           particleCount={300}
         ></Vortex>
-        <DragCards items={mystery.attachments.photos} />
+        <DragCards items={mystery.attachments} />
       </ShineBorder>
       {mystery.hints.map((hint, index) => (
         <div className="col-span-full" key={`hint-${index}`}>

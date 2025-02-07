@@ -39,6 +39,8 @@ const MysterySchema = z.object({
   retryInterval: z.number().int().positive(),
   attachments: z.object({
     photos: z.array(z.string()).min(1),
+    audios: z.array(z.string()),
+    links: z.array(z.string()),
   }),
   scheduledAt: z.string(),
 });
