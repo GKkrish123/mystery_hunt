@@ -41,7 +41,7 @@ import {
 } from "../helpers/query";
 import { type MysterySecret } from "@/server/model/secret-chamber";
 import { snapshotsToCategories } from "../helpers/category";
-import { MysteryEventBasic, type MysteryEvent } from "@/server/model/events";
+import { type MysteryEventBasic, type MysteryEvent } from "@/server/model/events";
 
 export const mysteryRouter = createTRPCRouter({
   getMysteries: privateProcedure

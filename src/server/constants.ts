@@ -1,4 +1,4 @@
-import { MysteryEventBasic } from "./model/events";
+import { type MysteryEventBasic } from "./model/events";
 import {
   type CategoryInteraction,
   type MysteryInteraction,

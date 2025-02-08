@@ -639,11 +639,11 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
   const eventExpiration = useMemo(
     () => ({
       isExpired:
-        (mystery.eventData?.expiresAt.seconds || now / 1000) * 1000 <= now,
+        (mystery.eventData?.expiresAt.seconds ?? now / 1000) * 1000 <= now,
       isCompleted:
-        (mystery.eventData?.scheduledTo.seconds || now / 1000) * 1000 <= now,
+        (mystery.eventData?.scheduledTo.seconds ?? now / 1000) * 1000 <= now,
     }),
-    [mystery.eventData],
+    [mystery.eventData, now],
   );
 
   return (
