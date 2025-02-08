@@ -31,8 +31,15 @@ import { Timestamp } from "firebase/firestore";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import GraphemeSplitter from "grapheme-splitter";
-import { ExternalLink, GripHorizontal } from "lucide-react";
+import {
+  ChevronRight,
+  ExternalLink,
+  GripHorizontal,
+  Lock,
+  Sparkles,
+} from "lucide-react";
 import Link from "next/link";
+import { AnimatedGradientText } from "./ui/animated-gradient-text";
 
 const BlurIn = dynamicImport(
   () => import("@/components/ui/blur-in").then((mod) => mod.default),
@@ -460,6 +467,7 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
   const { points: currentPoints, countdown: pointsCountdown } =
     usePointsCountdown(mystery);
   const splitter = new GraphemeSplitter();
+  const now = Date.now();
 
   useEffect(() => {
     setMystery(mysteryProp);
@@ -628,6 +636,15 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
   };
 
   const randomEmoji = useMemo(() => getRandomEmoji(), []);
+  const eventExpiration = useMemo(
+    () => ({
+      isExpired:
+        (mystery.eventData?.expiresAt.seconds || now / 1000) * 1000 <= now,
+      isCompleted:
+        (mystery.eventData?.scheduledTo.seconds || now / 1000) * 1000 <= now,
+    }),
+    [mystery.eventData],
+  );
 
   return (
     <div className="relative grid h-full auto-rows-min grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-7 md:gap-3">
@@ -638,6 +655,39 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
           mysteryFont.className,
         )}
       />
+      {mystery.linkedEvent && mystery.eventData ? (
+        <div className="col-span-full flex items-center justify-center">
+          <Link
+            href={`/events#${mystery.linkedEvent}`}
+            className={cn(
+              "z-10 cursor-pointer",
+              eventExpiration.isExpired && "pointer-events-none",
+            )}
+            aria-disabled={eventExpiration.isExpired ? "true" : "false"}
+            tabIndex={eventExpiration.isExpired ? -1 : 0}
+          >
+            <AnimatedGradientText>
+              {eventExpiration.isCompleted ? (
+                <Lock className="size-4 md:size-5" />
+              ) : (
+                <Sparkles className="size-4 md:size-5" />
+              )}
+              <span className="ml-1 text-xs md:text-sm">Event</span>
+              <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />
+              <span
+                className={cn(
+                  "inline !animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-sm text-transparent md:text-base",
+                )}
+              >
+                {mystery.linkedEvent}
+              </span>
+              {eventExpiration.isExpired ? null : (
+                <ChevronRight className="ml-1 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+              )}
+            </AnimatedGradientText>
+          </Link>
+        </div>
+      ) : null}
       <div className="col-span-1 flex flex-wrap content-center items-center gap-1 md:col-span-2">
         {mystery.tags.map((badge) => (
           <Badge
@@ -660,7 +710,10 @@ export function MysteryForm({ mystery: mysteryProp }: MysteryFormProps) {
         )}
       </div>
       <div className="col-span-1 col-start-3 ml-auto flex flex-row-reverse items-center pr-5 sm:col-start-4 md:col-span-2 md:col-start-6">
-        <AnimatedTooltip items={mystery.topThree.slice(0, 1)} />
+        <AnimatedTooltip
+          items={mystery.topThree}
+          insideEvent={!!mystery.linkedEvent && !eventExpiration.isCompleted}
+        />
       </div>
       <div className="col-span-full">
         <HyperText

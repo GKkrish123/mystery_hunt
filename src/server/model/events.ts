@@ -13,6 +13,12 @@ export interface MysteryEvent {
   updatedAt: Timestamp;
 }
 
+export interface MysteryEventBasic {
+  scheduledFrom: Timestamp;
+  scheduledTo: Timestamp;
+  expiresAt: Timestamp;
+}
+
 export interface MysteryEventWithData extends MysteryEvent {
   mysteries: Mystery[];
 }

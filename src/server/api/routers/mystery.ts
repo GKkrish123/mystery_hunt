@@ -41,7 +41,7 @@ import {
 } from "../helpers/query";
 import { type MysterySecret } from "@/server/model/secret-chamber";
 import { snapshotsToCategories } from "../helpers/category";
-import { type MysteryEvent } from "@/server/model/events";
+import { MysteryEventBasic, type MysteryEvent } from "@/server/model/events";
 
 export const mysteryRouter = createTRPCRouter({
   getMysteries: privateProcedure
@@ -106,14 +106,28 @@ export const mysteryRouter = createTRPCRouter({
       if (mysteryData.solvedBy.length > 0) {
         const huntersCollection = query(
           collection(db, MysteryCollections.hunters),
-          where(
-            documentId(),
-            "in",
-            [mysteryData.solvedBy.map((solved) => solved.hunterId)[0]],
-          ),
+          where(documentId(), "in", [
+            mysteryData.solvedBy.map((solved) => solved.hunterId)[0],
+          ]),
         );
         const querySnapshot = await getDocs(huntersCollection);
         topThree = getHuntersRankList(querySnapshot);
+      }
+      let eventData = undefined;
+      if (mysteryData.linkedEvent) {
+        const eventDoc = await getDoc(
+          doc(db, MysteryCollections.events, mysteryData.linkedEvent),
+        );
+        if (eventDoc.exists()) {
+          const { scheduledFrom, scheduledTo, expiresAt } = parseSnapshotDoc(
+            eventDoc.data(),
+          ) as MysteryEvent;
+          eventData = {
+            scheduledFrom,
+            scheduledTo,
+            expiresAt,
+          } as MysteryEventBasic;
+        }
       }
       const hunterTrailsSnapshot = await getHunterTrailById(ctx.user.hunterId);
       const hunterTrailsData = hunterTrailsSnapshot.data() as HunterTrail;
@@ -145,6 +159,7 @@ export const mysteryRouter = createTRPCRouter({
         lastTriedAt,
         actualSecret,
         actualPoints,
+        eventData,
       } as Mystery & MysteryFormValues;
     }),
 

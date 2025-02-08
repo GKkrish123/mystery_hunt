@@ -1,3 +1,4 @@
+import { MysteryEventBasic } from "./model/events";
 import {
   type CategoryInteraction,
   type MysteryInteraction,
@@ -27,6 +28,7 @@ export interface MysteryFormValues {
   lastTriedAt?: number;
   actualSecret?: string;
   actualPoints?: string;
+  eventData?: MysteryEventBasic;
 }
 
 export const defaultMysteryInteraction: MysteryInteraction = {
