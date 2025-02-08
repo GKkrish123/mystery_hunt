@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { memo } from "react";
-import { cn } from "@/lib/utils";
 import { default as dynamicImport } from "next/dynamic";
 import { ThreeDPhotoCarousel } from "./threeDCarousel";
 import { BoldCopy } from "./bold-copy";
@@ -26,12 +25,7 @@ export default memo(function ProductFeatures({
   className?: string;
 }) {
   return (
-    <section
-      className={cn(
-        "storybook-fix flex w-full flex-col items-center gap-4 bg-orange-50 pt-5",
-        className,
-      )}
-    >
+    <section className="storybook-fix col-span-full flex w-full flex-col items-center gap-4 bg-orange-50 bg-transparent pt-5">
       <BlurFade className="flex cursor-default flex-col items-center gap-2 text-center">
         <CoolMode
           options={{
@@ -80,12 +74,8 @@ export default memo(function ProductFeatures({
       <div className="flex items-center gap-3">
         <Link href="/explore" className="z-10 cursor-pointer">
           <AnimatedGradientText>
-            <ChevronLeft className="mr-1 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
-            <span
-              className={cn(
-                `inline !animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
-              )}
-            >
+            <ChevronLeft className="mr-1 size-4 transition-transform duration-300 ease-in-out group-hover:-translate-x-0.5" />
+            <span className="inline !animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent">
               Explore
             </span>
             <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
@@ -96,11 +86,7 @@ export default memo(function ProductFeatures({
           <AnimatedGradientText>
             <Sparkles className="h-5 w-5" />{" "}
             <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
-            <span
-              className={cn(
-                `inline !animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
-              )}
-            >
+            <span className="inline !animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent">
               Events
             </span>
             <ChevronRight className="ml-1 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
