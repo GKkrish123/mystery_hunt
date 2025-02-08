@@ -2,11 +2,14 @@
 
 import { type ReactNode, useRef } from "react";
 import {
+  AnimatePresence,
+  domAnimation,
+  LazyMotion,
   type MotionValue,
-  motion,
   useScroll,
   useTransform,
-} from "framer-motion";
+} from "motion/react";
+import { h2 as MotionH2, div as MotionDiv } from "motion/react-m";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import {
@@ -77,15 +80,19 @@ export const MacbookScroll = ({
         COMING SOON
       </span>
       <div className="flex min-h-[170vh] flex-shrink-0 scale-[0.40] transform flex-col items-center justify-start py-0 [perspective:800px] sm:scale-50 md:min-h-[250vh] md:scale-75 md:py-80 lg:scale-90">
-        <motion.h2
-          style={{
-            translateY: textTransform,
-            opacity: textOpacity,
-          }}
-          className="mb-32 text-center text-3xl font-bold text-neutral-800 dark:text-white"
-        >
-          {title}
-        </motion.h2>
+        <LazyMotion features={domAnimation} strict>
+          <AnimatePresence propagate>
+            <MotionH2
+              style={{
+                translateY: textTransform as unknown as number,
+                opacity: textOpacity as unknown as number,
+              }}
+              className="mb-32 text-center text-3xl font-bold text-neutral-800 dark:text-white"
+            >
+              {title}
+            </MotionH2>
+          </AnimatePresence>
+        </LazyMotion>
         <Lid
           src={src}
           scaleX={scaleX}
@@ -162,26 +169,30 @@ export const Lid = ({
           </span>
         </div>
       </div>
-      <motion.div
-        style={{
-          scaleX: scaleX,
-          scaleY: scaleY,
-          rotateX: rotate,
-          translateY: translate,
-          transformStyle: "preserve-3d",
-          transformOrigin: "top",
-        }}
-        className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
-      >
-        <div className="absolute inset-0 rounded-lg bg-[#272729]" />
-        <Image
-          src={src!}
-          alt="Wooo"
-          fill
-          priority
-          className="absolute inset-0 h-full w-full rounded-lg object-fill"
-        />
-      </motion.div>
+      <LazyMotion features={domAnimation} strict>
+        <AnimatePresence propagate>
+          <MotionDiv
+            style={{
+              scaleX: scaleX as unknown as number,
+              scaleY: scaleY as unknown as number,
+              rotateX: rotate as unknown as number,
+              translateY: translate as unknown as number,
+              transformStyle: "preserve-3d",
+              transformOrigin: "top",
+            }}
+            className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
+          >
+            <div className="absolute inset-0 rounded-lg bg-[#272729]" />
+            <Image
+              src={src!}
+              alt="Wooo"
+              fill
+              priority
+              className="absolute inset-0 h-full w-full rounded-lg object-fill"
+            />
+          </MotionDiv>
+        </AnimatePresence>
+      </LazyMotion>
     </div>
   );
 };
