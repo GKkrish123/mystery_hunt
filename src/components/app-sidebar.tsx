@@ -67,7 +67,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar ref={sidebarRef} variant="inset" {...props}>
       {isOpen ? (
         <>
-          <Meteors key="sidebar-meteors" number={12} sidebar={true} />
+          <Meteors key="sidebar-meteors" number={3} sidebar={true} />
           <RetroGrid key="sidebar-retro" />
         </>
       ) : null}

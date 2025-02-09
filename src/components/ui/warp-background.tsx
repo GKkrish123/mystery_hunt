@@ -10,6 +10,7 @@ import {
   useCallback,
   useMemo,
 } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface WarpBackgroundProps extends HTMLAttributes<HTMLDivElement> {
   perspective?: number;
@@ -65,7 +66,6 @@ const Beam = ({
 export const WarpBackground: FC<WarpBackgroundProps> = ({
   perspective = 100,
   className,
-  beamsPerSide = 3,
   beamSize = 5,
   beamDelayMax = 3,
   beamDelayMin = 0,
@@ -73,6 +73,9 @@ export const WarpBackground: FC<WarpBackgroundProps> = ({
   // gridColor = "hsl(var(--border))",
   ...props
 }) => {
+  const isMobile = useIsMobile();
+  const beamsPerSide = isMobile ? 2 : 3;
+
   const generateBeams = useCallback(() => {
     const beams = [];
     const cellsPerSide = Math.floor(100 / beamSize);

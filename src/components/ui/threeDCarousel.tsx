@@ -64,7 +64,7 @@ const Carousel = memo(function CarouselComponent({
       transition: {
         repeat: Infinity,
         ease: "linear",
-        duration: 40,
+        duration: 50,
       },
     });
   };

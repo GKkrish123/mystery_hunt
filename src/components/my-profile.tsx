@@ -87,7 +87,7 @@ export function MyProfile({ className }: { className?: string }) {
               fallbackHex,
               minContrastRatio,
               aProps: {
-                href: "https://discord.gg/4spYKVDe",
+                href: "https://discord.gg/st8HvpczDR",
                 target: "_blank",
                 rel: "noopener noreferrer",
                 className: "transition-transform duration-300 hover:scale-110",

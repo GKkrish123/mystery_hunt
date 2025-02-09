@@ -18,7 +18,7 @@ export const Meteors = memo(({ number = 20, sidebar, half }: MeteorsProps) => {
 
   const { width } = useViewportSize();
   const [debouncedWidth] = useDebouncedValue(
-    half || sidebar ? 120 : width,
+    half || sidebar || isMobile ? 120 : width,
     500,
   );
 

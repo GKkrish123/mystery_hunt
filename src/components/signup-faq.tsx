@@ -265,7 +265,7 @@ function SignUpFaq({ onSubmit }: { onSubmit: () => void }) {
                 fallbackHex,
                 minContrastRatio,
                 aProps: {
-                  href: "https://discord.gg/4spYKVDe",
+                  href: "https://discord.gg/st8HvpczDR",
                   target: "_blank",
                   rel: "noopener noreferrer",
                   className:

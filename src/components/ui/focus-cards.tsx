@@ -30,13 +30,13 @@ export function FocusCards({
           }}
         >
           <div className="p-2">
-            <div className="mb-2 text-center text-sm font-semibold text-foreground">
+            <div className="mb-2 text-center text-xs lg:text-sm font-semibold text-foreground">
               {card.name}
             </div>
-            <div className="mb-2 text-center font-mono text-sm text-foreground">
+            <div className="mb-2 text-center font-mono text-xs lg:text-sm text-foreground">
               {card.points} Points
             </div>
-            <p className="leading-2 text-center text-sm text-muted-foreground">
+            <p className="leading-2 text-center text-xs lg:text-sm text-muted-foreground">
               {card.achievement}
             </p>
           </div>

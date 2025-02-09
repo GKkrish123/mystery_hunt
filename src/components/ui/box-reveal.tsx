@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { AnimatePresence, useAnimation, useInView } from "motion/react";
+import { AnimatePresence, type TargetAndTransition } from "motion/react";
 import { div as MotionDiv } from "motion/react-m";
 import { domAnimation, LazyMotion } from "motion/react";
-import { useTheme } from "next-themes";
+import { useCallback, useState } from "react";
 
 interface BoxRevealProps {
   children: JSX.Element;
@@ -18,49 +17,43 @@ export const BoxReveal = ({
   width = "fit-content",
   duration,
 }: BoxRevealProps) => {
-  const mainControls = useAnimation();
-  const slideControls = useAnimation();
+  const [isInView, setIsInView] = useState(false);
 
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const { resolvedTheme } = useTheme();
-
-  useEffect(() => {
-    if (isInView) {
-      void slideControls.start("visible");
-      void mainControls.start("visible");
-    } else {
-      void slideControls.start("hidden");
-      void mainControls.start("hidden");
-    }
-  }, [isInView, mainControls, slideControls]);
-
+  const changeInView = useCallback(() => {
+    setIsInView(true);
+    return {};
+  }, []);
   return (
-    <div ref={ref} style={{ position: "relative", width, overflow: "hidden" }}>
+    <div style={{ position: "relative", width, overflow: "hidden" }}>
       <LazyMotion features={domAnimation} strict>
         <AnimatePresence propagate>
           <MotionDiv
             variants={{
-              hidden: { opacity: 0, y: 75 },
+              hidden: { opacity: 0, y: 30 },
               visible: { opacity: 1, y: 0 },
             }}
+            viewport={{ once: true }}
             initial="hidden"
-            animate={mainControls}
+            animate={isInView ? "visible" : "hidden"}
+            whileInView={changeInView as unknown as TargetAndTransition}
             transition={{ duration: duration ? duration : 0.5, delay: 0.25 }}
           >
             {children}
           </MotionDiv>
         </AnimatePresence>
       </LazyMotion>
-      <LazyMotion features={domAnimation} strict>
+      {/* <LazyMotion features={domAnimation} strict>
         <AnimatePresence propagate>
           <MotionDiv
+            className="bg-black dark:bg-white"
             variants={{
-              hidden: { left: 0 },
-              visible: { left: "100%" },
+              hidden: { x: 0 },
+              visible: { x: "102%" },
             }}
+            viewport={{ once: true }}
             initial="hidden"
-            animate={slideControls}
+            animate={isInView ? "visible" : "hidden"}
+            whileInView={changeInView as unknown as TargetAndTransition}
             transition={{ duration: duration ? duration : 0.5, ease: "easeIn" }}
             style={{
               position: "absolute",
@@ -69,11 +62,10 @@ export const BoxReveal = ({
               left: 0,
               right: 0,
               zIndex: 20,
-              background: resolvedTheme === "dark" ? "#ffffff" : "#000000",
             }}
           />
         </AnimatePresence>
-      </LazyMotion>
+      </LazyMotion> */}
     </div>
   );
 };

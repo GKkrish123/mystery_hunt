@@ -90,7 +90,7 @@ export const BackgroundBeamsWithCollision = memo(
     useEffect(() => {
       if (containerRect?.width && containerRect?.height) {
         const newBeams = generateRandomBeams(
-          isMobile ? 10 : 20,
+          isMobile ? 3 : 7,
           containerRect.width,
         );
         setBeams(newBeams);

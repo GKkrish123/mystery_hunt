@@ -18,7 +18,7 @@ interface LetterPullupProps {
 const pullupVariant = {
   hidden: { filter: "blur(10px)", opacity: 0 },
   visible: { filter: "blur(0px)", opacity: 1, transition: { duration: 0.5 } },
-  initial: { y: 100, opacity: 0 },
+  initial: { y: 30, opacity: 0 },
   animate: (i: any) => ({
     y: 0,
     opacity: 1,
