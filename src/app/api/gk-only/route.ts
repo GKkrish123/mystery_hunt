@@ -28,13 +28,13 @@ const MysterySchema = z.object({
   maxTries: z.number().int().min(1),
   expectedSecret: z.string().min(1).toLowerCase(),
   achievement: z.string().min(1).optional(),
-  linkedEvent: z.string(),
+  linkedEvent: z.string().optional(),
   maxPoints: z.number().int().positive(),
   minPoints: z.number().int().positive(),
-  preFindCooldown: z.number().int().positive(),
-  preFindCooldownCut: z.number().int().positive(),
-  postFindCooldown: z.number().int().positive(),
-  postFindCooldownCut: z.number().int().positive(),
+  preFindCooldown: z.number().int().nonnegative(),
+  preFindCooldownCut: z.number().int().nonnegative(),
+  postFindCooldown: z.number().int().nonnegative(),
+  postFindCooldownCut: z.number().int().nonnegative(),
   tags: z.array(z.string()).min(1),
   retryInterval: z.number().int().positive(),
   attachments: z.object({
@@ -73,7 +73,11 @@ const PayloadSchema = z.object({
   mysteries: z.array(MysterySchema),
 });
 
-async function uploadImage(fileName: string, imgString: string) {
+async function uploadFile(
+  fileName: string,
+  imgString: string,
+  isAudio?: boolean,
+) {
   const buffer = Buffer.from(imgString?.split(",")?.[1] ?? "", "base64");
   const maxSizeInBytes = 100 * 1024;
   if (buffer.length > maxSizeInBytes) {
@@ -87,7 +91,7 @@ async function uploadImage(fileName: string, imgString: string) {
   const file = bucket.file(fileName);
   await file.save(buffer, {
     metadata: {
-      contentType: "image/jpeg",
+      contentType: isAudio ? "audio/mpeg" : "image/jpeg",
       cacheControl: "public, max-age=31536000, immutable",
     },
   });
@@ -107,7 +111,7 @@ async function deleteFiles(files: string[]) {
 }
 
 export async function POST(req: NextRequest) {
-  const uploadedImages: string[] = [];
+  const uploadedFiles: string[] = [];
   try {
     const reqHeaders = await headers();
     if (
@@ -177,11 +181,20 @@ export async function POST(req: NextRequest) {
           photos: await Promise.all(
             mystery.attachments.photos.map(async (file, index) => {
               const imgName = `mysteries/${mysteryDoc.id}_${index + 1}.jpeg`;
-              const uploadedImage = await uploadImage(imgName, file);
-              uploadedImages.push(imgName);
+              const uploadedImage = await uploadFile(imgName, file);
+              uploadedFiles.push(imgName);
               return uploadedImage;
             }),
           ),
+          audios: await Promise.all(
+            mystery.attachments.audios.map(async (file, index) => {
+              const audName = `mysteries/${mysteryDoc.id}_aud_${index + 1}.mp3`;
+              const uploadedAudio = await uploadFile(audName, file, true);
+              uploadedFiles.push(audName);
+              return uploadedAudio;
+            }),
+          ),
+          links: mystery.attachments.links,
         };
         mysterySecretMapping[mysteryDoc.id] = {
           secret: mystery.expectedSecret,
@@ -221,8 +234,8 @@ export async function POST(req: NextRequest) {
       for (const category of newCategories) {
         const categoryDoc = doc(collection(db, MysteryCollections.categories));
         const imgName = `categories/${categoryDoc.id}.jpeg`;
-        const themePicUrl = await uploadImage(imgName, category.themePicUrl);
-        uploadedImages.push(imgName);
+        const themePicUrl = await uploadFile(imgName, category.themePicUrl);
+        uploadedFiles.push(imgName);
         transaction.set(categoryDoc, { ...category, themePicUrl });
         newCategoryIds.push(categoryDoc.id);
       }
@@ -230,8 +243,8 @@ export async function POST(req: NextRequest) {
       for (const event of newEvents) {
         const eventDoc = doc(db, MysteryCollections.events, event.name);
         const imgName = `events/${eventDoc.id}.jpeg`;
-        const imageUrl = await uploadImage(imgName, event.imageUrl);
-        uploadedImages.push(imgName);
+        const imageUrl = await uploadFile(imgName, event.imageUrl);
+        uploadedFiles.push(imgName);
         transaction.set(eventDoc, {
           ...event,
           mysteries: eventMysteryMapping[event.name] ?? [],
@@ -277,14 +290,14 @@ export async function POST(req: NextRequest) {
         categories: newCategoryIds,
         events: newEventIds,
         eventMysteryMapping,
-        uploadedImages,
+        uploadedFiles,
       },
       { status: 200 },
     );
   } catch (error) {
     console.error("Error in GK ONLY handler:", (error as Error).message);
-    if (uploadedImages.length) {
-      await deleteFiles(uploadedImages);
+    if (uploadedFiles.length) {
+      await deleteFiles(uploadedFiles);
     }
     return NextResponse.json(
       { error: "Internal server error" },

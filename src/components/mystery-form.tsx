@@ -292,7 +292,7 @@ const Card = ({
             left,
             rotate: forAudio ? 0 : (rotate as unknown as number),
             zIndex: zIndex as unknown as number,
-            scale: forAudio ? 0.8 : (scale as unknown as number),
+            scale: forAudio ? 0.8 : url ? 1 : (scale as unknown as number),
           }}
           drag={!forRotation}
           dragConstraints={containerRef}
@@ -326,6 +326,7 @@ const Card = ({
                 <Link
                   className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-1 outline dark:bg-black"
                   href={url}
+                  target="_blank"
                 >
                   <ExternalLink className="h-10 w-10" />
                 </Link>
@@ -392,6 +393,10 @@ const usePointsCountdown = (mysteryData: Mystery & MysteryFormValues) => {
   const [points, setPoints] = useState(mysteryData.maxPoints);
 
   useEffect(() => {
+    if (mysteryData.maxPoints === mysteryData.minPoints) {
+      setPoints(mysteryData.maxPoints);
+      return;
+    }
     const calculatePointsAndCountdown = () => {
       const now = Date.now();
       const targetSeconds =
