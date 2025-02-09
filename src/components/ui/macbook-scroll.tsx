@@ -34,7 +34,6 @@ import {
   WholeWord,
 } from "lucide-react";
 import { mysteryFont } from "@/lib/fonts";
-import { Spotlight } from "./spotlight";
 import { ShootingStars } from "./shooting-stars";
 
 export const MacbookScroll = ({
@@ -123,7 +122,6 @@ export const MacbookScroll = ({
           {badge && <div className="absolute bottom-4 left-4">{badge}</div>}
         </div>
       </div>
-      <Spotlight />
       <ShootingStars />
     </div>
   );
