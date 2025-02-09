@@ -41,7 +41,10 @@ import {
 } from "../helpers/query";
 import { type MysterySecret } from "@/server/model/secret-chamber";
 import { snapshotsToCategories } from "../helpers/category";
-import { type MysteryEventBasic, type MysteryEvent } from "@/server/model/events";
+import {
+  type MysteryEventBasic,
+  type MysteryEvent,
+} from "@/server/model/events";
 
 export const mysteryRouter = createTRPCRouter({
   getMysteries: privateProcedure
@@ -593,25 +596,28 @@ export const mysteryRouter = createTRPCRouter({
       }
 
       if (secretData.secret === secret) {
-        const cooldown =
-          mysteryData.solvedCount === 0
-            ? mysteryData.preFindCooldown
-            : mysteryData.postFindCooldown;
-        const cooldownCut =
-          mysteryData.solvedCount === 0
-            ? mysteryData.preFindCooldownCut
-            : mysteryData.postFindCooldownCut;
-        const targetTime =
-          mysteryData.solvedCount === 0
-            ? mysteryData.firstViewedAt?.toMillis()
-            : mysteryData.solvedBy?.[0]?.solvedAt?.toMillis();
-        const elapsedTime = (now - (targetTime ?? now)) / 1000;
-        const cooldownPeriods = Math.floor(elapsedTime / cooldown);
-        const pointsLost = cooldownPeriods * cooldownCut;
-        const currentPoints = Math.max(
-          mysteryData.maxPoints - pointsLost,
-          mysteryData.minPoints,
-        );
+        let currentPoints = mysteryData.maxPoints;
+        if (currentPoints !== mysteryData.minPoints) {
+          const cooldown =
+            mysteryData.solvedCount === 0
+              ? mysteryData.preFindCooldown
+              : mysteryData.postFindCooldown;
+          const cooldownCut =
+            mysteryData.solvedCount === 0
+              ? mysteryData.preFindCooldownCut
+              : mysteryData.postFindCooldownCut;
+          const targetTime =
+            mysteryData.solvedCount === 0
+              ? mysteryData.firstViewedAt?.toMillis()
+              : mysteryData.solvedBy?.[0]?.solvedAt?.toMillis();
+          const elapsedTime = (now - (targetTime ?? now)) / 1000;
+          const cooldownPeriods = Math.floor(elapsedTime / cooldown);
+          const pointsLost = cooldownPeriods * cooldownCut;
+          currentPoints = Math.max(
+            mysteryData.maxPoints - pointsLost,
+            mysteryData.minPoints,
+          );
+        }
 
         await runTransaction(db, async (transaction) => {
           let isOnEvent = false;
