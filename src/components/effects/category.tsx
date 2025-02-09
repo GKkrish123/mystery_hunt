@@ -15,7 +15,7 @@ export default function CategoryEffects() {
   const { openMobile } = useSidebar();
   return openMobile ? null : (
     <>
-      <SparklingGrid />
+      <SparklingGrid key="category-effect" />
     </>
   );
 }

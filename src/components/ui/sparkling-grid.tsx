@@ -119,19 +119,12 @@ export const SparklingGrid: React.FC<SparklingGridProps> = ({
         container.removeChild(container.firstChild);
       }
     };
-  }, [gridSize, sparkleFrequency, sparkleColor, dotColor]);
+  }, []);
 
   return (
-    <LazyMotion features={domAnimation} strict>
-      <AnimatePresence propagate>
-        <MotionDiv
-          ref={containerRef}
-          className="absolute inset-0 top-0 -z-50 overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 2 }}
-        />
-      </AnimatePresence>
-    </LazyMotion>
+    <div
+      ref={containerRef}
+      className="absolute inset-0 top-0 -z-50 overflow-hidden"
+    />
   );
 };

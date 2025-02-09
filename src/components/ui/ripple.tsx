@@ -2,7 +2,6 @@
 
 import { memo, type CSSProperties } from "react";
 import { cn } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 interface RippleProps {
   mainCircleSize?: number;
@@ -12,13 +11,11 @@ interface RippleProps {
 }
 
 const Ripple = memo(function Ripple({
+  mainCircleSize = 210,
+  mainCircleOpacity = 0.24,
+  numCircles = 6,
   className,
 }: RippleProps) {
-  const isMobile = useIsMobile();
-  const mainCircleSize = isMobile ? 520 : 210;
-  const mainCircleOpacity = 0.2;
-  const numCircles = isMobile ? 3 : 8;
-
   return (
     <div
       className={cn(
