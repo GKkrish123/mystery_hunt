@@ -107,8 +107,13 @@ export default {
         gradient: "gradient 8s linear infinite",
         "bg-position": "bg-position 10s infinite linear",
         "line-shadow": "line-shadow 15s linear infinite",
+        fadeIn: "fadeIn 0.5s ease-in",
       },
       keyframes: {
+        fadeIn: {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
         "bg-position": {
           "0%": {
             backgroundPosition: "0% 50%",
