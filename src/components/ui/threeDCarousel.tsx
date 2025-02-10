@@ -13,7 +13,6 @@ import {
 import { div as MotionDiv } from "motion/react-m";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ShineBorder from "./shine-border";
-import { CardContainer, CardItem } from "./three-d-card";
 import Image from "next/image";
 import { useSidebar } from "./sidebar";
 
@@ -141,25 +140,21 @@ const Carousel = memo(function CarouselComponent({
                     }}
                     onPointerDown={() => handleClick(imgUrl, index)}
                   >
-                    <CardContainer className="w-full">
-                      <CardItem translateZ="100" className="w-full">
-                        <ShineBorder
-                          className="w-full min-w-0 p-0"
-                          borderRadius={10}
-                          borderWidth={1.5}
-                          duration={7}
-                          color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
-                        >
-                          <Image
-                            src={imgUrl}
-                            height={300}
-                            width={300}
-                            className="pointer-events-none h-36 w-full rounded-xl object-cover group-hover/card:shadow-xl md:h-64"
-                            alt="thumbnail"
-                          />
-                        </ShineBorder>
-                      </CardItem>
-                    </CardContainer>
+                    <ShineBorder
+                      className="w-full min-w-0 p-0"
+                      borderRadius={10}
+                      borderWidth={1.5}
+                      duration={7}
+                      color={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+                    >
+                      <Image
+                        src={imgUrl}
+                        height={300}
+                        width={300}
+                        className="pointer-events-none h-36 w-full rounded-xl object-cover group-hover/card:shadow-xl md:h-64"
+                        alt="thumbnail"
+                      />
+                    </ShineBorder>
                   </MotionDiv>
                 </AnimatePresence>
               </LazyMotion>
