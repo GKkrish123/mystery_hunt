@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { div as MotionDiv } from "motion/react-m";
-import { AnimatePresence, domAnimation, LazyMotion } from "motion/react";
 
 interface SparklingGridProps {
   gridSize?: number;
@@ -21,7 +19,6 @@ export const SparklingGrid: React.FC<SparklingGridProps> = ({
   gridSize = 30,
   sparkleFrequency = 0.03,
   sparkleColor = { light: "darkgray", dark: "silver" },
-  dotColor = { light: "bg-black/20", dark: "bg-white/20" },
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -119,6 +116,7 @@ export const SparklingGrid: React.FC<SparklingGridProps> = ({
         container.removeChild(container.firstChild);
       }
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
