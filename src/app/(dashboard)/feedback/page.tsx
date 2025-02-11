@@ -26,7 +26,7 @@ export default function FeedbackPage() {
           <BlurIn
             word="Feedback Corner"
             className={cn(
-              "mx-auto h-8 text-3xl font-bold text-black dark:text-white md:h-10 md:text-4xl",
+              "mx-auto h-8 text-3xl font-bold text-black dark:text-white md:h-10 md:text-4xl select-none",
               mysteryFont.className,
             )}
           />

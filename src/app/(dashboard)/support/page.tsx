@@ -17,7 +17,7 @@ export default function SupportPage() {
   return (
     <>
       <div className="relative grid h-full auto-rows-min grid-cols-1 gap-3 overflow-hidden px-3 pb-3 pt-0 sm:grid-cols-2 md:grid-cols-5 md:px-4 md:pb-4">
-        <div className="col-span-full flex items-center justify-center">
+        <div className="col-span-full flex items-center justify-center select-none">
           <BlurIn
             word="Support"
             className={cn(

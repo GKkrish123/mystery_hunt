@@ -22,7 +22,7 @@ const CoolMode = dynamicImport(() =>
 export default memo(function ProductFeatures() {
   return (
     <section className="storybook-fix col-span-full flex w-full flex-col items-center gap-4 bg-orange-50 bg-transparent pt-5">
-      <BlurFade className="flex cursor-default flex-col items-center gap-2 text-center">
+      <BlurFade className="flex cursor-default flex-col items-center gap-2 text-center select-none">
         <CoolMode
           options={{
             particle: "question",

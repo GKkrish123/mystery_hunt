@@ -20,7 +20,7 @@ export default async function ProgressPage() {
   return (
     <>
       <div className="relative grid h-full w-full auto-rows-min grid-cols-1 gap-3 overflow-hidden px-3 pb-3 pt-0 sm:grid-cols-2 md:grid-cols-5 md:px-4 md:pb-4">
-        <div className="h-8 col-span-full flex justify-center">
+        <div className="h-8 col-span-full flex justify-center select-none">
           <TextSplit text="Progress" />
         </div>
         <ParallaxScroll

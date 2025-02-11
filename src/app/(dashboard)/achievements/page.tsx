@@ -32,7 +32,7 @@ export default async function AchievementsPage() {
           <SparklesText
             text="Achievements"
             sparklesCount={5}
-            className="col-span-full mx-auto h-8 cursor-pointer text-2xl font-bold text-black dark:text-white md:h-10 md:text-3xl"
+            className="col-span-full select-none mx-auto h-8 cursor-pointer text-2xl font-bold text-black dark:text-white md:h-10 md:text-3xl"
           />
         </CoolMode>
         <LightBoard

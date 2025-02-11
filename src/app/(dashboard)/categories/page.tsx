@@ -32,7 +32,7 @@ export default async function CategoriesPage({
       <div className="relative grid h-full w-full auto-rows-min grid-cols-1 gap-3 px-3 pb-3 pt-0 sm:grid-cols-2 md:grid-cols-5 md:px-4 md:pb-4">
         <BounceText
           text="Categories"
-          wrapperClassName="col-span-full"
+          wrapperClassName="col-span-full select-none"
           bouncingIndices={[0, 2, 5, 9]}
         />
         <SearchBar value={search} forCategory />

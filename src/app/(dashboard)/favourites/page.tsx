@@ -38,7 +38,7 @@ export default async function FavouritesPage() {
         <HeartsText
           text="Favourites"
           heartsCount={5}
-          className="col-span-full mx-auto h-8 text-2xl font-bold text-black dark:text-white md:h-10 md:text-3xl"
+          className="col-span-full mx-auto h-8 text-2xl font-bold text-black dark:text-white md:h-10 md:text-3xl select-none"
         />
         <Tabs defaultValue="mysteries" className="col-span-full">
           <TabsList className="grid w-full grid-cols-2">

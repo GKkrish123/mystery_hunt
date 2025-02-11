@@ -49,7 +49,7 @@ export default memo(function LetterPullup({
   return (
     <div
       className={cn(
-        "flex justify-center",
+        "flex justify-center select-none",
         wrapperClassName,
         mysteryFont.className,
       )}

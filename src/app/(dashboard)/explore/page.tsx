@@ -53,7 +53,7 @@ export default async function ExplorerPage() {
   return (
     <>
       <div className="relative grid h-full w-full auto-rows-min grid-cols-3 gap-3 px-3 pb-3 pt-0 md:grid-cols-6 md:px-4 md:pb-4">
-        <BlurFade className="col-span-full flex items-center justify-center">
+        <BlurFade className="col-span-full flex items-center justify-center select-none">
           <TextShine text="Explorer" shineColor="#FFD700" duration={5} />
         </BlurFade>
         <ShineBorder

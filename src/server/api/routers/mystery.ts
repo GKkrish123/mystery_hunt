@@ -256,6 +256,7 @@ export const mysteryRouter = createTRPCRouter({
     const mysteriesCollection = collection(db, MysteryCollections.mysteries);
     const mostLikedQuery = query(
       mysteriesCollection,
+      where("guessCount", ">", 0),
       orderBy("guessCount", "desc"),
       limit(10),
     );
@@ -272,6 +273,7 @@ export const mysteryRouter = createTRPCRouter({
     const mysteriesCollection = collection(db, MysteryCollections.mysteries);
     const mostLikedQuery = query(
       mysteriesCollection,
+      where("solvedCount", ">", 0),
       orderBy("solvedCount", "desc"),
       limit(10),
     );

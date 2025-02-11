@@ -96,8 +96,8 @@ export default async function DashboardPage() {
     api.mystery.getPopularMysteries().catch(() => []),
     api.category.getMostWatchedCategories().catch(() => []),
     api.mystery.getMostLikedMysteries().catch(() => []),
-    api.mystery.getMostGuessedMysteries().catch(() => []),
     api.mystery.getMostSolvedMysteries().catch(() => []),
+    api.mystery.getMostGuessedMysteries().catch(() => []),
   ]);
 
   const dashboardData = [

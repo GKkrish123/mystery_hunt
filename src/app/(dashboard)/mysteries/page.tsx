@@ -35,7 +35,7 @@ export default async function MysteriesPage({
         <SplitText
           text="Mysteries"
           className={cn(
-            "col-span-full mx-auto h-8 text-3xl font-bold tracking-wider text-black dark:text-white md:h-10 md:text-4xl lg:text-4xl",
+            "col-span-full mx-auto h-8 text-3xl font-bold tracking-wider text-black dark:text-white md:h-10 md:text-4xl lg:text-4xl select-none",
             mysteryFont.className,
           )}
         />

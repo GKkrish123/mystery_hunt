@@ -36,7 +36,7 @@ export default async function EventsPage() {
     <>
       <div className="relative grid h-full w-full auto-rows-min grid-cols-3 gap-3 px-3 pb-3 pt-0 md:grid-cols-6 md:px-4 md:pb-4">
         <BlurFade className="col-span-full flex flex-col items-center justify-center">
-          <div className="flex py-2">
+          <div className="flex py-2 select-none">
             <ColourfulText text="Events" className="text-4xl !font-extrabold" />
           </div>
           <div className="flex w-full justify-center md:px-[10%] lg:px-[15%] xl:px-[20%] 2xl:px-[25%]">

@@ -11,7 +11,7 @@ const RainbowButton = dynamicImport(() =>
 export default async function NotFound() {
   return (
     <div className="relative grid auto-rows-min grid-cols-3 gap-4 px-3 pb-3 pt-0 md:px-4 md:pb-4">
-      <div className="col-span-full pt-10">
+      <div className="col-span-full pt-10 select-none">
         <span className="pointer-events-none block whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-4xl font-semibold leading-none text-transparent dark:from-white dark:to-slate-900/10 md:text-5xl">
           What You Seek is No More
         </span>
