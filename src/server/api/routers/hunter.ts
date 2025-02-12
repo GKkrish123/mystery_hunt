@@ -142,13 +142,11 @@ export const userRouter = createTRPCRouter({
         },
         { merge: true },
       );
-      void addDoc(
-        collection(db, MysteryCollections.mail),
-        {
-          to: "me <mysteryverse.co@gmail.com>",
-          message: {
-            subject: "New Feedback",
-            html: `
+      void addDoc(collection(db, MysteryCollections.mail), {
+        to: "me <mysteryverse.co@gmail.com>",
+        message: {
+          subject: "New Feedback",
+          html: `
               <ul>
                 <li><strong>Feedback:</strong> ${feedback}</li>
                 <li><strong>Timestamp:</strong> ${new Date(now).toLocaleString()}</li>
@@ -158,9 +156,8 @@ export const userRouter = createTRPCRouter({
                 <li><strong>ID:</strong> ${hunterdata?.id ?? "N/A"}</li>
               </ul>
             `,
-          },
         },
-      );
+      });
       return { success: true };
     }),
 
@@ -328,23 +325,31 @@ export const userRouter = createTRPCRouter({
           password: z
             .string()
             .min(1)
-            .refine((password) => password.length >= 8)
-            .refine((password) => /[A-Z]/.test(password))
-            .refine((password) => /[!@#$%^&*(),.?":{}|<>]/.test(password))
-            .refine((password) => /\d/.test(password)),
+            .refine(
+              (password) =>
+                password.length > 8 &&
+                /[A-Z]/.test(password) &&
+                /[!@#$%^&*(),.?\":{}|<>]/.test(password) &&
+                /\d/.test(password),
+            ),
           confirmPassword: z
             .string()
             .min(1)
-            .refine((confirmPassword) => confirmPassword.length >= 8)
-            .refine((confirmPassword) => /[A-Z]/.test(confirmPassword))
-            .refine((confirmPassword) =>
-              /[!@#$%^&*(),.?":{}|<>]/.test(confirmPassword),
-            )
-            .refine((confirmPassword) => /\d/.test(confirmPassword)),
+            .refine(
+              (password) =>
+                password.length > 8 &&
+                /[A-Z]/.test(password) &&
+                /[!@#$%^&*(),.?\":{}|<>]/.test(password) &&
+                /\d/.test(password),
+            ),
           country: z.string().min(1),
           city: z.string().min(1),
-          dob: z.date(),
-          email: z.string().min(1).email(),
+          dob: z.date().refine((value) => {
+            const minDate = new Date();
+            minDate.setFullYear(minDate.getFullYear() - 12);
+            return value && value <= minDate;
+          }),
+          email: z.string().trim().min(1).email(),
           gender: z.string().min(1),
           name: z.string().min(3).max(50),
           phoneNo: z.string().min(1),

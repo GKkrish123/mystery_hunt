@@ -53,7 +53,7 @@ export default async function ExplorerPage() {
   return (
     <>
       <div className="relative grid h-full w-full auto-rows-min grid-cols-3 gap-3 px-3 pb-3 pt-0 md:grid-cols-6 md:px-4 md:pb-4">
-        <BlurFade className="col-span-full flex items-center justify-center select-none">
+        <BlurFade className="col-span-full flex select-none items-center justify-center">
           <TextShine text="Explorer" shineColor="#FFD700" duration={5} />
         </BlurFade>
         <ShineBorder
@@ -85,20 +85,22 @@ export default async function ExplorerPage() {
           />
           <Separator className="mt-3" />
         </div>
-        {hallOfFameMysteries.map((item, index) => (
-          <div
-            key={`hof-${item.category.name}-${index}`}
-            className="z-10 col-span-3"
-          >
-            <HeadingReveal
-              title={item.category.name}
-              description={item.category.description}
-              moreLink={`/explore/${item.category.tag}`}
-            />
-            <ImageCarousel className="col-span-full" items={item.mysteries} />
-            <Separator className="mt-3" />
-          </div>
-        ))}
+        {hallOfFameMysteries
+          .filter((item) => item.mysteries.length > 0)
+          .map((item, index) => (
+            <div
+              key={`hof-${item.category.name}-${index}`}
+              className="z-10 col-span-3"
+            >
+              <HeadingReveal
+                title={item.category.name}
+                description={item.category.description}
+                moreLink={`/explore/${item.category.tag}`}
+              />
+              <ImageCarousel className="col-span-full" items={item.mysteries} />
+              <Separator className="mt-3" />
+            </div>
+          ))}
         <Link className="col-span-3 h-10 md:col-span-2" href="/mysteries">
           <ShinyButton className="size-full">More Mysteries</ShinyButton>
         </Link>

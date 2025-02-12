@@ -21,7 +21,7 @@ export const SpringModal = memo(function SpringModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={() => setIsOpen(-1)}
+          onPointerDown={() => setIsOpen(-1)}
           className={cn(
             "absolute inset-0 z-50 grid cursor-pointer place-items-center overflow-y-scroll p-8 md:-mb-20",
             // "backdrop-blur"

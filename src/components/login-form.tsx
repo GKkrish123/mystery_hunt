@@ -40,6 +40,7 @@ import { Eye, EyeClosed } from "lucide-react";
 const formSchema = z.object({
   email: z
     .string()
+    .trim()
     .min(1, {
       message: "Are you a ghost?",
     })
@@ -61,6 +62,7 @@ export function LoginForm() {
       email: "",
       password: "",
     },
+    mode: "onChange",
   });
 
   const email = form.watch("email");
@@ -89,7 +91,7 @@ export function LoginForm() {
         form.clearErrors();
         const user = await signInWithEmailAndPassword(
           auth,
-          values.email,
+          values.email.trim(),
           values.password,
         );
         const token = await user.user.getIdTokenResult();

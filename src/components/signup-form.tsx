@@ -71,12 +71,22 @@ const formSchema = z
       .max(50, {
         message: "Ok, That's too much",
       }),
-    dob: z.date(),
+    dob: z.date().refine(
+      (value) => {
+        const minDate = new Date();
+        minDate.setFullYear(minDate.getFullYear() - 12);
+        return value && value <= minDate;
+      },
+      {
+        message: "Hey there, kid! You can enter once you turn 12.",
+      },
+    ),
     gender: z.string().min(1, {
       message: "So, You are Nobody?",
     }),
     email: z
       .string()
+      .trim()
       .min(1, {
         message: "Are you from 1200BC?",
       })
@@ -95,19 +105,17 @@ const formSchema = z
       .min(1, {
         message: "Do you really think you can pass without this?",
       })
-      .refine((password) => password.length >= 8, {
-        message:
-          "Your key is too short; the portal demands at least 8 characters.",
-      })
-      .refine((password) => /[A-Z]/.test(password), {
-        message: "One uppercase character is missing from your password.",
-      })
-      .refine((password) => /[!@#$%^&*(),.?":{}|<>]/.test(password), {
-        message: "One special character is required to unlock.",
-      })
-      .refine((password) => /\d/.test(password), {
-        message: "At least single numeral is needed to complete the cipher.",
-      }),
+      .refine(
+        (password) =>
+          password.length > 8 &&
+          /[A-Z]/.test(password) &&
+          /[!@#$%^&*(),.?\":{}|<>]/.test(password) &&
+          /\d/.test(password),
+        {
+          message:
+            "Your key must be at least 8 characters long with an uppercase letter, a number, and a special character.",
+        },
+      ),
     confirmPassword: z.string().min(1, {
       message: "Do you really think you can pass without this?",
     }),
@@ -148,6 +156,7 @@ export function SignupForm() {
       confirmPassword: "",
       profilePic: "",
     },
+    mode: "onChange",
   });
 
   const state = form.watch("state");
@@ -210,7 +219,7 @@ export function SignupForm() {
           city: values.city,
           state: values.state,
           country: values.country,
-          email: values.email,
+          email: values.email.trim(),
           gender: values.gender,
           password: values.password,
           confirmPassword: values.confirmPassword,
@@ -324,7 +333,7 @@ export function SignupForm() {
                 >
                   <AnimatedShinyText
                     shimmerWidth={150}
-                    className="!animate-shiny-text-fast inline-flex items-center justify-center bg-gradient-to-r from-transparent via-black via-100% to-transparent px-2 py-1 text-neutral-800/70 transition ease-out hover:text-neutral-800 hover:duration-300 dark:via-white/80 dark:text-neutral-200/70 hover:dark:text-neutral-200"
+                    className="inline-flex !animate-shiny-text-fast items-center justify-center bg-gradient-to-r from-transparent via-black via-100% to-transparent px-2 py-1 text-neutral-800/70 transition ease-out hover:text-neutral-800 hover:duration-300 dark:via-white/80 dark:text-neutral-200/70 hover:dark:text-neutral-200"
                   >
                     <ShieldAlert className="mr-0.5 size-4 text-black/70 !transition-transform duration-300 ease-in-out group-hover:-translate-x-0.5 dark:text-white/70 lg:mr-1 lg:size-5" />
                     <span>CODE OF TRUST</span>
@@ -388,8 +397,20 @@ export function SignupForm() {
                                   selected={field.value}
                                   onSelect={field.onChange}
                                   autoFocus
-                                  startMonth={new Date("1900-01-01")}
-                                  endMonth={new Date()}
+                                  startMonth={
+                                    new Date(
+                                      new Date().setFullYear(
+                                        new Date().getFullYear() - 125,
+                                      ),
+                                    )
+                                  }
+                                  endMonth={
+                                    new Date(
+                                      new Date().setFullYear(
+                                        new Date().getFullYear() - 12,
+                                      ),
+                                    )
+                                  }
                                 />
                               </PopoverContent>
                             </Popover>

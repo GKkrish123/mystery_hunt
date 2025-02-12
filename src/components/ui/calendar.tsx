@@ -31,21 +31,20 @@ function Calendar({
   ...props
 }: CalendarProps) {
   const [navView, setNavView] = useState<"days" | "years">("days");
+  const { onPrevClick, startMonth, endMonth } = props;
+
   const [displayYears, setDisplayYears] = useState<{
     from: number;
     to: number;
   }>(
     useMemo(() => {
-      const currentYear = new Date().getFullYear();
+      const currentYear = endMonth!.getFullYear();
       return {
         from: currentYear - Math.floor(yearRange / 2 - 1),
         to: currentYear + Math.ceil(yearRange / 2),
       };
-    }, [yearRange]),
+    }, [yearRange, endMonth]),
   );
-
-  const { onPrevClick, startMonth, endMonth } = props;
-
   const columnsDisplayed = navView === "years" ? 1 : numberOfMonths;
 
   return (
@@ -235,7 +234,7 @@ function Calendar({
         },
         CaptionLabel: ({ children }) => (
           <Button
-            className="h-7 w-full truncate text-sm font-medium"
+            className="h-7 w-full truncate bg-neutral-300/50 text-sm font-medium dark:bg-neutral-700/50 dark:hover:bg-neutral-800/50"
             variant="ghost"
             size="sm"
             onClick={() =>
