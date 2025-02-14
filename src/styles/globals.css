@@ -145,3 +145,9 @@
 audio::-webkit-media-controls-enclosure {
   border-radius: 3px !important;
 }
+
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
