@@ -22,13 +22,13 @@ const cards = [
     img: "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/carousel/Mysteries.jpeg",
     title: "Mysteries",
     description:
-      "Puzzles to uncover secret letters using clues for certain points under challenging conditions.",
+      "Puzzles to uncover secret letters using clues for certain points, under challenging conditions.",
   },
   {
     img: "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/carousel/Secrets.jpeg",
     title: "Secrets",
     description:
-      "Secret letters can be of anything but space. [eg.]'The Secret 35' -> 11 letters",
+      "Secret letters can be anything except spaces. [e.g.] 'The Secret 35' → 11 letters.",
   },
   {
     img: "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/carousel/Categories.jpeg",
@@ -40,54 +40,55 @@ const cards = [
     img: "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/carousel/Events.jpeg",
     title: "Events",
     description:
-      "Limited time or seasonal challenges with a set of mysteries added at specific intervals.",
+      "Limited-time or seasonal challenges featuring a set of mysteries added at specific intervals.",
   },
   {
     img: "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/carousel/Leaderboards.jpeg",
     title: "Leaderboards",
-    description: "It is a description",
+    description:
+      "Hunters are ranked based on points and can filter rankings by location or event.",
   },
   {
     img: "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/carousel/Time.jpeg",
     title: "Time",
     description:
-      "Some mysteries's points gets decayed with time. [eg.]Max 200 points. Decay: 1 point/10 min before first find, 1 point/3 min after.",
+      "Some mysteries have points which decay over time. [e.g.] Max 200 points. Decay: 1 point/10 min before the first solve, 1 point/3 min after.",
   },
   {
     img: "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/carousel/Languages.jpeg",
     title: "Languages",
     description:
-      "Mysteries tagged with regional languages can be solved with respective keyboard inputs. [eg.]தமிழ்",
+      "Mysteries tagged with regional languages can be solved using respective keyboard inputs. [e.g.] தமிழ்",
   },
   {
     img: "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/carousel/Audio.jpeg",
     title: "Audio",
     description:
-      "Mysteries can also have audio, video or links pointing to related websites with clues.",
+      "Mysteries may include audio, video, or links pointing to related websites for additional clues.",
   },
   {
     img: "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/carousel/Gifts.jpeg",
     title: "Gifts",
     description:
-      "Top scoring hunters of events are rewarded with prizes and will be notified in their mails.",
+      "Top-scoring hunters in events are rewarded with prizes and notified via email.",
   },
   {
     img: "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/carousel/Limited.jpeg",
     title: "Limited",
     description:
-      "Mysteries have very limited tries to test your secret key and also not too frequent.",
+      "Mysteries have limited attempts to test your secret key and cannot be retried frequently.",
   },
   {
     img: "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/carousel/Favourites.jpeg",
     title: "Favourites",
     description:
-      "Mysteries and Categories can be added to favourites with dedicated emblems on top of them.",
+      "Mysteries and categories can be added to favourites, marked with dedicated emblems.",
   },
   {
     img: "https://storage.googleapis.com/gkrish-mystery-hunt.firebasestorage.app/carousel/Intent.jpeg",
     title: "Vision",
     description:
-      "Knowledge should be gained in the process of finding secrets and not just about winning. Be Restless and Responsible!",
+      "The journey of discovering secrets should also be about gaining knowledge, not just winning. Be restless and responsible!",
   },
 ];
 
