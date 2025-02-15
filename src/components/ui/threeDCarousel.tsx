@@ -200,7 +200,7 @@ const Carousel = memo(function CarouselComponent({
                 >
                   <AnimatePresence propagate>
                     <MotionDiv
-                      className="absolute flex h-full origin-center items-center justify-center rounded-xl p-2 antialiased ![transform-style:preserve-3d]"
+                      className="absolute flex h-full origin-center items-center justify-center rounded-xl p-2 antialiased ![transform-style:preserve-3d] hover:scale-[1]"
                       style={{
                         width: `${faceWidth}px`,
                         transform: `rotateY(${
@@ -210,7 +210,7 @@ const Carousel = memo(function CarouselComponent({
                       onClick={() => setOpenIndex(index)}
                     >
                       <ShineBorder
-                        className="w-full min-w-0 cursor-pointer p-[0.1rem] antialiased"
+                        className="w-full min-w-0 cursor-pointer p-[0.1rem] antialiased transition ease-in-out hover:scale-[1.1]"
                         borderClassName="antialiased"
                         borderRadius={14}
                         borderWidth={1.5}

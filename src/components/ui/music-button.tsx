@@ -1,6 +1,6 @@
 "use client";
 
-import { type FC, memo, type ReactNode, useState } from "react";
+import { type FC, memo, type ReactNode, useEffect, useState } from "react";
 import { Pause, Play, SkipBack, SkipForward, XIcon } from "lucide-react";
 import YoutubeColor from "@/components/icons/lottie/YoutubeColor.json";
 import YoutubeColorDark from "@/components/icons/lottie/YoutubeColorDark.json";
@@ -59,6 +59,30 @@ export const MusicButton: React.FC<FamilyButtonProps> = memo(() => {
       loop: true,
     },
   });
+
+  useEffect(() => {
+    const handleAudioStateChange = (event: Event) => {
+      const customEvent = event as CustomEvent<"play" | "pause">;
+      if (
+        customEvent.detail === "play" &&
+        playerDetails.state === PlayerState.PLAYING
+      ) {
+        actions.pauseVideo();
+      } else if (
+        customEvent.detail === "pause" &&
+        playerDetails.state !== PlayerState.PLAYING
+      ) {
+        actions.playVideo();
+      }
+    };
+
+    window.addEventListener("audioInterference", handleAudioStateChange);
+
+    return () => {
+      window.removeEventListener("audioInterference", handleAudioStateChange);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerDetails.state]);
 
   const randomSongNumber = createRandomGenerator(
     0,

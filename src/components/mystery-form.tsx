@@ -265,6 +265,11 @@ const Card = ({
     }
   };
 
+  const handleAudioStateChange = (state: "play" | "pause") => {
+    const event = new CustomEvent("audioInterference", { detail: state });
+    window.dispatchEvent(event);
+  };
+
   useGesture(
     {
       onPinch: ({ movement: move, offset: [_, angle] }) => {
@@ -338,6 +343,8 @@ const Card = ({
                 src={src}
                 onPointerDown={(e) => e.stopPropagation()}
                 onDrag={(e) => e.preventDefault()}
+                onPlay={() => handleAudioStateChange("play")}
+                onPause={() => handleAudioStateChange("pause")}
                 controls
                 controlsList="nodownload noplaybackrate"
               />

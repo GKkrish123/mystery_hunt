@@ -27,7 +27,7 @@ export function CarouselCategories({
       }}
       className={cn("w-9/12 sm:w-5/6 lg:w-11/12", className)}
     >
-      <CarouselPrevious className="-left-10 -mt-5" />
+      <CarouselPrevious className="-left-10 z-10 -mt-5" />
       <CarouselContent>
         {categories.map((category, index) => (
           <CarouselItem
@@ -38,7 +38,7 @@ export function CarouselCategories({
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselNext className="-right-10 -mt-5" />
+      <CarouselNext className="-right-10 z-10 -mt-5" />
     </Carousel>
   );
 }
