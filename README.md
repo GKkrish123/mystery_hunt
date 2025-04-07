@@ -1,29 +1,31 @@
-# Create T3 App Commit test
+# Mysteryverse
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Welcome to the **Mysteryverse**, your gateway to unraveling mysteries and exploring the unknown.
 
-## What's next? How do I make an app with this?
+## Tech Stack
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+The Mysteryverse App is built using the following technologies:
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- **Frontend**: Next.js for building a dynamic and responsive user interface.
+- **Backend**: Next.js TRPC Router with Redis, Pub Sub and Cloud Functions for handling server-side logic and APIs.
+- **Database**: Firebase for storing user data and mystery-related content.
+- **Authentication**: Firebase Mobile and Email Verified signup for secure user authentication.
+- **Hosting**: Deployed on Google Cloud Platform with Firebase App Hosting.
+- **Version Control**: Git for source code management and collaboration.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+These technologies ensure a seamless and robust experience for users as they explore the mysteries within the app.
 
-## Learn More
+## What's next? How do I use this app?
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+This app is designed to be intuitive and user-friendly, allowing you to dive straight into the world of mysteries. Start exploring the features we've built for you, and feel free to expand or customize as needed.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+If you have questions or need assistance, please refer to the resources below or reach out to our community for support.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Key Features
 
-## How do I deploy this?
+- **Interactive Mystery Solving**: Engage with puzzles, clues, and challenges.
+- **Collaborative Gameplay**: Team up with friends or other users to solve mysteries together.
+- **Dynamic Content Updates**: New mysteries and challenges added regularly.
+- **Customizable Experience**: Tailor the app to suit your preferences.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Enjoy your journey into the Mysteryverse!
