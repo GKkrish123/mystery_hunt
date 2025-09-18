@@ -1,9 +1,11 @@
 "use client";
 
-import Lottie from "lottie-react";
+import dynamic from "next/dynamic";
 import LoaderOrange from "@/components/icons/lottie/LoaderOrange.json";
 import { cn } from "@/lib/utils";
 import { memo } from "react";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 interface AppLoaderProps {
   className?: string;
@@ -21,7 +23,7 @@ export default memo(function AppLoader({ className }: AppLoaderProps) {
         <Lottie
           className="h-40 w-40"
           animationData={LoaderOrange}
-          onClick={(e) => {
+          onClick={(e: React.MouseEvent) => {
             e.preventDefault();
           }}
           autoplay={true}

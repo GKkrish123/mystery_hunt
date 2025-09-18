@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MysteryHunt</string>
+    <string name="title_activity_main">MysteryHunt</string>
+    <string name="package_name">com.mystery.hunt</string>
+    <string name="custom_url_scheme">com.mystery.hunt</string>
+</resources>

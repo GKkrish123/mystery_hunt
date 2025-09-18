@@ -15,9 +15,20 @@
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "cap:sync": "npx cap sync",
+    "cap:add:ios": "npx cap add ios",
+    "cap:add:android": "npx cap add android",
+    "cap:open:ios": "npx cap open ios",
+    "cap:open:android": "npx cap open android",
+    "mobile:dev:ios": "CAP_SERVER_URL=http://127.0.0.1:3000 npm run cap:sync && npm run cap:open:ios",
+    "mobile:dev:android": "CAP_SERVER_URL=http://10.0.2.2:3000 npm run cap:sync && npm run cap:open:android",
+    "mobile:prod": "CAP_SERVER_URL=https://mysteryverse.co.in npm run cap:sync"
   },
   "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3",
+    "@capacitor/ios": "^7.4.3",
     "@hookform/resolvers": "^3.9.1",
     "@mantine/hooks": "^7.13.4",
     "@radix-ui/react-avatar": "^1.1.1",
@@ -95,6 +106,7 @@
     }
   },
   "devDependencies": {
+    "@capacitor/cli": "^7.4.3",
     "@next/bundle-analyzer": "^15.1.2",
     "@svgr/webpack": "^8.1.0",
     "@types/eslint": "^8.56.10",
